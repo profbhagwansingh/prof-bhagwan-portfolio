@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Build outputs — never commit
+backend/dist/
+frontend/.next/
+frontend/out/
+
+# Prisma generated client — never commit
+backend/prisma/generated/
+
+# Environment files — never commit
+.env
+.env.local
+.env*.local
+backend/.env
+frontend/.env.local
+
+# Uploads
+backend/uploads/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/

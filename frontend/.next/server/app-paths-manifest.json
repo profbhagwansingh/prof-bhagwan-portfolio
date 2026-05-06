@@ -1,0 +1,10 @@
+{
+  "/page": "app/page.js",
+  "/admin/publications/page": "app/admin/publications/page.js",
+  "/admin/dashboard/page": "app/admin/dashboard/page.js",
+  "/admin/content/scholars/page": "app/admin/content/scholars/page.js",
+  "/admin/gallery/page": "app/admin/gallery/page.js",
+  "/admin/submissions/page": "app/admin/submissions/page.js",
+  "/admin/settings/page": "app/admin/settings/page.js",
+  "/admin/alumni/page": "app/admin/alumni/page.js"
+}
