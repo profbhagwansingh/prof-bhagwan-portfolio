@@ -1,6 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { PrismaClient } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
 
@@ -8,8 +10,6 @@ async function bootstrap() {
   const logger = new Logger('Bootstrap');
   const app = await NestFactory.create(AppModule);
 
-  // ── Security: HTTP headers ────────────────────────────────────────────────
-  // Helmet sets secure HTTP headers (XSS, clickjacking, MIME-sniffing, etc.)
   app.use(helmet({
     contentSecurityPolicy: {
       directives: {
@@ -21,10 +21,9 @@ async function bootstrap() {
         connectSrc: ["'self'", process.env.FRONTEND_URL ?? 'http://localhost:3000'],
       },
     },
-    crossOriginEmbedderPolicy: false, // Allow loading images from external origins
+    crossOriginEmbedderPolicy: false,
   }));
 
-  // ── Security: CORS ────────────────────────────────────────────────────────
   const allowedOrigins = (process.env.FRONTEND_URL ?? 'http://localhost:3000')
     .split(',')
     .map((o) => o.trim());
@@ -36,7 +35,6 @@ async function bootstrap() {
     credentials: true,
   });
 
-  // ── Validation: Global pipe ───────────────────────────────────────────────
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -48,7 +46,6 @@ async function bootstrap() {
     }),
   );
 
-  // ── Swagger / OpenAPI Documentation ───────────────────────────────────────
   const config = new DocumentBuilder()
     .setTitle('Prof. Bhagwan Singh — Portfolio API')
     .setDescription(
@@ -80,8 +77,24 @@ async function bootstrap() {
   });
   logger.log('📚 Swagger docs available at /api/docs');
 
-  // ── Graceful shutdown ─────────────────────────────────────────────────────
   app.enableShutdownHooks();
+
+  // ── Auto-seed admin on startup ─────────────────────────────────────────────
+  const prisma = new PrismaClient();
+  const adminEmail = process.env.ADMIN_EMAIL ?? 'admin@bhagwansingh.com';
+  const adminPassword = process.env.ADMIN_PASSWORD ?? 'Admin@1234';
+  const existing = await prisma.user.findUnique({ where: { email: adminEmail } });
+  if (!existing) {
+    const passwordHash = await bcrypt.hash(adminPassword, 12);
+    await prisma.user.create({
+      data: { email: adminEmail, passwordHash, fullName: 'Super Admin', role: 'SUPER_ADMIN', isActive: true },
+    });
+    logger.log('✅ Admin user created: ' + adminEmail);
+  } else {
+    logger.log('ℹ️ Admin already exists, skipping seed.');
+  }
+  await prisma.$disconnect();
+  // ──────────────────────────────────────────────────────────────────────────
 
   const port = process.env.PORT ?? 4000;
   await app.listen(port);
