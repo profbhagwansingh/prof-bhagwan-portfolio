@@ -1,7 +1,6 @@
 import { ConfigService } from '@nestjs/config';
 export declare class MediaService {
     private config;
-    private uploadDir;
     constructor(config: ConfigService);
     saveFile(file: Express.Multer.File): Promise<{
         url: string;

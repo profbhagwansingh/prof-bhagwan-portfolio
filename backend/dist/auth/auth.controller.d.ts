@@ -20,9 +20,9 @@ export declare class AuthController {
         role: import(".prisma/client").$Enums.Role;
     }>;
     getProfile(req: any): Promise<{
-        id: string;
         email: string;
         fullName: string;
+        id: string;
         role: import(".prisma/client").$Enums.Role;
         lastLogin: Date | null;
         createdAt: Date;

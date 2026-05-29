@@ -3,9 +3,9 @@ export declare class UsersService {
     private prisma;
     constructor(prisma: PrismaService);
     findAll(): Promise<{
-        id: string;
         email: string;
         fullName: string;
+        id: string;
         role: import(".prisma/client").$Enums.Role;
         isActive: boolean;
         lastLogin: Date | null;
@@ -13,9 +13,9 @@ export declare class UsersService {
         updatedAt: Date;
     }[]>;
     findOne(id: string): Promise<{
-        id: string;
         email: string;
         fullName: string;
+        id: string;
         role: import(".prisma/client").$Enums.Role;
         isActive: boolean;
         lastLogin: Date | null;
@@ -28,9 +28,9 @@ export declare class UsersService {
         password: string;
         role?: 'SUPER_ADMIN' | 'ADMIN' | 'EDITOR';
     }): Promise<{
-        id: string;
         email: string;
         fullName: string;
+        id: string;
         role: import(".prisma/client").$Enums.Role;
         isActive: boolean;
         createdAt: Date;
@@ -40,9 +40,9 @@ export declare class UsersService {
         role?: 'SUPER_ADMIN' | 'ADMIN' | 'EDITOR';
         isActive?: boolean;
     }): Promise<{
-        id: string;
         email: string;
         fullName: string;
+        id: string;
         role: import(".prisma/client").$Enums.Role;
         isActive: boolean;
         updatedAt: Date;
