@@ -6,9 +6,9 @@ export declare class ContentService {
         images: {
             id: string;
             sortOrder: number;
-            heroSectionId: string;
             imageUrl: string;
             altText: string;
+            heroSectionId: string;
         }[];
     } & {
         id: string;
@@ -33,16 +33,16 @@ export declare class ContentService {
     addHeroImage(heroSectionId: string, imageUrl: string, altText?: string): Promise<{
         id: string;
         sortOrder: number;
-        heroSectionId: string;
         imageUrl: string;
         altText: string;
+        heroSectionId: string;
     }>;
     deleteHeroImage(id: string): Promise<{
         id: string;
         sortOrder: number;
-        heroSectionId: string;
         imageUrl: string;
         altText: string;
+        heroSectionId: string;
     }>;
     getAboutContent(): Promise<{
         id: string;
