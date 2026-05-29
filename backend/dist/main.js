@@ -104,7 +104,7 @@ async function bootstrap() {
     const prisma = new client_1.PrismaClient();
     const { execSync } = await Promise.resolve().then(() => __importStar(require('child_process')));
     try {
-        execSync('npx prisma migrate deploy', { stdio: 'inherit' });
+        execSync('npx prisma migrate deploy --schema=/opt/render/project/src/backend/prisma/schema.prisma', { stdio: 'inherit' });
         logger.log('✅ Database migrations applied');
     }
     catch (e) {

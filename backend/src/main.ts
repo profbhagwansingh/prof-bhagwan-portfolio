@@ -85,7 +85,7 @@ async function bootstrap() {
   // Run migrations on startup
   const { execSync } = await import('child_process');
   try {
-    execSync('npx prisma migrate deploy', { stdio: 'inherit' });
+    execSync('npx prisma migrate deploy --schema=/opt/render/project/src/backend/prisma/schema.prisma', { stdio: 'inherit' });
     logger.log('✅ Database migrations applied');
   } catch (e) {
     logger.error('Migration failed', e);
