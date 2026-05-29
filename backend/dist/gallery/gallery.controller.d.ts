@@ -100,7 +100,7 @@ export declare class GalleryController {
         createdAt: Date;
     }>;
     getSlideshowFiles(): Promise<string[]>;
-    uploadSlideshowFiles(files: Express.Multer.File[]): Promise<{
+    uploadSlideshowFiles(files: any[]): Promise<{
         uploaded: string[];
     }>;
     renameSlideshowFile(data: {
@@ -128,7 +128,7 @@ export declare class GalleryController {
         success: boolean;
     }>;
     getGalleryFiles(folder: string): Promise<string[]>;
-    uploadGalleryFiles(folder: string, files: Express.Multer.File[]): Promise<{
+    uploadGalleryFiles(folder: string, files: any[]): Promise<{
         uploaded: string[];
     }>;
     renameGalleryFile(data: {

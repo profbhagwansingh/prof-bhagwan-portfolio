@@ -11,13 +11,13 @@ export class MediaController {
 
     @Post('upload')
     @UseInterceptors(FileInterceptor('file', { limits: { fileSize: 10 * 1024 * 1024 } }))
-    async uploadFile(@UploadedFile() file: Express.Multer.File) {
+    async uploadFile(@UploadedFile() file: any) {
         return this.mediaService.saveFile(file);
     }
 
     @Post('upload/multiple')
     @UseInterceptors(FilesInterceptor('files', 10, { limits: { fileSize: 10 * 1024 * 1024 } }))
-    async uploadMultiple(@UploadedFiles() files: Express.Multer.File[]) {
+    async uploadMultiple(@UploadedFiles() files: any[]) {
         const results = await Promise.all(files.map((f) => this.mediaService.saveFile(f)));
         return results;
     }

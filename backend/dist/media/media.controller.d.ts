@@ -2,11 +2,11 @@ import { MediaService } from './media.service';
 export declare class MediaController {
     private mediaService;
     constructor(mediaService: MediaService);
-    uploadFile(file: Express.Multer.File): Promise<{
+    uploadFile(file: any): Promise<{
         url: string;
         filename: string;
     }>;
-    uploadMultiple(files: Express.Multer.File[]): Promise<{
+    uploadMultiple(files: any[]): Promise<{
         url: string;
         filename: string;
     }[]>;

@@ -59,7 +59,7 @@ export class GalleryController {
 
     @Post('admin/slideshow-files/upload')
     @UseInterceptors(FilesInterceptor('files', 20))
-    uploadSlideshowFiles(@UploadedFiles() files: Express.Multer.File[]) {
+    uploadSlideshowFiles(@UploadedFiles() files: any[]) {
         return this.galleryService.uploadSlideshowFiles(files);
     }
 
@@ -99,7 +99,7 @@ export class GalleryController {
 
     @Post('admin/files/upload')
     @UseInterceptors(FilesInterceptor('files', 20))
-    uploadGalleryFiles(@Query('folder') folder: string, @UploadedFiles() files: Express.Multer.File[]) {
+    uploadGalleryFiles(@Query('folder') folder: string, @UploadedFiles() files: any[]) {
         return this.galleryService.uploadFiles(folder, files);
     }
 

@@ -13,7 +13,7 @@ export class MediaService {
         });
     }
 
-    async saveFile(file: Express.Multer.File): Promise<{ url: string; filename: string }> {
+    async saveFile(file: any): Promise<{ url: string; filename: string }> {
         return new Promise((resolve, reject) => {
             cloudinary.uploader.upload_stream(
                 { folder: 'profbhagwan', resource_type: 'auto' },
