@@ -12,8 +12,9 @@ export function AboutHero() {
       <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-primary-500/5 blur-3xl -z-10" />
 
       <div className="container-academic">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
         <div
-          className="max-w-3xl transition-all duration-700"
+          className="transition-all duration-700"
           style={{ opacity: visible ? 1 : 0, transform: visible ? "none" : "translateY(24px)" }}
         >
           <div className="accent-line">
@@ -25,10 +26,9 @@ export function AboutHero() {
             About the Professor
           </h1>
           <p className="text-lg text-[var(--text-muted)] leading-relaxed mb-8 max-w-2xl">
-            Prof. (Dr.) Bhagwan Singh is a dedicated management educator and researcher
-            with over two decades of experience in shaping future business leaders.
-            His work spans strategic management, marketing, human resources, and
-            sustainability — guided always by the philosophy of care for people, planet, and peace.
+            With a career spanning over 25 years, Prof. (Dr.) Bhagwan Singh is a renowned academic in the field of management. He currently serves as a Professor in the Department of Business Administration (DBA), School of Management Sciences (SMS) at the Central University of Jharkhand (CUJ), where he has also held key positions including Dean, Head of Department, and Finance Officer (I/c).
+            <br/><br/>
+            His research primarily focuses on the intersection of Marketing and Information Technology. He has published over 54 papers in esteemed journals and has authored two influential books on digital and internet marketing.
           </p>
 
           {/* Quick facts */}
@@ -48,6 +48,14 @@ export function AboutHero() {
               </div>
             ))}
           </div>
+        </div>
+
+        <div
+          className="hidden lg:block relative w-full h-[500px] rounded-3xl overflow-hidden shadow-2xl transition-all duration-1000 border border-[var(--border)]"
+          style={{ opacity: visible ? 1 : 0, transform: visible ? "none" : "scale(0.95) translateY(24px)" }}
+        >
+          <img src="/media/img/Dr_B_Singh_with_President.jpg" alt="Prof. Bhagwan Singh with President" className="w-full h-full object-cover" />
+        </div>
         </div>
       </div>
     </section>

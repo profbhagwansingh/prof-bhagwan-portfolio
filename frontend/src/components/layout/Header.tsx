@@ -16,12 +16,35 @@ const navLinks = [
   { href: "/alumni",       label: "Alumni Connect" },
 ];
 
+/** Live IST clock — updates every second, SSR-safe */
+function useLiveClock() {
+  const [time, setTime] = useState<string>("");
+
+  useEffect(() => {
+    const fmt = () =>
+      new Date().toLocaleTimeString("en-IN", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true,
+        timeZone: "Asia/Kolkata",
+      });
+
+    setTime(fmt());
+    const id = setInterval(() => setTime(fmt()), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  return time;
+}
+
 export function Header() {
-  const pathname   = usePathname();
-  const { theme, setTheme } = useTheme();
-  const [scrolled,    setScrolled]    = useState(false);
-  const [mobileOpen,  setMobileOpen]  = useState(false);
-  const [mounted,     setMounted]     = useState(false);
+  const pathname             = usePathname();
+  const { theme, setTheme }  = useTheme();
+  const [scrolled,   setScrolled]   = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [mounted,    setMounted]    = useState(false);
+  const liveTime = useLiveClock();
 
   useEffect(() => { setMounted(true); }, []);
 
@@ -31,7 +54,6 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close mobile menu on route change
   useEffect(() => { setMobileOpen(false); }, [pathname]);
 
   return (
@@ -85,6 +107,32 @@ export function Header() {
 
             {/* Right Side Actions */}
             <div className="flex items-center gap-2">
+
+              {/* ── Live IST Clock (desktop) ── */}
+              {mounted && liveTime && (
+                <div
+                  title="Indian Standard Time (IST)"
+                  className={cn(
+                    "hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-mono font-medium transition-all duration-300 select-none",
+                    scrolled
+                      ? "bg-[var(--bg-secondary)] border-[var(--border)] text-[var(--text-muted)]"
+                      : "bg-white/10 border-white/15 text-white/75 backdrop-blur-sm"
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "w-1.5 h-1.5 rounded-full animate-pulse flex-shrink-0",
+                      scrolled ? "bg-primary-500" : "bg-primary-400"
+                    )}
+                  />
+                  {liveTime}
+                  <span className={cn(
+                    "text-[10px] tracking-wider ml-0.5",
+                    scrolled ? "text-[var(--text-muted)]" : "text-white/40"
+                  )}>IST</span>
+                </div>
+              )}
+
               {/* Theme Toggle */}
               {mounted && (
                 <button
@@ -142,6 +190,13 @@ export function Header() {
               <p className="text-xs text-[var(--text-muted)] mt-0.5">
                 Care for People, Planet &amp; Peace
               </p>
+              {/* Live clock in mobile panel */}
+              {mounted && liveTime && (
+                <p className="text-xs font-mono text-primary-500 mt-1.5 flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary-500 animate-pulse inline-block flex-shrink-0" />
+                  {liveTime} <span className="text-[10px] text-[var(--text-muted)]">IST</span>
+                </p>
+              )}
             </div>
             <button
               onClick={() => setMobileOpen(false)}
@@ -175,7 +230,7 @@ export function Header() {
           {/* Panel Footer */}
           <div className="p-6 border-t border-[var(--border)]">
             <p className="text-xs text-[var(--text-muted)] italic font-display">
-              "Invest in Time with positive vibes and ROI will be always good"
+              &ldquo;Invest in Time with positive vibes and ROI will be always good&rdquo;
             </p>
           </div>
         </div>

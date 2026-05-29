@@ -40,7 +40,7 @@ export default function TimelineAdminPage() {
   // ─── Fetch ────────────────────────────────────────────────
   const fetchEntries = () => {
     setError(null);
-    api.get("/api/content/timeline")
+    api.get("/api/content/admin/timeline")
       .then((res) => {
         const data = res.data;
         setEntries(Array.isArray(data) ? data : (data?.data ?? data?.items ?? []));

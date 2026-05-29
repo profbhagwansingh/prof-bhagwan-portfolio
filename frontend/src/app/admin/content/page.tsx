@@ -20,6 +20,13 @@ const contentSections = [
     color: "bg-emerald-500",
   },
   {
+    href:  "/admin/content/books",
+    icon:  BookOpen,
+    label: "Authored Books",
+    desc:  "Manage published books and their purchase links.",
+    color: "bg-indigo-500",
+  },
+  {
     href:  "/admin/content/achievements",
     icon:  Award,
     label: "Awards & Achievements",

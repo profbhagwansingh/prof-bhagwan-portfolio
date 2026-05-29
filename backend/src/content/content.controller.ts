@@ -57,10 +57,20 @@ export class ContentController {
     @Roles(Role.SUPER_ADMIN, Role.ADMIN)
     deleteHeroImage(@Param('id') id: string) { return this.contentService.deleteHeroImage(id); }
 
+    @Get('admin/about')
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @Roles(Role.SUPER_ADMIN, Role.ADMIN, Role.EDITOR)
+    getAdminAbout() { return this.contentService.getAboutContent(); } // can be updated to getAll if needed
+
     @Post('admin/about')
     @UseGuards(AuthGuard('jwt'), RolesGuard)
     @Roles(Role.SUPER_ADMIN, Role.ADMIN, Role.EDITOR)
     upsertAbout(@Body() data: any) { return this.contentService.upsertAboutContent(data); }
+
+    @Get('admin/timeline')
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @Roles(Role.SUPER_ADMIN, Role.ADMIN, Role.EDITOR)
+    getAdminTimeline() { return this.contentService.getAllTimeline(); }
 
     @Post('admin/timeline')
     @UseGuards(AuthGuard('jwt'), RolesGuard)

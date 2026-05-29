@@ -14,6 +14,7 @@ const config_1 = require("@nestjs/config");
 const auth_service_1 = require("./auth.service");
 const auth_controller_1 = require("./auth.controller");
 const jwt_strategy_1 = require("./jwt.strategy");
+const rt_strategy_1 = require("./rt.strategy");
 const roles_guard_1 = require("./roles.guard");
 let AuthModule = class AuthModule {
 };
@@ -27,13 +28,13 @@ exports.AuthModule = AuthModule = __decorate([
                 inject: [config_1.ConfigService],
                 useFactory: (config) => ({
                     secret: config.get('JWT_SECRET'),
-                    signOptions: { expiresIn: config.get('JWT_EXPIRES_IN', '7d') },
+                    signOptions: { expiresIn: config.get('JWT_EXPIRES_IN', '15m') },
                 }),
             }),
         ],
         controllers: [auth_controller_1.AuthController],
-        providers: [auth_service_1.AuthService, jwt_strategy_1.JwtStrategy, roles_guard_1.RolesGuard],
-        exports: [auth_service_1.AuthService, jwt_strategy_1.JwtStrategy, roles_guard_1.RolesGuard],
+        providers: [auth_service_1.AuthService, jwt_strategy_1.JwtStrategy, rt_strategy_1.RefreshTokenStrategy, roles_guard_1.RolesGuard],
+        exports: [auth_service_1.AuthService, jwt_strategy_1.JwtStrategy, rt_strategy_1.RefreshTokenStrategy, roles_guard_1.RolesGuard],
     })
 ], AuthModule);
 //# sourceMappingURL=auth.module.js.map

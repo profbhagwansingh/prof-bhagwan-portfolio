@@ -61,6 +61,7 @@ model User {
   role         Role     @default(EDITOR)
   isActive     Boolean  @default(true)
   lastLogin    DateTime?
+  refreshToken String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
@@ -161,6 +162,7 @@ model Publication {
   journal      String?
   year         Int
   tag          PublicationTag @default(PEER_REVIEWED)
+  authors      String?
   doi          String?
   externalUrl  String?
   abstractText String?        @db.Text
@@ -230,20 +232,21 @@ model GalleryCategory {
 }
 
 model GalleryItem {
-  id           String          @id @default(uuid())
-  categoryId   String
-  category     GalleryCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  mediaType    MediaType       @default(PHOTO)
-  mediaUrl     String
-  thumbnailUrl String?
-  caption      String?
-  altText      String          @default("")
-  sortOrder    Int             @default(0)
-  isActive     Boolean         @default(true)
-  createdAt    DateTime        @default(now())
+   id           String          @id @default(uuid())
+   categoryId   String
+   category     GalleryCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+   mediaType    MediaType       @default(PHOTO)
+   mediaUrl     String
+   thumbnailUrl String?
+   caption      String?
+   altText      String          @default("")
+   sortOrder    Int             @default(0)
+   isActive     Boolean         @default(true)
+   isSlideshow  Boolean         @default(false)
+   createdAt    DateTime        @default(now())
 
-  @@map("gallery_items")
-}
+   @@map("gallery_items")
+ }
 
 // ─── CONTACT SUBMISSIONS ─────────────────────────────────────
 

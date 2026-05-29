@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GalleryModule = void 0;
 const common_1 = require("@nestjs/common");
+const platform_express_1 = require("@nestjs/platform-express");
 const gallery_service_1 = require("./gallery.service");
 const gallery_controller_1 = require("./gallery.controller");
 let GalleryModule = class GalleryModule {
@@ -15,6 +16,11 @@ let GalleryModule = class GalleryModule {
 exports.GalleryModule = GalleryModule;
 exports.GalleryModule = GalleryModule = __decorate([
     (0, common_1.Module)({
+        imports: [
+            platform_express_1.MulterModule.register({
+                limits: { fileSize: 10 * 1024 * 1024 },
+            }),
+        ],
         controllers: [gallery_controller_1.GalleryController],
         providers: [gallery_service_1.GalleryService],
     })

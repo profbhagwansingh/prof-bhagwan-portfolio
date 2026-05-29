@@ -114,6 +114,16 @@ export declare class ContentController {
         altText: string;
         heroSectionId: string;
     }>;
+    getAdminAbout(): Promise<{
+        id: string;
+        isActive: boolean;
+        updatedAt: Date;
+        title: string;
+        sortOrder: number;
+        imageUrl: string | null;
+        sectionKey: string;
+        content: string;
+    }[]>;
     upsertAbout(data: any): Promise<{
         id: string;
         isActive: boolean;
@@ -124,6 +134,17 @@ export declare class ContentController {
         sectionKey: string;
         content: string;
     }>;
+    getAdminTimeline(): Promise<{
+        id: string;
+        isActive: boolean;
+        title: string;
+        subtitle: string | null;
+        sortOrder: number;
+        organization: string;
+        location: string | null;
+        dateRange: string;
+        externalLink: string | null;
+    }[]>;
     upsertTimeline(data: any): Promise<{
         id: string;
         isActive: boolean;

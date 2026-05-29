@@ -27,9 +27,18 @@ let PublicationsService = class PublicationsService {
         return this.prisma.publication.findMany({ orderBy: [{ year: 'desc' }, { sortOrder: 'asc' }] });
     }
     async upsertPublication(data) {
+        const payload = {
+            title: data.title,
+            journal: data.journal,
+            year: data.year,
+            tag: data.tag,
+            authors: data.authors,
+            externalUrl: data.url || null,
+            abstractText: data.abstract || null,
+        };
         if (data.id)
-            return this.prisma.publication.update({ where: { id: data.id }, data });
-        return this.prisma.publication.create({ data });
+            return this.prisma.publication.update({ where: { id: data.id }, data: payload });
+        return this.prisma.publication.create({ data: payload });
     }
     async deletePublication(id) {
         return this.prisma.publication.delete({ where: { id } });

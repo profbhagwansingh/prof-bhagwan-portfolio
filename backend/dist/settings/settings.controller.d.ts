@@ -14,6 +14,13 @@ export declare class SettingsController {
         canonicalUrl: string | null;
         structuredData: import("@prisma/client/runtime/library").JsonValue | null;
     } | null>;
+    getSocialLinks(): Promise<{
+        id: string;
+        updatedAt: Date;
+        category: string;
+        key: string;
+        value: string;
+    }[]>;
     getAllSettings(category?: string): Promise<{
         id: string;
         updatedAt: Date;
@@ -22,6 +29,17 @@ export declare class SettingsController {
         value: string;
     }[]>;
     upsertSetting(data: {
+        key: string;
+        value: string;
+        category?: string;
+    }): Promise<{
+        id: string;
+        updatedAt: Date;
+        category: string;
+        key: string;
+        value: string;
+    }>;
+    updateSettings(data: {
         key: string;
         value: string;
         category?: string;
@@ -45,6 +63,18 @@ export declare class SettingsController {
         structuredData: import("@prisma/client/runtime/library").JsonValue | null;
     }[]>;
     upsertSeo(data: any): Promise<{
+        id: string;
+        updatedAt: Date;
+        pageSlug: string;
+        metaTitle: string | null;
+        metaDescription: string | null;
+        ogTitle: string | null;
+        ogDescription: string | null;
+        ogImage: string | null;
+        canonicalUrl: string | null;
+        structuredData: import("@prisma/client/runtime/library").JsonValue | null;
+    }>;
+    upsertSeoBySlug(pageSlug: string, data: any): Promise<{
         id: string;
         updatedAt: Date;
         pageSlug: string;

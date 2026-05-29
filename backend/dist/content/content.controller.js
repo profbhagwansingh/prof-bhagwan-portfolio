@@ -36,7 +36,9 @@ let ContentController = class ContentController {
         return this.contentService.addHeroImage(data.heroSectionId, data.imageUrl, data.altText);
     }
     deleteHeroImage(id) { return this.contentService.deleteHeroImage(id); }
+    getAdminAbout() { return this.contentService.getAboutContent(); }
     upsertAbout(data) { return this.contentService.upsertAboutContent(data); }
+    getAdminTimeline() { return this.contentService.getAllTimeline(); }
     upsertTimeline(data) { return this.contentService.upsertTimeline(data); }
     deleteTimeline(id) { return this.contentService.deleteTimeline(id); }
     upsertCourse(data) { return this.contentService.upsertCourse(data); }
@@ -127,6 +129,14 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], ContentController.prototype, "deleteHeroImage", null);
 __decorate([
+    (0, common_1.Get)('admin/about'),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), roles_guard_1.RolesGuard),
+    (0, roles_guard_1.Roles)(client_1.Role.SUPER_ADMIN, client_1.Role.ADMIN, client_1.Role.EDITOR),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], ContentController.prototype, "getAdminAbout", null);
+__decorate([
     (0, common_1.Post)('admin/about'),
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), roles_guard_1.RolesGuard),
     (0, roles_guard_1.Roles)(client_1.Role.SUPER_ADMIN, client_1.Role.ADMIN, client_1.Role.EDITOR),
@@ -135,6 +145,14 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], ContentController.prototype, "upsertAbout", null);
+__decorate([
+    (0, common_1.Get)('admin/timeline'),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), roles_guard_1.RolesGuard),
+    (0, roles_guard_1.Roles)(client_1.Role.SUPER_ADMIN, client_1.Role.ADMIN, client_1.Role.EDITOR),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], ContentController.prototype, "getAdminTimeline", null);
 __decorate([
     (0, common_1.Post)('admin/timeline'),
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), roles_guard_1.RolesGuard),

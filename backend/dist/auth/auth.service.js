@@ -71,12 +71,45 @@ let AuthService = class AuthService {
         const valid = await bcrypt.compare(dto.password, user.passwordHash);
         if (!valid)
             throw new common_1.UnauthorizedException('Invalid credentials');
+        const tokens = await this.getTokens(user.id, user.email, user.role);
+        await this.updateRefreshToken(user.id, tokens.refreshToken);
         await this.prisma.user.update({ where: { id: user.id }, data: { lastLogin: new Date() } });
-        const payload = { sub: user.id, email: user.email, role: user.role };
         return {
-            accessToken: this.jwtService.sign(payload),
+            ...tokens,
             user: { id: user.id, email: user.email, fullName: user.fullName, role: user.role },
         };
+    }
+    async refreshToken(userId, rt) {
+        const user = await this.prisma.user.findUnique({ where: { id: userId } });
+        if (!user || !user.refreshToken)
+            throw new common_1.ForbiddenException('Access Denied');
+        const rtMatches = await bcrypt.compare(rt, user.refreshToken);
+        if (!rtMatches)
+            throw new common_1.ForbiddenException('Access Denied');
+        const tokens = await this.getTokens(user.id, user.email, user.role);
+        await this.updateRefreshToken(user.id, tokens.refreshToken);
+        return tokens;
+    }
+    async updateRefreshToken(userId, refreshToken) {
+        const hash = await bcrypt.hash(refreshToken, 10);
+        await this.prisma.user.update({
+            where: { id: userId },
+            data: { refreshToken: hash },
+        });
+    }
+    async getTokens(userId, email, role) {
+        const payload = { sub: userId, email, role };
+        const [accessToken, refreshToken] = await Promise.all([
+            this.jwtService.signAsync(payload, {
+                secret: process.env.JWT_SECRET || 'super-secret',
+                expiresIn: '15m',
+            }),
+            this.jwtService.signAsync(payload, {
+                secret: process.env.JWT_REFRESH_SECRET || 'super-refresh-secret',
+                expiresIn: '7d',
+            }),
+        ]);
+        return { accessToken, refreshToken };
     }
     async getProfile(userId) {
         const user = await this.prisma.user.findUnique({

@@ -25,10 +25,11 @@ let ContentService = class ContentService {
         });
     }
     async upsertHeroSection(data) {
-        if (data.id) {
-            return this.prisma.heroSection.update({ where: { id: data.id }, data });
+        const { id, ...rest } = data;
+        if (id) {
+            return this.prisma.heroSection.update({ where: { id }, data: rest });
         }
-        return this.prisma.heroSection.create({ data });
+        return this.prisma.heroSection.create({ data: rest });
     }
     async addHeroImage(heroSectionId, imageUrl, altText = '') {
         return this.prisma.heroImage.create({ data: { heroSectionId, imageUrl, altText } });
@@ -43,10 +44,11 @@ let ContentService = class ContentService {
         });
     }
     async upsertAboutContent(data) {
-        if (data.id) {
-            return this.prisma.aboutContent.update({ where: { id: data.id }, data });
+        const { id, ...rest } = data;
+        if (id) {
+            return this.prisma.aboutContent.update({ where: { id }, data: rest });
         }
-        return this.prisma.aboutContent.create({ data });
+        return this.prisma.aboutContent.create({ data: rest });
     }
     async getTimeline() {
         return this.prisma.experienceTimeline.findMany({
@@ -58,10 +60,17 @@ let ContentService = class ContentService {
         return this.prisma.experienceTimeline.findMany({ orderBy: { sortOrder: 'asc' } });
     }
     async upsertTimeline(data) {
-        if (data.id) {
-            return this.prisma.experienceTimeline.update({ where: { id: data.id }, data });
+        const { id, ...rest } = data;
+        const clean = {
+            ...rest,
+            subtitle: rest.subtitle || null,
+            location: rest.location || null,
+            externalLink: rest.externalLink || null,
+        };
+        if (id) {
+            return this.prisma.experienceTimeline.update({ where: { id }, data: clean });
         }
-        return this.prisma.experienceTimeline.create({ data });
+        return this.prisma.experienceTimeline.create({ data: clean });
     }
     async deleteTimeline(id) {
         return this.prisma.experienceTimeline.delete({ where: { id } });
@@ -73,10 +82,11 @@ let ContentService = class ContentService {
         });
     }
     async upsertCourse(data) {
-        if (data.id) {
-            return this.prisma.course.update({ where: { id: data.id }, data });
+        const { id, ...rest } = data;
+        if (id) {
+            return this.prisma.course.update({ where: { id }, data: rest });
         }
-        return this.prisma.course.create({ data });
+        return this.prisma.course.create({ data: rest });
     }
     async deleteCourse(id) {
         return this.prisma.course.delete({ where: { id } });
@@ -88,10 +98,11 @@ let ContentService = class ContentService {
         });
     }
     async upsertAchievement(data) {
-        if (data.id) {
-            return this.prisma.achievement.update({ where: { id: data.id }, data });
+        const { id, ...rest } = data;
+        if (id) {
+            return this.prisma.achievement.update({ where: { id }, data: rest });
         }
-        return this.prisma.achievement.create({ data });
+        return this.prisma.achievement.create({ data: rest });
     }
     async deleteAchievement(id) {
         return this.prisma.achievement.delete({ where: { id } });
@@ -103,10 +114,17 @@ let ContentService = class ContentService {
         });
     }
     async upsertScholar(data) {
-        if (data.id) {
-            return this.prisma.phdScholar.update({ where: { id: data.id }, data });
+        const { id, ...rest } = data;
+        const clean = {
+            ...rest,
+            imageUrl: rest.imageUrl || null,
+            researchTopic: rest.researchTopic || null,
+            currentPosition: rest.currentPosition || null,
+        };
+        if (id) {
+            return this.prisma.phdScholar.update({ where: { id }, data: clean });
         }
-        return this.prisma.phdScholar.create({ data });
+        return this.prisma.phdScholar.create({ data: clean });
     }
     async deleteScholar(id) {
         return this.prisma.phdScholar.delete({ where: { id } });
@@ -118,10 +136,11 @@ let ContentService = class ContentService {
         });
     }
     async upsertAnnouncement(data) {
-        if (data.id) {
-            return this.prisma.announcement.update({ where: { id: data.id }, data });
+        const { id, ...rest } = data;
+        if (id) {
+            return this.prisma.announcement.update({ where: { id }, data: rest });
         }
-        return this.prisma.announcement.create({ data });
+        return this.prisma.announcement.create({ data: rest });
     }
     async deleteAnnouncement(id) {
         return this.prisma.announcement.delete({ where: { id } });
@@ -133,10 +152,11 @@ let ContentService = class ContentService {
         });
     }
     async upsertSocialLink(data) {
-        if (data.id) {
-            return this.prisma.socialLink.update({ where: { id: data.id }, data });
+        const { id, ...rest } = data;
+        if (id) {
+            return this.prisma.socialLink.update({ where: { id }, data: rest });
         }
-        return this.prisma.socialLink.create({ data });
+        return this.prisma.socialLink.create({ data: rest });
     }
     async deleteSocialLink(id) {
         return this.prisma.socialLink.delete({ where: { id } });

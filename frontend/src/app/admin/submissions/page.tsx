@@ -31,7 +31,7 @@ export default function SubmissionsPage() {
 
   const fetchContacts = () => {
     api.get("/api/submissions/admin/contacts")
-      .then((r) => setContacts(r.data))
+      .then((r) => setContacts(r.data.items || []))
       .catch(() => {})
       .finally(() => setLoading(false));
   };

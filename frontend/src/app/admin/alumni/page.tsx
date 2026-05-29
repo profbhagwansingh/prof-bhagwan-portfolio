@@ -37,7 +37,7 @@ export default function AlumniAdminPage() {
 
   const fetchAlumni = () => {
     api.get("/api/submissions/admin/alumni")
-      .then((r) => setAlumni(r.data))
+      .then((r) => setAlumni(r.data.items || []))
       .catch(() => {})
       .finally(() => setLoading(false));
   };

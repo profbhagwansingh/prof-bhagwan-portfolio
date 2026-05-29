@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, Logger } from '@nestjs/common';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
 
@@ -9,12 +10,21 @@ async function bootstrap() {
 
   // ── Security: HTTP headers ────────────────────────────────────────────────
   // Helmet sets secure HTTP headers (XSS, clickjacking, MIME-sniffing, etc.)
-  app.use(helmet());
+  app.use(helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'"],
+        styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+        fontSrc: ["'self'", "https://fonts.gstatic.com"],
+        imgSrc: ["'self'", "data:", "blob:", "https:"],
+        connectSrc: ["'self'", process.env.FRONTEND_URL ?? 'http://localhost:3000'],
+      },
+    },
+    crossOriginEmbedderPolicy: false, // Allow loading images from external origins
+  }));
 
   // ── Security: CORS ────────────────────────────────────────────────────────
-  // Allow requests only from your Next.js frontend origin.
-  // In development, FRONTEND_URL defaults to localhost:3001 so the backend
-  // (on :3000) can talk to the frontend without browser CORS errors.
   const allowedOrigins = (process.env.FRONTEND_URL ?? 'http://localhost:3000')
     .split(',')
     .map((o) => o.trim());
@@ -27,34 +37,53 @@ async function bootstrap() {
   });
 
   // ── Validation: Global pipe ───────────────────────────────────────────────
-  // Automatically validates every incoming request body against its DTO.
-  // whitelist: strips any property not declared in the DTO (prevents mass-assignment).
-  // forbidNonWhitelisted: returns 400 if unknown properties are sent.
-  // transform: auto-converts plain JS objects into DTO class instances
-  //            (needed for class-validator decorators to work at runtime).
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
     }),
   );
 
-  // ── Global API prefix ─────────────────────────────────────────────────────
-  // All routes will be under /api/... (e.g. POST /api/auth/login).
-  // Note: auth.controller.ts already prefixes with 'api/auth' — if you add
-  // this global prefix, remove the 'api/' from the individual controllers
-  // to avoid /api/api/auth/login. For now this is left commented out until
-  // controllers are updated.
-  //
-  // app.setGlobalPrefix('api');
+  // ── Swagger / OpenAPI Documentation ───────────────────────────────────────
+  const config = new DocumentBuilder()
+    .setTitle('Prof. Bhagwan Singh — Portfolio API')
+    .setDescription(
+      'RESTful API for the academic portfolio platform. ' +
+      'Provides public content endpoints and authenticated admin CRUD operations.'
+    )
+    .setVersion('1.0')
+    .addBearerAuth(
+      { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+      'JWT-auth',
+    )
+    .addTag('auth', 'Authentication & Authorization')
+    .addTag('content', 'Hero, About, Timeline, Courses, Achievements, Scholars, Announcements, Social Links')
+    .addTag('publications', 'Journal Publications & Books')
+    .addTag('gallery', 'Gallery Categories & Items')
+    .addTag('submissions', 'Contact & Alumni Form Submissions')
+    .addTag('media', 'File Upload & Management')
+    .addTag('settings', 'Site Settings & SEO Metadata')
+    .addTag('users', 'User Management')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api/docs', app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+      tagsSorter: 'alpha',
+      operationsSorter: 'method',
+    },
+  });
+  logger.log('📚 Swagger docs available at /api/docs');
 
   // ── Graceful shutdown ─────────────────────────────────────────────────────
-  // Enables NestJS lifecycle hooks (OnModuleDestroy) so PrismaService can
-  // cleanly disconnect from the database on SIGTERM (e.g. Docker stop).
   app.enableShutdownHooks();
 
-  const port = process.env.PORT ?? 3000;
+  const port = process.env.PORT ?? 4000;
   await app.listen(port);
   logger.log(`🚀 Server running on http://localhost:${port}`);
   logger.log(`📦 Environment: ${process.env.NODE_ENV ?? 'development'}`);

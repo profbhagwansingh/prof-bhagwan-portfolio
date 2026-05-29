@@ -15,10 +15,11 @@ export class ContentService {
     }
 
     async upsertHeroSection(data: any) {
-        if (data.id) {
-            return this.prisma.heroSection.update({ where: { id: data.id }, data });
+        const { id, ...rest } = data;
+        if (id) {
+            return this.prisma.heroSection.update({ where: { id }, data: rest });
         }
-        return this.prisma.heroSection.create({ data });
+        return this.prisma.heroSection.create({ data: rest });
     }
 
     async addHeroImage(heroSectionId: string, imageUrl: string, altText = '') {
@@ -38,10 +39,11 @@ export class ContentService {
     }
 
     async upsertAboutContent(data: any) {
-        if (data.id) {
-            return this.prisma.aboutContent.update({ where: { id: data.id }, data });
+        const { id, ...rest } = data;
+        if (id) {
+            return this.prisma.aboutContent.update({ where: { id }, data: rest });
         }
-        return this.prisma.aboutContent.create({ data });
+        return this.prisma.aboutContent.create({ data: rest });
     }
 
     // ─── TIMELINE ─────────────────────────────────────────
@@ -57,10 +59,18 @@ export class ContentService {
     }
 
     async upsertTimeline(data: any) {
-        if (data.id) {
-            return this.prisma.experienceTimeline.update({ where: { id: data.id }, data });
+        const { id, ...rest } = data;
+        // Normalise empty strings to null for optional fields
+        const clean = {
+            ...rest,
+            subtitle: rest.subtitle || null,
+            location: rest.location || null,
+            externalLink: rest.externalLink || null,
+        };
+        if (id) {
+            return this.prisma.experienceTimeline.update({ where: { id }, data: clean });
         }
-        return this.prisma.experienceTimeline.create({ data });
+        return this.prisma.experienceTimeline.create({ data: clean });
     }
 
     async deleteTimeline(id: string) {
@@ -76,10 +86,11 @@ export class ContentService {
     }
 
     async upsertCourse(data: any) {
-        if (data.id) {
-            return this.prisma.course.update({ where: { id: data.id }, data });
+        const { id, ...rest } = data;
+        if (id) {
+            return this.prisma.course.update({ where: { id }, data: rest });
         }
-        return this.prisma.course.create({ data });
+        return this.prisma.course.create({ data: rest });
     }
 
     async deleteCourse(id: string) {
@@ -95,10 +106,11 @@ export class ContentService {
     }
 
     async upsertAchievement(data: any) {
-        if (data.id) {
-            return this.prisma.achievement.update({ where: { id: data.id }, data });
+        const { id, ...rest } = data;
+        if (id) {
+            return this.prisma.achievement.update({ where: { id }, data: rest });
         }
-        return this.prisma.achievement.create({ data });
+        return this.prisma.achievement.create({ data: rest });
     }
 
     async deleteAchievement(id: string) {
@@ -114,10 +126,18 @@ export class ContentService {
     }
 
     async upsertScholar(data: any) {
-        if (data.id) {
-            return this.prisma.phdScholar.update({ where: { id: data.id }, data });
+        const { id, ...rest } = data;
+        // Normalise empty strings to null for optional fields
+        const clean = {
+            ...rest,
+            imageUrl: rest.imageUrl || null,
+            researchTopic: rest.researchTopic || null,
+            currentPosition: rest.currentPosition || null,
+        };
+        if (id) {
+            return this.prisma.phdScholar.update({ where: { id }, data: clean });
         }
-        return this.prisma.phdScholar.create({ data });
+        return this.prisma.phdScholar.create({ data: clean });
     }
 
     async deleteScholar(id: string) {
@@ -133,10 +153,11 @@ export class ContentService {
     }
 
     async upsertAnnouncement(data: any) {
-        if (data.id) {
-            return this.prisma.announcement.update({ where: { id: data.id }, data });
+        const { id, ...rest } = data;
+        if (id) {
+            return this.prisma.announcement.update({ where: { id }, data: rest });
         }
-        return this.prisma.announcement.create({ data });
+        return this.prisma.announcement.create({ data: rest });
     }
 
     async deleteAnnouncement(id: string) {
@@ -152,10 +173,11 @@ export class ContentService {
     }
 
     async upsertSocialLink(data: any) {
-        if (data.id) {
-            return this.prisma.socialLink.update({ where: { id: data.id }, data });
+        const { id, ...rest } = data;
+        if (id) {
+            return this.prisma.socialLink.update({ where: { id }, data: rest });
         }
-        return this.prisma.socialLink.create({ data });
+        return this.prisma.socialLink.create({ data: rest });
     }
 
     async deleteSocialLink(id: string) {

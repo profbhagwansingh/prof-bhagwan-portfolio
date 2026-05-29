@@ -3,22 +3,29 @@
 import { useEffect, useRef, useState } from "react";
 import { ExternalLink, BookOpen, FileText } from "lucide-react";
 
+import api from "@/lib/api";
+
 type Tag = "ALL" | "SCOPUS" | "PEER_REVIEWED" | "UGC_CARE" | "CONFERENCE";
 
-const publications = [
-  { tag: "SCOPUS",        year: 2023, title: "Impact of Digital Marketing on Consumer Purchase Behaviour in Emerging Markets",                   journal: "Journal of Marketing Research" },
-  { tag: "PEER_REVIEWED", year: 2023, title: "Corporate Social Responsibility and Firm Value: Evidence from Indian Manufacturing",               journal: "Indian Journal of Corporate Governance" },
-  { tag: "SCOPUS",        year: 2022, title: "Sustainable HRM Practices and Organisational Performance: A Systematic Review",                    journal: "International Journal of Human Resource Management" },
-  { tag: "UGC_CARE",      year: 2022, title: "Entrepreneurship Ecosystem in India: Challenges and Opportunities Post-Pandemic",                  journal: "Journal of Entrepreneurship & Innovation" },
-  { tag: "PEER_REVIEWED", year: 2022, title: "Leadership Styles and Employee Engagement in Higher Education Institutions",                       journal: "Management & Labour Studies" },
-  { tag: "CONFERENCE",    year: 2022, title: "Digital Transformation in SMEs: A Framework for Strategic Adoption",                              journal: "International Conference on Business Strategy" },
-  { tag: "SCOPUS",        year: 2021, title: "Green Marketing Strategies and Consumer Perception: A Study of FMCG Sector",                      journal: "Journal of Consumer Marketing" },
-  { tag: "UGC_CARE",      year: 2021, title: "Work-Life Balance and Organisational Commitment Among Faculty Members",                           journal: "Indian Journal of Industrial Relations" },
-  { tag: "PEER_REVIEWED", year: 2021, title: "Corporate Governance and Financial Performance: Evidence from BSE Listed Companies",              journal: "Finance India" },
-  { tag: "SCOPUS",        year: 2020, title: "Knowledge Management and Competitive Advantage in Service Sector Firms",                          journal: "Journal of Knowledge Management" },
-  { tag: "UGC_CARE",      year: 2020, title: "E-Commerce Adoption Barriers in Rural India: An Empirical Analysis",                             journal: "Asian Journal of Management" },
-  { tag: "CONFERENCE",    year: 2020, title: "Sustainability Reporting Practices in Indian Corporations: A Content Analysis",                   journal: "National Conference on Sustainable Business" },
-];
+interface Publication {
+  id: string;
+  title: string;
+  journal: string | null;
+  year: number;
+  tag: string;
+  authors: string;
+  externalUrl: string | null;
+}
+
+interface Book {
+  id: string;
+  title: string;
+  year: number;
+  subtitle: string | null;
+  isbn: string | null;
+  purchaseUrl: string | null;
+  coverImageUrl: string | null;
+}
 
 const tagConfig: Record<string, { label: string; class: string }> = {
   ALL:          { label: "All",          class: "" },
@@ -28,25 +35,30 @@ const tagConfig: Record<string, { label: string; class: string }> = {
   CONFERENCE:   { label: "Conference",   class: "bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-950 dark:text-purple-300" },
 };
 
-const books = [
-  { title: "Strategic Management: Theory & Practice",             year: 2022, color: "from-primary-500 to-primary-700" },
-  { title: "Marketing Management in the Digital Age",             year: 2021, color: "from-emerald-500 to-emerald-700" },
-  { title: "Human Resource Management: A Values Approach",        year: 2020, color: "from-amber-500 to-amber-700" },
-  { title: "Research Methodology for Management Studies",         year: 2019, color: "from-rose-500 to-rose-700" },
+const bookColors = [
+  "from-primary-500 to-primary-700",
+  "from-emerald-500 to-emerald-700",
+  "from-amber-500 to-amber-700",
+  "from-rose-500 to-rose-700",
 ];
 
 export function PublicationsPage() {
   const [activeTag, setActiveTag] = useState<Tag>("ALL");
   const [visible, setVisible] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+  const [publications, setPublications] = useState<Publication[]>([]);
+  const [books, setBooks] = useState<Book[]>([]);
 
-  useEffect(() => { setTimeout(() => setVisible(true), 100); }, []);
+  useEffect(() => { 
+    setTimeout(() => setVisible(true), 100); 
+    api.get("/api/publications").then(res => setPublications(res.data)).catch(console.error);
+    api.get("/api/publications/books").then(res => setBooks(res.data)).catch(console.error);
+  }, []);
 
   const filtered = activeTag === "ALL"
     ? publications
     : publications.filter((p) => p.tag === activeTag);
 
-  const grouped = filtered.reduce<Record<number, typeof publications>>((acc, pub) => {
+  const grouped = filtered.reduce<Record<number, Publication[]>>((acc, pub) => {
     (acc[pub.year] ??= []).push(pub);
     return acc;
   }, {});
@@ -103,7 +115,7 @@ export function PublicationsPage() {
           </div>
 
           {/* Grouped by Year */}
-          <div className="space-y-12" ref={ref}>
+          <div className="space-y-12">
             {years.map((year) => (
               <div key={year}>
                 {/* Year heading */}
@@ -127,19 +139,22 @@ export function PublicationsPage() {
 
                       <div className="flex-1 min-w-0">
                         <div className="flex flex-wrap items-center gap-2 mb-1">
-                          <span className={`text-xs font-medium px-2 py-0.5 rounded-full border ${tagConfig[pub.tag].class}`}>
-                            {tagConfig[pub.tag].label}
+                          <span className={`text-xs font-medium px-2 py-0.5 rounded-full border ${tagConfig[pub.tag]?.class || tagConfig.PEER_REVIEWED.class}`}>
+                            {tagConfig[pub.tag]?.label || "Peer Reviewed"}
                           </span>
                         </div>
                         <h3 className="font-display text-sm font-semibold text-[var(--text-primary)] leading-snug mb-0.5">
                           {pub.title}
                         </h3>
-                        <p className="text-xs text-[var(--text-muted)] italic">{pub.journal}</p>
+                        <p className="text-xs text-[var(--text-muted)] italic mb-1">{pub.journal}</p>
+                        <p className="text-[11px] text-[var(--text-soft)]">{pub.authors}</p>
                       </div>
 
-                      <button className="w-8 h-8 rounded-lg border border-[var(--border)] flex items-center justify-center text-[var(--text-muted)] hover:text-primary-500 hover:border-primary-300 transition-all flex-shrink-0">
-                        <ExternalLink className="w-3.5 h-3.5" />
-                      </button>
+                      {pub.externalUrl && (
+                        <a href={pub.externalUrl} target="_blank" rel="noreferrer" className="w-8 h-8 rounded-lg border border-[var(--border)] flex items-center justify-center text-[var(--text-muted)] hover:text-primary-500 hover:border-primary-300 transition-all flex-shrink-0">
+                          <ExternalLink className="w-3.5 h-3.5" />
+                        </a>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -160,19 +175,33 @@ export function PublicationsPage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {books.map((book, i) => (
-              <div key={i} className="card-base overflow-hidden group">
-                <div className={`h-44 bg-gradient-to-br ${book.color} flex items-center justify-center relative`}>
-                  <BookOpen className="w-14 h-14 text-white/40" />
-                  <span className="absolute top-3 right-3 font-display text-white/80 text-sm font-bold">{book.year}</span>
+            {books.map((book, i) => {
+              const bgGradient = bookColors[i % bookColors.length];
+              return (
+                <div key={book.id} className="card-base overflow-hidden group">
+                  <div className={`h-44 bg-gradient-to-br ${bgGradient} flex items-center justify-center relative`}>
+                    {book.coverImageUrl && (book.coverImageUrl.startsWith('http') || book.coverImageUrl.startsWith('/')) ? (
+                      <img 
+                        src={book.coverImageUrl} 
+                        alt={book.title} 
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <>
+                        <BookOpen className="w-14 h-14 text-white/40" />
+                        <span className="absolute top-3 right-3 font-display text-white/80 text-sm font-bold">{book.year}</span>
+                      </>
+                    )}
+                  </div>
+                  <div className="p-5">
+                    <h3 className="font-display text-sm font-semibold text-[var(--text-primary)] leading-snug mb-1">
+                      {book.title}
+                    </h3>
+                    {book.subtitle && <p className="text-xs text-[var(--text-muted)]">{book.subtitle}</p>}
+                  </div>
                 </div>
-                <div className="p-5">
-                  <h3 className="font-display text-sm font-semibold text-[var(--text-primary)] leading-snug">
-                    {book.title}
-                  </h3>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

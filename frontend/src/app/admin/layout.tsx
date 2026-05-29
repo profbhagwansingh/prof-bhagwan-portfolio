@@ -6,7 +6,7 @@ import Link from "next/link";
 import {
   GraduationCap, LayoutDashboard, FileText, Image,
   Users, MessageSquare, Settings, LogOut, Menu, X,
-  BookOpen, Bell, ChevronRight,
+  BookOpen, Bell, ChevronRight, Shield,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -17,6 +17,7 @@ const navItems = [
   { href: "/admin/content",      label: "Content",      icon: BookOpen },
   { href: "/admin/submissions",  label: "Submissions",  icon: MessageSquare },
   { href: "/admin/alumni",       label: "Alumni",       icon: Users },
+  { href: "/admin/users",        label: "Users",        icon: Shield },
   { href: "/admin/settings",     label: "Settings",     icon: Settings },
 ];
 

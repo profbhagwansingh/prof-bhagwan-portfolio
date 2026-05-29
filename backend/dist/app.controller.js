@@ -11,14 +11,35 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppController = void 0;
 const common_1 = require("@nestjs/common");
+const throttler_1 = require("@nestjs/throttler");
 const app_service_1 = require("./app.service");
+const prisma_service_1 = require("./prisma/prisma.service");
 let AppController = class AppController {
     appService;
-    constructor(appService) {
+    prisma;
+    constructor(appService, prisma) {
         this.appService = appService;
+        this.prisma = prisma;
     }
     getHello() {
         return this.appService.getHello();
+    }
+    async getHealth() {
+        let dbStatus = 'connected';
+        try {
+            await this.prisma.$queryRaw `SELECT 1`;
+        }
+        catch {
+            dbStatus = 'disconnected';
+        }
+        return {
+            status: 'ok',
+            timestamp: new Date().toISOString(),
+            uptime: process.uptime(),
+            environment: process.env.NODE_ENV ?? 'development',
+            database: dbStatus,
+            version: '1.0.0',
+        };
     }
 };
 exports.AppController = AppController;
@@ -28,8 +49,16 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", String)
 ], AppController.prototype, "getHello", null);
+__decorate([
+    (0, common_1.Get)('api/health'),
+    (0, throttler_1.SkipThrottle)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], AppController.prototype, "getHealth", null);
 exports.AppController = AppController = __decorate([
     (0, common_1.Controller)(),
-    __metadata("design:paramtypes", [app_service_1.AppService])
+    __metadata("design:paramtypes", [app_service_1.AppService,
+        prisma_service_1.PrismaService])
 ], AppController);
 //# sourceMappingURL=app.controller.js.map

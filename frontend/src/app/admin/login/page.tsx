@@ -18,7 +18,7 @@ export default function AdminLoginPage() {
     setError("");
     try {
       const res = await api.post("/api/auth/login", form);
-      localStorage.setItem("admin_token", res.data.access_token);
+      localStorage.setItem("admin_token", res.data.accessToken);
       router.push("/admin/dashboard");
     } catch {
       setError("Invalid email or password. Please try again.");

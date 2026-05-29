@@ -26,14 +26,23 @@ let SettingsController = class SettingsController {
     getSeoForPage(pageSlug) {
         return this.settingsService.getSeoForPage(pageSlug);
     }
+    getSocialLinks() {
+        return this.settingsService.getSettings('social');
+    }
     getAllSettings(category) {
         return this.settingsService.getSettings(category);
     }
     upsertSetting(data) {
         return this.settingsService.upsertSetting(data.key, data.value, data.category);
     }
+    updateSettings(data) {
+        return this.settingsService.upsertSetting(data.key, data.value, data.category);
+    }
     getAllSeo() { return this.settingsService.getAllSeo(); }
     upsertSeo(data) { return this.settingsService.upsertSeo(data); }
+    upsertSeoBySlug(pageSlug, data) {
+        return this.settingsService.upsertSeo({ ...data, pageSlug });
+    }
     getAuditLogs(page) {
         return this.settingsService.getAuditLogs(+(page || 1));
     }
@@ -46,6 +55,12 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], SettingsController.prototype, "getSeoForPage", null);
+__decorate([
+    (0, common_1.Get)('social-links'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], SettingsController.prototype, "getSocialLinks", null);
 __decorate([
     (0, common_1.Get)('admin/all'),
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
@@ -64,6 +79,15 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], SettingsController.prototype, "upsertSetting", null);
 __decorate([
+    (0, common_1.Put)('admin/settings'),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), roles_guard_1.RolesGuard),
+    (0, roles_guard_1.Roles)(client_1.Role.SUPER_ADMIN, client_1.Role.ADMIN),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], SettingsController.prototype, "updateSettings", null);
+__decorate([
     (0, common_1.Get)('admin/seo'),
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     __metadata("design:type", Function),
@@ -79,6 +103,16 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], SettingsController.prototype, "upsertSeo", null);
+__decorate([
+    (0, common_1.Put)('seo/:pageSlug'),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), roles_guard_1.RolesGuard),
+    (0, roles_guard_1.Roles)(client_1.Role.SUPER_ADMIN, client_1.Role.ADMIN),
+    __param(0, (0, common_1.Param)('pageSlug')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", void 0)
+], SettingsController.prototype, "upsertSeoBySlug", null);
 __decorate([
     (0, common_1.Get)('admin/audit-logs'),
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), roles_guard_1.RolesGuard),

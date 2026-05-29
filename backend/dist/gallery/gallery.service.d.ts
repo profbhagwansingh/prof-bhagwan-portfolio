@@ -2,6 +2,8 @@ import { PrismaService } from '../prisma/prisma.service';
 import { MediaType } from '@prisma/client';
 export declare class GalleryService {
     private prisma;
+    private readonly logger;
+    private readonly mediaRoot;
     constructor(prisma: PrismaService);
     getCategories(): Promise<({
         items: {
@@ -15,6 +17,7 @@ export declare class GalleryService {
             mediaUrl: string;
             thumbnailUrl: string | null;
             caption: string | null;
+            isSlideshow: boolean;
         }[];
     } & {
         id: string;
@@ -34,7 +37,7 @@ export declare class GalleryService {
         sortOrder: number;
         slug: string;
     }>;
-    getItems(categorySlug?: string, mediaType?: MediaType, page?: number, limit?: number): Promise<{
+    getItems(categorySlug?: string, mediaType?: MediaType, isSlideshow?: boolean, page?: number, limit?: number): Promise<{
         items: ({
             category: {
                 id: string;
@@ -53,6 +56,7 @@ export declare class GalleryService {
             mediaUrl: string;
             thumbnailUrl: string | null;
             caption: string | null;
+            isSlideshow: boolean;
         })[];
         total: number;
         page: number;
@@ -69,6 +73,7 @@ export declare class GalleryService {
         mediaUrl: string;
         thumbnailUrl: string | null;
         caption: string | null;
+        isSlideshow: boolean;
     }>;
     deleteItem(id: string): Promise<{
         id: string;
@@ -81,5 +86,56 @@ export declare class GalleryService {
         mediaUrl: string;
         thumbnailUrl: string | null;
         caption: string | null;
+        isSlideshow: boolean;
+    }>;
+    toggleSlideshow(id: string, isSlideshow: boolean): Promise<{
+        id: string;
+        isActive: boolean;
+        createdAt: Date;
+        sortOrder: number;
+        altText: string;
+        categoryId: string;
+        mediaType: import(".prisma/client").$Enums.MediaType;
+        mediaUrl: string;
+        thumbnailUrl: string | null;
+        caption: string | null;
+        isSlideshow: boolean;
+    }>;
+    private resolveDir;
+    scanFiles(folder: string): Promise<string[]>;
+    uploadFiles(folder: string, files: Express.Multer.File[]): Promise<{
+        uploaded: string[];
+    }>;
+    renameFile(folder: string, oldName: string, newName: string): Promise<{
+        success: boolean;
+        newUrl: string;
+    }>;
+    deleteFile(folder: string, filename: string): Promise<{
+        success: boolean;
+    }>;
+    createFolder(folderName: string): Promise<{
+        success: boolean;
+    }>;
+    renameFolder(oldName: string, newName: string): Promise<{
+        success: boolean;
+    }>;
+    deleteFolder(folderName: string): Promise<{
+        success: boolean;
+    }>;
+    scanGalleryFolders(): Promise<{
+        folder: string;
+        label: string;
+        count: number;
+    }[]>;
+    scanSlideshowFiles(): Promise<string[]>;
+    uploadSlideshowFiles(files: Express.Multer.File[]): Promise<{
+        uploaded: string[];
+    }>;
+    renameSlideshowFile(oldName: string, newName: string): Promise<{
+        success: boolean;
+        newUrl: string;
+    }>;
+    deleteSlideshowFile(filename: string): Promise<{
+        success: boolean;
     }>;
 }

@@ -3,65 +3,33 @@
 import { useEffect, useRef, useState } from "react";
 import { ExternalLink } from "lucide-react";
 
-const timeline = [
-  {
-    title: "Professor & Head of Department",
-    organization: "DSMM College",
-    location: "India",
-    dateRange: "2010 — Present",
-    subtitle: "Department of Management Studies",
-    link: "",
-  },
-  {
-    title: "Associate Professor",
-    organization: "DSMM College",
-    location: "India",
-    dateRange: "2005 — 2010",
-    subtitle: "Teaching UG & PG Management Programmes",
-    link: "",
-  },
-  {
-    title: "Assistant Professor",
-    organization: "Institute of Management",
-    location: "India",
-    dateRange: "2000 — 2005",
-    subtitle: "Marketing & Strategic Management",
-    link: "",
-  },
-  {
-    title: "PhD in Management",
-    organization: "University",
-    location: "India",
-    dateRange: "1997 — 2001",
-    subtitle: "Doctoral Research in Management Studies",
-    link: "",
-  },
-  {
-    title: "MBA (Gold Medallist)",
-    organization: "University",
-    location: "India",
-    dateRange: "1995 — 1997",
-    subtitle: "Master of Business Administration",
-    link: "",
-  },
-];
+import api from "@/lib/api";
+
+interface TimelineItem {
+  id: string;
+  title: string;
+  subtitle: string | null;
+  organization: string;
+  location: string | null;
+  dateRange: string;
+  externalLink: string | null;
+}
 
 export function TimelineSection() {
-  const ref = useRef<HTMLDivElement>(null);
-  const [inView, setInView] = useState(false);
+  const [timeline, setTimeline] = useState<TimelineItem[]>([]);
+
   useEffect(() => {
-    const el = ref.current; if (!el) return;
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setInView(true); }, { threshold: 0.1 });
-    obs.observe(el); return () => obs.disconnect();
+    api.get("/api/content/timeline").then(res => {
+      setTimeline(Array.isArray(res.data) ? res.data : []);
+    }).catch(console.error);
   }, []);
 
+  if (timeline.length === 0) return null;
+
   return (
-    <section ref={ref} className="py-section bg-[var(--bg-primary)]">
+    <section className="py-section bg-[var(--bg-primary)]">
       <div className="container-academic">
-        <div
-          className="mb-14 transition-all duration-700"
-          style={{ opacity: inView ? 1 : 0, transform: inView ? "none" : "translateY(24px)" }}
-        >
+        <div className="mb-14">
           <div className="accent-line">
             <p className="text-xs font-medium uppercase tracking-widest text-primary-500 mb-2">Career Journey</p>
           </div>
@@ -77,13 +45,8 @@ export function TimelineSection() {
           <div className="space-y-6">
             {timeline.map((item, i) => (
               <div
-                key={i}
-                className="relative flex gap-8 transition-all duration-700"
-                style={{
-                  opacity: inView ? 1 : 0,
-                  transform: inView ? "none" : "translateX(-24px)",
-                  transitionDelay: `${i * 100}ms`,
-                }}
+                key={item.id}
+                className="relative flex gap-8"
               >
                 {/* Dot */}
                 <div className="hidden md:flex flex-col items-center flex-shrink-0">
@@ -99,22 +62,33 @@ export function TimelineSection() {
                       <h3 className="font-display text-lg font-semibold text-[var(--text-primary)] mb-1">
                         {item.title}
                       </h3>
-                      <p className="text-primary-500 font-medium text-sm mb-1">
-                        {item.organization} · {item.location}
-                      </p>
-                      <p className="text-sm text-[var(--text-muted)]">{item.subtitle}</p>
-                    </div>
-                    <div className="flex items-center gap-3 flex-shrink-0">
-                      <span className="px-3 py-1 rounded-full bg-[var(--accent-light)] text-primary-600 text-xs font-medium border border-primary-200">
-                        {item.dateRange}
-                      </span>
-                      {item.link && (
-                        <a href={item.link} target="_blank" rel="noopener noreferrer"
-                          className="w-8 h-8 rounded-lg border border-[var(--border)] flex items-center justify-center text-[var(--text-muted)] hover:text-primary-500 hover:border-primary-300 transition-all">
-                          <ExternalLink className="w-3.5 h-3.5" />
-                        </a>
+                      {item.subtitle && (
+                        <p className="text-sm text-[var(--text-muted)] mb-3">{item.subtitle}</p>
                       )}
+                      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-[var(--text-soft)]">
+                        <span className="font-medium text-[var(--text-primary)]">{item.organization}</span>
+                        {item.location && (
+                          <>
+                            <span className="w-1 h-1 rounded-full bg-[var(--border)]" />
+                            <span>{item.location}</span>
+                          </>
+                        )}
+                        <span className="w-1 h-1 rounded-full bg-[var(--border)]" />
+                        <span className="font-display font-medium text-primary-500">
+                          {item.dateRange}
+                        </span>
+                      </div>
                     </div>
+                    {item.externalLink && (
+                      <a
+                        href={item.externalLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-xs font-medium text-primary-500 hover:text-primary-600 transition-colors bg-primary-50 px-3 py-1.5 rounded-lg"
+                      >
+                        Visit <ExternalLink className="w-3.5 h-3.5" />
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>

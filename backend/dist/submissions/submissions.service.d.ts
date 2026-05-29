@@ -9,8 +9,8 @@ export declare class SubmissionsService {
         whatsapp?: string;
         message: string;
     }): Promise<{
-        email: string;
         id: string;
+        email: string;
         createdAt: Date;
         name: string;
         status: import(".prisma/client").$Enums.SubmissionStatus;
@@ -19,8 +19,8 @@ export declare class SubmissionsService {
     }>;
     getContacts(status?: SubmissionStatus, page?: number, limit?: number): Promise<{
         items: {
-            email: string;
             id: string;
+            email: string;
             createdAt: Date;
             name: string;
             status: import(".prisma/client").$Enums.SubmissionStatus;
@@ -32,8 +32,8 @@ export declare class SubmissionsService {
         totalPages: number;
     }>;
     updateContactStatus(id: string, status: SubmissionStatus): Promise<{
-        email: string;
         id: string;
+        email: string;
         createdAt: Date;
         name: string;
         status: import(".prisma/client").$Enums.SubmissionStatus;
@@ -41,8 +41,8 @@ export declare class SubmissionsService {
         message: string;
     }>;
     deleteContact(id: string): Promise<{
-        email: string;
         id: string;
+        email: string;
         createdAt: Date;
         name: string;
         status: import(".prisma/client").$Enums.SubmissionStatus;
@@ -50,9 +50,9 @@ export declare class SubmissionsService {
         message: string;
     }>;
     createAlumni(data: any): Promise<{
+        id: string;
         email: string;
         fullName: string;
-        id: string;
         createdAt: Date;
         status: import(".prisma/client").$Enums.AlumniStatus;
         whatsapp: string | null;
@@ -66,9 +66,9 @@ export declare class SubmissionsService {
     }>;
     getAlumni(status?: AlumniStatus, page?: number, limit?: number): Promise<{
         items: {
+            id: string;
             email: string;
             fullName: string;
-            id: string;
             createdAt: Date;
             status: import(".prisma/client").$Enums.AlumniStatus;
             whatsapp: string | null;
@@ -85,9 +85,9 @@ export declare class SubmissionsService {
         totalPages: number;
     }>;
     updateAlumniStatus(id: string, status: AlumniStatus): Promise<{
+        id: string;
         email: string;
         fullName: string;
-        id: string;
         createdAt: Date;
         status: import(".prisma/client").$Enums.AlumniStatus;
         whatsapp: string | null;
@@ -100,9 +100,9 @@ export declare class SubmissionsService {
         pictureUrl: string | null;
     }>;
     deleteAlumni(id: string): Promise<{
+        id: string;
         email: string;
         fullName: string;
-        id: string;
         createdAt: Date;
         status: import(".prisma/client").$Enums.AlumniStatus;
         whatsapp: string | null;
@@ -115,9 +115,35 @@ export declare class SubmissionsService {
         pictureUrl: string | null;
     }>;
     getDashboardStats(): Promise<{
-        contactCount: number;
-        alumniCount: number;
-        newContacts: number;
-        newAlumni: number;
+        contacts: {
+            total: number;
+            new: number;
+        };
+        alumni: {
+            total: number;
+            new: number;
+        };
+        publications: number;
+        galleryItems: number;
+        slideshowImages: number;
+        courses: number;
+        scholars: number;
+        timeline: number;
+        books: number;
+        achievements: number;
+        announcements: number;
+        recentActivity: ({
+            id: string;
+            type: "contact";
+            text: string;
+            time: Date;
+            status: import(".prisma/client").$Enums.SubmissionStatus;
+        } | {
+            id: string;
+            type: "alumni";
+            text: string;
+            time: Date;
+            status: import(".prisma/client").$Enums.AlumniStatus;
+        })[];
     }>;
 }

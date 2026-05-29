@@ -56,13 +56,65 @@ let SubmissionsService = class SubmissionsService {
         return this.prisma.alumniSubmission.delete({ where: { id } });
     }
     async getDashboardStats() {
-        const [contactCount, alumniCount, newContacts, newAlumni] = await Promise.all([
+        const [contactCount, alumniCount, newContacts, newAlumni, publicationCount, galleryItemCount, slideshowCount, courseCount, scholarCount, timelineCount, bookCount, achievementCount, announcementCount,] = await Promise.all([
             this.prisma.contactSubmission.count(),
             this.prisma.alumniSubmission.count(),
             this.prisma.contactSubmission.count({ where: { status: 'NEW' } }),
             this.prisma.alumniSubmission.count({ where: { status: 'NEW' } }),
+            this.prisma.publication.count(),
+            this.prisma.galleryItem.count(),
+            this.prisma.galleryItem.count({ where: { isSlideshow: true } }),
+            this.prisma.course.count({ where: { isActive: true } }),
+            this.prisma.phdScholar.count({ where: { isActive: true } }),
+            this.prisma.experienceTimeline.count({ where: { isActive: true } }),
+            this.prisma.book.count({ where: { isActive: true } }),
+            this.prisma.achievement.count({ where: { isActive: true } }),
+            this.prisma.announcement.count({ where: { isActive: true } }),
         ]);
-        return { contactCount, alumniCount, newContacts, newAlumni };
+        const [recentContacts, recentAlumni] = await Promise.all([
+            this.prisma.contactSubmission.findMany({
+                orderBy: { createdAt: 'desc' },
+                take: 5,
+                select: { id: true, name: true, createdAt: true, status: true },
+            }),
+            this.prisma.alumniSubmission.findMany({
+                orderBy: { createdAt: 'desc' },
+                take: 5,
+                select: { id: true, fullName: true, createdAt: true, status: true },
+            }),
+        ]);
+        const recentActivity = [
+            ...recentContacts.map((c) => ({
+                id: c.id,
+                type: 'contact',
+                text: `New message from ${c.name}`,
+                time: c.createdAt,
+                status: c.status,
+            })),
+            ...recentAlumni.map((a) => ({
+                id: a.id,
+                type: 'alumni',
+                text: `Alumni registration: ${a.fullName}`,
+                time: a.createdAt,
+                status: a.status,
+            })),
+        ]
+            .sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime())
+            .slice(0, 8);
+        return {
+            contacts: { total: contactCount, new: newContacts },
+            alumni: { total: alumniCount, new: newAlumni },
+            publications: publicationCount,
+            galleryItems: galleryItemCount,
+            slideshowImages: slideshowCount,
+            courses: courseCount,
+            scholars: scholarCount,
+            timeline: timelineCount,
+            books: bookCount,
+            achievements: achievementCount,
+            announcements: announcementCount,
+            recentActivity,
+        };
     }
 };
 exports.SubmissionsService = SubmissionsService;
