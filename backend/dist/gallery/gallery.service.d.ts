@@ -8,55 +8,55 @@ export declare class GalleryService {
     getCategories(): Promise<({
         items: {
             id: string;
-            isActive: boolean;
-            createdAt: Date;
             sortOrder: number;
-            altText: string;
+            isActive: boolean;
             categoryId: string;
             mediaType: import(".prisma/client").$Enums.MediaType;
             mediaUrl: string;
             thumbnailUrl: string | null;
             caption: string | null;
+            altText: string;
             isSlideshow: boolean;
+            createdAt: Date;
         }[];
     } & {
         id: string;
         name: string;
-        sortOrder: number;
         slug: string;
+        sortOrder: number;
     })[]>;
     upsertCategory(data: any): Promise<{
         id: string;
         name: string;
-        sortOrder: number;
         slug: string;
+        sortOrder: number;
     }>;
     deleteCategory(id: string): Promise<{
         id: string;
         name: string;
-        sortOrder: number;
         slug: string;
+        sortOrder: number;
     }>;
     getItems(categorySlug?: string, mediaType?: MediaType, isSlideshow?: boolean, page?: number, limit?: number): Promise<{
         items: ({
             category: {
                 id: string;
                 name: string;
-                sortOrder: number;
                 slug: string;
+                sortOrder: number;
             };
         } & {
             id: string;
-            isActive: boolean;
-            createdAt: Date;
             sortOrder: number;
-            altText: string;
+            isActive: boolean;
             categoryId: string;
             mediaType: import(".prisma/client").$Enums.MediaType;
             mediaUrl: string;
             thumbnailUrl: string | null;
             caption: string | null;
+            altText: string;
             isSlideshow: boolean;
+            createdAt: Date;
         })[];
         total: number;
         page: number;
@@ -64,46 +64,46 @@ export declare class GalleryService {
     }>;
     upsertItem(data: any): Promise<{
         id: string;
-        isActive: boolean;
-        createdAt: Date;
         sortOrder: number;
-        altText: string;
+        isActive: boolean;
         categoryId: string;
         mediaType: import(".prisma/client").$Enums.MediaType;
         mediaUrl: string;
         thumbnailUrl: string | null;
         caption: string | null;
+        altText: string;
         isSlideshow: boolean;
+        createdAt: Date;
     }>;
     deleteItem(id: string): Promise<{
         id: string;
-        isActive: boolean;
-        createdAt: Date;
         sortOrder: number;
-        altText: string;
+        isActive: boolean;
         categoryId: string;
         mediaType: import(".prisma/client").$Enums.MediaType;
         mediaUrl: string;
         thumbnailUrl: string | null;
         caption: string | null;
+        altText: string;
         isSlideshow: boolean;
+        createdAt: Date;
     }>;
     toggleSlideshow(id: string, isSlideshow: boolean): Promise<{
         id: string;
-        isActive: boolean;
-        createdAt: Date;
         sortOrder: number;
-        altText: string;
+        isActive: boolean;
         categoryId: string;
         mediaType: import(".prisma/client").$Enums.MediaType;
         mediaUrl: string;
         thumbnailUrl: string | null;
         caption: string | null;
+        altText: string;
         isSlideshow: boolean;
+        createdAt: Date;
     }>;
     private resolveDir;
     scanFiles(folder: string): Promise<string[]>;
-    uploadFiles(folder: string, files: Express.Multer.File[]): Promise<{
+    uploadFiles(folder: string, files: any[]): Promise<{
         uploaded: string[];
     }>;
     renameFile(folder: string, oldName: string, newName: string): Promise<{
@@ -128,7 +128,7 @@ export declare class GalleryService {
         count: number;
     }[]>;
     scanSlideshowFiles(): Promise<string[]>;
-    uploadSlideshowFiles(files: Express.Multer.File[]): Promise<{
+    uploadSlideshowFiles(files: any[]): Promise<{
         uploaded: string[];
     }>;
     renameSlideshowFile(oldName: string, newName: string): Promise<{

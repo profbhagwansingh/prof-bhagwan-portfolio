@@ -100,7 +100,7 @@ export class GalleryService {
         }
     }
 
-    async uploadFiles(folder: string, files: Express.Multer.File[]): Promise<{ uploaded: string[] }> {
+    async uploadFiles(folder: string, files: any[]): Promise<{ uploaded: string[] }> {
         const dir = this.resolveDir(folder);
         if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
         const uploaded: string[] = [];
@@ -202,7 +202,7 @@ export class GalleryService {
 
     // ─── Convenience wrappers for slideshow ──────────────────
     async scanSlideshowFiles() { return this.scanFiles('img/slideshow'); }
-    async uploadSlideshowFiles(files: Express.Multer.File[]) { return this.uploadFiles('img/slideshow', files); }
+    async uploadSlideshowFiles(files: any[]) { return this.uploadFiles('img/slideshow', files); }
     async renameSlideshowFile(oldName: string, newName: string) { return this.renameFile('img/slideshow', oldName, newName); }
     async deleteSlideshowFile(filename: string) { return this.deleteFile('img/slideshow', filename); }
 }
