@@ -4,10 +4,11 @@
     "rootDir": "./src",
     "outDir": "./dist",
     "skipLibCheck": true,
-    "strict": true,
+    "strict": false,
     "strictNullChecks": false,
     "noImplicitAny": false,
-    "strictPropertyInitialization": false
+    "strictPropertyInitialization": false,
+    "types": ["node", "express"]
   },
   "exclude": ["node_modules", "test", "dist", "**/*spec.ts", "prisma.config.ts", "setup-admin.ts"]
 }

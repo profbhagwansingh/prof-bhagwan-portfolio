@@ -6,9 +6,9 @@ export declare class ContentController {
         images: {
             id: string;
             sortOrder: number;
+            heroSectionId: string;
             imageUrl: string;
             altText: string;
-            heroSectionId: string;
         }[];
     } & {
         id: string;
@@ -103,16 +103,16 @@ export declare class ContentController {
     }): Promise<{
         id: string;
         sortOrder: number;
+        heroSectionId: string;
         imageUrl: string;
         altText: string;
-        heroSectionId: string;
     }>;
     deleteHeroImage(id: string): Promise<{
         id: string;
         sortOrder: number;
+        heroSectionId: string;
         imageUrl: string;
         altText: string;
-        heroSectionId: string;
     }>;
     getAdminAbout(): Promise<{
         id: string;
