@@ -81,6 +81,16 @@ async function bootstrap() {
 
   // ── Auto-seed admin on startup ─────────────────────────────────────────────
   const prisma = new PrismaClient();
+
+  // Run migrations on startup
+  const { execSync } = await import('child_process');
+  try {
+    execSync('npx prisma migrate deploy', { stdio: 'inherit' });
+    logger.log('✅ Database migrations applied');
+  } catch (e) {
+    logger.error('Migration failed', e);
+  }
+
   const adminEmail = process.env.ADMIN_EMAIL ?? 'admin@bhagwansingh.com';
   const adminPassword = process.env.ADMIN_PASSWORD ?? 'Admin@1234';
   const existing = await prisma.user.findUnique({ where: { email: adminEmail } });
