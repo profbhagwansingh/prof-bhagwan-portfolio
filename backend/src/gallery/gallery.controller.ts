@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Patch, Delete, Body, Param, Query, UseGuards, UseInterceptors, UploadedFiles } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FilesInterceptor } from '@nestjs/platform-express';
+
 import { RolesGuard, Roles } from '../auth/roles.guard';
 import { GalleryService } from './gallery.service';
 import { Role, MediaType } from '@prisma/client';

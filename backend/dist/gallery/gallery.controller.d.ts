@@ -6,43 +6,43 @@ export declare class GalleryController {
     getCategories(): Promise<({
         items: {
             id: string;
-            isActive: boolean;
-            createdAt: Date;
             sortOrder: number;
-            altText: string;
+            isActive: boolean;
             categoryId: string;
             mediaType: import(".prisma/client").$Enums.MediaType;
             mediaUrl: string;
             thumbnailUrl: string | null;
             caption: string | null;
+            altText: string;
             isSlideshow: boolean;
+            createdAt: Date;
         }[];
     } & {
         id: string;
         name: string;
-        sortOrder: number;
         slug: string;
+        sortOrder: number;
     })[]>;
     getItems(category?: string, type?: MediaType, isSlideshow?: boolean, page?: string, limit?: string): Promise<{
         items: ({
             category: {
                 id: string;
                 name: string;
-                sortOrder: number;
                 slug: string;
+                sortOrder: number;
             };
         } & {
             id: string;
-            isActive: boolean;
-            createdAt: Date;
             sortOrder: number;
-            altText: string;
+            isActive: boolean;
             categoryId: string;
             mediaType: import(".prisma/client").$Enums.MediaType;
             mediaUrl: string;
             thumbnailUrl: string | null;
             caption: string | null;
+            altText: string;
             isSlideshow: boolean;
+            createdAt: Date;
         })[];
         total: number;
         page: number;
@@ -51,53 +51,53 @@ export declare class GalleryController {
     upsertCategory(data: any): Promise<{
         id: string;
         name: string;
-        sortOrder: number;
         slug: string;
+        sortOrder: number;
     }>;
     deleteCategory(id: string): Promise<{
         id: string;
         name: string;
-        sortOrder: number;
         slug: string;
+        sortOrder: number;
     }>;
     upsertItem(data: any): Promise<{
         id: string;
-        isActive: boolean;
-        createdAt: Date;
         sortOrder: number;
-        altText: string;
+        isActive: boolean;
         categoryId: string;
         mediaType: import(".prisma/client").$Enums.MediaType;
         mediaUrl: string;
         thumbnailUrl: string | null;
         caption: string | null;
+        altText: string;
         isSlideshow: boolean;
+        createdAt: Date;
     }>;
     deleteItem(id: string): Promise<{
         id: string;
-        isActive: boolean;
-        createdAt: Date;
         sortOrder: number;
-        altText: string;
+        isActive: boolean;
         categoryId: string;
         mediaType: import(".prisma/client").$Enums.MediaType;
         mediaUrl: string;
         thumbnailUrl: string | null;
         caption: string | null;
+        altText: string;
         isSlideshow: boolean;
+        createdAt: Date;
     }>;
     toggleSlideshow(id: string, isSlideshow: boolean): Promise<{
         id: string;
-        isActive: boolean;
-        createdAt: Date;
         sortOrder: number;
-        altText: string;
+        isActive: boolean;
         categoryId: string;
         mediaType: import(".prisma/client").$Enums.MediaType;
         mediaUrl: string;
         thumbnailUrl: string | null;
         caption: string | null;
+        altText: string;
         isSlideshow: boolean;
+        createdAt: Date;
     }>;
     getSlideshowFiles(): Promise<string[]>;
     uploadSlideshowFiles(files: Express.Multer.File[]): Promise<{
