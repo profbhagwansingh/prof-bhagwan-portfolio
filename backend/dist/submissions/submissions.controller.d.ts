@@ -9,8 +9,8 @@ export declare class SubmissionsController {
         whatsapp?: string;
         message: string;
     }): Promise<{
-        email: string;
         id: string;
+        email: string;
         createdAt: Date;
         name: string;
         status: import(".prisma/client").$Enums.SubmissionStatus;
@@ -18,9 +18,9 @@ export declare class SubmissionsController {
         message: string;
     }>;
     createAlumni(data: any): Promise<{
+        id: string;
         email: string;
         fullName: string;
-        id: string;
         createdAt: Date;
         status: import(".prisma/client").$Enums.AlumniStatus;
         whatsapp: string | null;
@@ -34,8 +34,8 @@ export declare class SubmissionsController {
     }>;
     getContacts(status?: SubmissionStatus, page?: string): Promise<{
         items: {
-            email: string;
             id: string;
+            email: string;
             createdAt: Date;
             name: string;
             status: import(".prisma/client").$Enums.SubmissionStatus;
@@ -47,8 +47,8 @@ export declare class SubmissionsController {
         totalPages: number;
     }>;
     updateContactStatus(id: string, status: SubmissionStatus): Promise<{
-        email: string;
         id: string;
+        email: string;
         createdAt: Date;
         name: string;
         status: import(".prisma/client").$Enums.SubmissionStatus;
@@ -56,8 +56,8 @@ export declare class SubmissionsController {
         message: string;
     }>;
     deleteContact(id: string): Promise<{
-        email: string;
         id: string;
+        email: string;
         createdAt: Date;
         name: string;
         status: import(".prisma/client").$Enums.SubmissionStatus;
@@ -66,9 +66,9 @@ export declare class SubmissionsController {
     }>;
     getAlumni(status?: AlumniStatus, page?: string): Promise<{
         items: {
+            id: string;
             email: string;
             fullName: string;
-            id: string;
             createdAt: Date;
             status: import(".prisma/client").$Enums.AlumniStatus;
             whatsapp: string | null;
@@ -85,9 +85,9 @@ export declare class SubmissionsController {
         totalPages: number;
     }>;
     updateAlumniStatus(id: string, status: AlumniStatus): Promise<{
+        id: string;
         email: string;
         fullName: string;
-        id: string;
         createdAt: Date;
         status: import(".prisma/client").$Enums.AlumniStatus;
         whatsapp: string | null;
@@ -100,9 +100,9 @@ export declare class SubmissionsController {
         pictureUrl: string | null;
     }>;
     deleteAlumni(id: string): Promise<{
+        id: string;
         email: string;
         fullName: string;
-        id: string;
         createdAt: Date;
         status: import(".prisma/client").$Enums.AlumniStatus;
         whatsapp: string | null;
