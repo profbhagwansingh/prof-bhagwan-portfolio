@@ -40,7 +40,8 @@ export function ScholarsSection() {
           {scholars.map((scholar) => (
             <div
               key={scholar.id}
-              className="card-base p-6 group flex flex-col gap-4"
+              onClick={() => scholar.imageUrl && window.open(scholar.imageUrl, '_blank')}
+              className={`card-base p-6 group flex flex-col gap-4 transition-all duration-200 hover:-translate-y-1 ${scholar.imageUrl ? 'cursor-pointer hover:shadow-lg' : ''}`}
             >
               <div className="flex items-center gap-4 border-b border-[var(--border)] pb-4">
                 {scholar.imageUrl ? (

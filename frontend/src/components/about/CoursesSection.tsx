@@ -9,6 +9,7 @@ interface Course {
   id: string;
   name: string;
   category: string;
+  syllabusUrl?: string;
 }
 
 const categoryColors: Record<string, string> = {
@@ -43,13 +44,14 @@ export function CoursesSection() {
           {courses.map((course, i) => (
             <div
               key={course.id}
-              className="card-base p-5 flex items-center justify-between gap-4 group"
+              onClick={() => course.syllabusUrl && window.open(course.syllabusUrl, '_blank')}
+              className={`card-base p-5 flex items-center justify-between gap-4 group transition-all duration-200 hover:-translate-y-1 ${course.syllabusUrl ? 'cursor-pointer hover:shadow-lg' : ''}`}
             >
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg bg-[var(--accent-light)] flex items-center justify-center flex-shrink-0 group-hover:bg-primary-500 transition-colors">
                   <FileText className="w-4 h-4 text-primary-500 group-hover:text-white transition-colors" />
                 </div>
-                <span className="text-sm font-medium text-[var(--text-soft)]">{course.name}</span>
+                <span className="text-sm font-medium text-[var(--text-soft)] group-hover:text-primary-500 transition-colors">{course.name}</span>
               </div>
               <span className={`text-xs font-medium px-2 py-0.5 rounded-full border flex-shrink-0 ${categoryColors[course.category] || categoryColors.UG}`}>
                 {course.category}
