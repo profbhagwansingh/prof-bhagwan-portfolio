@@ -51,9 +51,7 @@ export function AlumniPage() {
         formData.append("picture", picFile);
       }
 
-      await api.post("/api/submissions/alumni", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      await api.post("/api/submissions/alumni", formData);
       setStatus("success");
     } catch {
       setStatus("error");
