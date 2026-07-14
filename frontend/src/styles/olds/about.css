@@ -1,0 +1,938 @@
+/* About Me Section */
+.about-me {
+    padding: 4rem 0;
+    background-color: #fff;
+}
+
+.about-me h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+}
+
+.about-content {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    flex-wrap: wrap; /* Allows wrapping on smaller screens */
+}
+
+.about-content img {
+    flex: 1;
+    max-width: 350px;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.about-text {
+    flex: 2;
+}
+
+.about-text h3 {
+    font-size: 1.8rem;
+    color: #5061C4;
+    margin-bottom: 1rem;
+}
+
+.about-text p {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+.skills-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 2rem;
+}
+
+.skills-list li {
+    background: #eef0f8;
+    color: #5061C4;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: 500;
+}
+
+/* Responsive Design for About Section */
+@media (max-width: 768px) {
+    .about-content {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+/* Styling for Achievements Section */
+.achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.achievement-card {
+    background: #f9f9f9;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid #5061C4;
+    text-align: left;
+}
+
+.achievement-card h4 {
+    margin-top: 0;
+    color: #5061C4;
+}
+
+/* Styling for Administrative Roles Section */
+.roles-list {
+    list-style: none;
+    padding: 0;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.roles-list li {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    padding: 0.75rem 1.25rem;
+    border-radius: 25px;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Re-using skills-list for courses, just ensuring it's centered */
+.courses-section .skills-list {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+
+/* --- General Section Title Styling --- */
+.section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    margin-top: 5rem;
+    position: relative;
+    padding-bottom: 1rem;
+}
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background-color: #5061C4;
+    border-radius: 2px;
+}
+
+
+/* --- Animated Experience Timeline --- */
+/* --- Dynamic Experience Timeline --- */
+/* --- Road Map Experience Timeline --- */
+.experience-timeline {
+    position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 4rem 0; /* More padding for the curves */
+    overflow: hidden; /* Hide overflow of curves */
+}
+
+/* Remove the old straight center line */
+.experience-timeline::after {
+    display: none; 
+}
+
+/* Base Item Styling */
+.timeline-item {
+    position: relative;
+    width: 50%;
+    padding: 1rem 0 1rem 0;
+    box-sizing: border-box;
+    z-index: 1;
+}
+
+/* --- THE ROAD MAP CURVES (The Snake Logic) --- */
+
+/* 1. ODD ITEMS (Left side) */
+.timeline-item:nth-child(odd) {
+    float: left;
+    clear: both;
+    text-align: right;
+    padding-right: 60px; /* Space for the curve */
+}
+
+/* Draw the curve for Odd items: Goes Down -> Curves Right */
+.timeline-item:nth-child(odd)::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%; /* Extends into the right side of screen */
+    height: 100%;
+    border-right: 4px solid #e0e0e0;
+    border-bottom: 4px solid #e0e0e0;
+    border-radius: 0 0 50px 0; /* Bottom-Right Corner rounded */
+    z-index: -1;
+}
+
+/* 2. EVEN ITEMS (Right side) */
+.timeline-item:nth-child(even) {
+    float: right;
+    clear: both;
+    text-align: left;
+    padding-left: 60px; /* Space for the curve */
+    margin-top: -4px; /* Fix tiny gap between borders */
+}
+
+/* Draw the curve for Even items: Goes Down -> Curves Left */
+.timeline-item:nth-child(even)::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%; /* Extends into the left side of screen */
+    height: 100%;
+    border-left: 4px solid #e0e0e0;
+    border-bottom: 4px solid #e0e0e0;
+    border-radius: 0 0 0 50px; /* Bottom-Left Corner rounded */
+    z-index: -1;
+}
+
+/* Special Case: The Last Item shouldn't curve back, just end */
+.timeline-item:last-child::before {
+    border-bottom: none;
+    border-radius: 0;
+}
+
+/* --- THE DOTS (Traffic Stops) --- */
+.timeline-item::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: #fff;
+    border: 4px solid #5061C4;
+    border-radius: 50%;
+    top: 25px; 
+    z-index: 2;
+    transition: transform 0.3s ease;
+}
+
+/* Position dots on the 'Road' line */
+.timeline-item:nth-child(odd)::after {
+    right: -12px; /* On the right edge */
+}
+
+.timeline-item:nth-child(even)::after {
+    left: -12px; /* On the left edge */
+}
+
+.timeline-item:hover::after {
+    background-color: #5061C4;
+    transform: scale(1.3);
+}
+
+/* --- DOUBLE SIDED ITEM (Left & Right at same height) --- */
+
+/* 1. Container Layout */
+.timeline-item.double-sided {
+    width: 100%;
+    height: auto;
+    float: none;
+    clear: both;
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch; /* <--- CHANGED from flex-start to stretch */
+    position: relative;
+    margin-bottom: 3rem; /* Add space before the next timeline item starts */
+}
+
+/* 2. Straight Center Line (Overrides the snake curve) */
+.timeline-item.double-sided::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background: #e0e0e0;
+    transform: translateX(-50%); /* Perfectly centers the line */
+    
+    /* Remove the curve borders */
+    border: none;
+    border-radius: 0;
+}
+
+/* 3. Center the Dot */
+.timeline-item.double-sided::after {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    z-index: 2;
+}
+
+/* 4. Size the Children (The link <a> and the div) */
+.timeline-item.double-sided > a, 
+.timeline-item.double-sided > .timeline-content {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Ensure the content inside the link expands fully */
+.timeline-item.double-sided .timeline-content {
+    width: 80%;
+    height: auto; 
+    box-sizing: border-box;
+}
+.timeline-item.double-sided > a, 
+.timeline-item.double-sided > .timeline-content-1 {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Ensure the content inside the link expands fully */
+.timeline-item.double-sided .timeline-content-1 {
+    width: 50%;
+    height: auto; 
+    box-sizing: border-box;
+}
+
+/* 5. ARROWS CONFIGURATION */
+
+/* Left Item Arrow (Points Right) */
+.timeline-item.double-sided > a:first-child .timeline-content::before,
+.timeline-item.double-sided > .timeline-content:first-child::before {
+    left: auto;
+    right: -15px;
+    border-width: 10px 0 10px 15px;
+    border-color: transparent transparent transparent #fff;
+}
+.timeline-item.double-sided > a:first-child .timeline-content-1::before,
+.timeline-item.double-sided > .timeline-content-1:first-child::before {
+    left: auto;
+    right: -15px;
+    border-width: 10px 0 10px 15px;
+    border-color: transparent transparent transparent #fff;
+}
+
+/* Right Item Arrow (Points Left) */
+.timeline-item.double-sided > .timeline-content:last-child::before,
+.timeline-item.double-sided > a:last-child .timeline-content::before {
+    left: -15px;
+    right: auto;
+    border-width: 10px 15px 10px 0;
+    border-color: transparent #fff transparent transparent;
+}
+.timeline-item.double-sided > .timeline-content-1:last-child::before,
+.timeline-item.double-sided > a:last-child .timeline-content-1::before {
+    left: -15px;
+    right: auto;
+    border-width: 10px 15px 10px 0;
+    border-color: transparent #fff transparent transparent;
+}
+
+/* Profile Link Responsive Styling */
+/* --- MOBILE RESPONSIVE (Stack them) --- */
+@media screen and (max-width: 768px) {
+    .timeline-item.double-sided {
+        flex-direction: column;
+        padding-left: 70px;
+        padding-right: 25px;
+    }
+
+    .timeline-item.double-sided .timeline-content {
+        width: 100% !important; /* Forces full width on phones */
+    }
+
+    .timeline-item.double-sided > a, 
+    .timeline-item.double-sided > .timeline-content {
+        width: 100%;
+        margin-bottom: 2rem;
+    }
+    .timeline-item.double-sided .timeline-content-1 {
+        width: 100% !important; /* Forces full width on phones */
+    }
+
+    .timeline-item.double-sided > a, 
+    .timeline-item.double-sided > .timeline-content-1 {
+        width: 100%;
+        margin-bottom: 2rem;
+    }
+
+    /* Move line back to the left */
+    .timeline-item.double-sided::before {
+        left: 30px;
+        transform: none;
+    }
+
+    /* Move dot back to the left */
+    .timeline-item.double-sided::after {
+        left: 19px;
+        transform: none;
+    }
+
+    /* Reset Arrows to point Left */
+    .timeline-item.double-sided > a:first-child .timeline-content-1::before,
+    .timeline-item.double-sided > .timeline-content-1:first-child::before,
+    .timeline-item.double-sided > .timeline-content-1:last-child::before {
+        left: -15px;
+        right: auto;
+        border-width: 10px 15px 10px 0;
+        border-color: transparent #fff transparent transparent;
+    }
+
+    /* Reset Arrows to point Left */
+    .timeline-item.double-sided > a:first-child .timeline-content-1::before,
+    .timeline-item.double-sided > .timeline-content-1:first-child::before,
+    .timeline-item.double-sided > .timeline-content-1:last-child::before {
+        left: -15px;
+        right: auto;
+        border-width: 10px 15px 10px 0;
+        border-color: transparent #fff transparent transparent;
+    }
+
+}
+
+/* --- CONTENT BOXES --- */
+.timeline-content {
+    background: #fff;
+    text-align: center;
+    align-items: center;
+    height: auto;
+    padding: 1.5rem 2rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.timeline-content:hover {
+    transform: translateY(-5px);
+}
+
+/* Arrows pointing to the road */
+.timeline-content::before {
+    content: " ";
+    position: absolute;
+    top: 30px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    z-index: 1;
+}
+
+.timeline-item:nth-child(odd) .timeline-content::before {
+    right: -15px;
+    border-width: 10px 0 10px 15px;
+    border-color: transparent transparent transparent #fff;
+}
+
+.timeline-item:nth-child(even) .timeline-content::before {
+    left: -15px;
+    border-width: 10px 15px 10px 0;
+    border-color: transparent #fff transparent transparent;
+}
+
+/* Typography */
+.timeline-content h4 { margin: 0 0 5px 0; color: #5061C4; font-size: 1.2rem; }
+.timeline-content p { margin: 5px 0; font-weight: 600; color: #333; }
+.timeline-date {
+    display: inline-block;
+    font-size: 0.9rem;
+    color: #777;
+    background: #f0f2f5;
+    padding: 4px 10px;
+    border-radius: 15px;
+    margin-top: 10px;
+}
+    
+/* --- CONTENT BOXES --- */
+.timeline-content-1 {
+    background: #fff;
+    text-align: center;
+    align-items: center;
+    height: auto;
+    padding: 1.5rem 2rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.timeline-content-1:hover {
+    transform: translateY(-5px);
+}
+
+/* Arrows pointing to the road */
+.timeline-content-1::before {
+    content: " ";
+    position: absolute;
+    top: 30px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    z-index: 1;
+}
+
+.timeline-item:nth-child(odd) .timeline-content-1::before {
+    right: -15px;
+    border-width: 10px 0 10px 15px;
+    border-color: transparent transparent transparent #fff;
+}
+
+.timeline-item:nth-child(even) .timeline-content-1::before {
+    left: -15px;
+    border-width: 10px 15px 10px 0;
+    border-color: transparent #fff transparent transparent;
+}
+
+/* Typography */
+.timeline-content-1 h4 { margin: 0 0 5px 0; color: #5061C4; font-size: 1.2rem; }
+.timeline-content-1 p { margin: 5px 0; font-weight: 600; color: #333; }
+.timeline-date {
+    display: inline-block;
+    font-size: 0.9rem;
+    color: #777;
+    background: #f0f2f5;
+    padding: 4px 10px;
+    border-radius: 15px;
+    margin-top: 10px;
+}
+
+/* Clearfix for float layout */
+.experience-timeline::after {
+    /* Use this to clear floats since we removed the vertical line */
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* --- MOBILE RESPONSIVE (Revert to Straight Line) --- */
+@media screen and (max-width: 768px) {
+    .experience-timeline {
+        padding: 2rem 0;
+    }
+
+    /* Restore specific "straight line" for mobile */
+    .experience-timeline::before {
+        content: '';
+        position: absolute;
+        top: 0; bottom: 0;
+        left: 30px;
+        width: 4px;
+        background: #e0e0e0;
+    }
+
+    .timeline-item {
+        width: 100%;
+        float: none;
+        padding-left: 70px;
+        padding-right: 25px;
+        margin-bottom: 2rem;
+        text-align: left;
+    }
+
+    /* Hide the curving road segments on mobile */
+    .timeline-item:nth-child(odd)::before,
+    .timeline-item:nth-child(even)::before {
+        display: none;
+    }
+
+    /* Reset dots to left side */
+    .timeline-item:nth-child(odd)::after,
+    .timeline-item:nth-child(even)::after {
+        left: 19px;
+        right: auto;
+    }
+
+    /* Reset arrows */
+    .timeline-item:nth-child(odd) .timeline-content::before,
+    .timeline-item:nth-child(even) .timeline-content::before {
+        left: -15px;
+        right: auto;
+        border-width: 10px 15px 10px 0;
+        border-color: transparent #fff transparent transparent;
+    }
+}
+/* --- Books & Achievements Cards --- */
+.achievements-grid, .books-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+.achievement-card {
+    background: #f9f9f9;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid #5061C4;
+}
+.achievement-card h4 {
+    margin-top: 0;
+    color: #5061C4;
+}
+
+/* Book Card Specific Styles */
+.book-card {
+    text-align: center;
+}
+.book-cover {
+    background: linear-gradient(45deg, #5061C4, #6a7ee8);
+    color: white;
+    padding: 3rem 1.5rem;
+    border-radius: 8px 3px 3px 8px;
+    margin-bottom: 1rem;
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+.book-card:hover .book-cover {
+    transform: rotateY(-10deg) scale(1.02);
+}
+.book-cover h4 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+.book-cover span {
+    display: block;
+    margin-top: 0.5rem;
+    opacity: 0.8;
+}
+
+/* --- PhD Supervision Grid --- */
+.phd-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    max-width: 900px;
+    margin: auto;
+}
+.phd-card {
+    padding: 0.75rem 1.25rem;
+    border-radius: 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 1px solid;
+}
+.phd-card.awarded {
+    background-color: #E6F4EA;
+    color: #34A853;
+    border-color: #34A853;
+}
+.phd-card.pursuing {
+    background-color: #FEF4E6;
+    color: #FBBC05;
+    border-color: #FBBC05;
+}
+.phd-card.post_doc {
+    background-color: #E8F0FE;
+    color: #1A73E8;
+    border-color: #1A73E8;
+}
+.phd-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+
+
+/* Make the cards look clickable */
+.phd-card {
+    cursor: pointer;
+}
+
+/* --- Modal (Popup) Styles --- */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; 
+    z-index: 2000; /* Sit on top of everything */
+    padding-top: 100px; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+}
+
+/* Modal Content (Image) */
+.modal-content {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+    border-radius: 8px;
+    animation: zoom 0.6s;
+}
+
+/* Caption of Modal Image */
+#modalCaption {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+    text-align: center;
+    color: #ccc;
+    padding: 10px 0;
+    height: 150px;
+    font-size: 1.2rem;
+}
+
+/* Add Animation */
+@keyframes zoom {
+    from {transform:scale(0)} 
+    to {transform:scale(1)}
+}
+
+/* The Close Button */
+.close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Responsive Modal */
+@media only screen and (max-width: 700px){
+    .modal-content {
+        width: 100%;
+    }
+}
+
+
+
+/* Styling for the Book Images */
+.book-image {
+    width: 100%;           /* Fills the card width */
+    max-width: 250px;      /* Limits size so it doesn't get too huge */
+    height: auto;          /* Keeps original shape */
+    border-radius: 8px;    /* Rounded corners */
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15); /* Nice 3D shadow */
+    margin-bottom: 1.5rem;
+    transition: transform 0.3s ease;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Hover Effect: Book pops up slightly */
+.book-card:hover .book-image {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 15px 25px rgba(0,0,0,0.25);
+}
+
+/* Typography for Book Titles */
+.book-card h4 {
+    color: #5061C4;
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+}
+
+.book-card .year {
+    color: #777;
+    font-size: 0.9rem;
+    font-weight: normal;
+}
+
+
+
+/* --- Courses Taught Section (Dynamic Scrolling) --- */
+
+.courses-section {
+    padding: 3rem 0;
+    margin-bottom: 4rem;
+    overflow: hidden; /* Hides the scrollbar */
+    background: #fff;
+}
+
+.marquee-container {
+    display: flex;
+    overflow: hidden; /* Crucial: Hides content that goes off screen */
+    width: 100%;
+    margin-bottom: 1.5rem; /* Space between rows */
+     /* Fades edges */
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.marquee-track {
+    display: flex;
+    gap: 1.5rem; /* Space between the two lists */
+    width: max-content; /* Force track to be as wide as content */
+}
+
+.courses-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 1.5rem; /* Space between individual tags */
+}
+
+/* Individual Tag Styling */
+.courses-list li {
+    background: #f4f6fc;
+    color: #5061C4;
+    border: 1px solid #e0e0e0;
+    padding: 12px 25px;
+    border-radius: 50px; /* Pill shape */
+    font-size: 1rem;
+    font-weight: 600;
+    white-space: nowrap; /* Prevents text breaking */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, background 0.3s;
+}
+
+/* Hover Effect: Pause animation and highlight */
+.courses-list li:hover {
+    background: #5061C4;
+    color: #fff;
+    transform: scale(1.1);
+    cursor: pointer;
+    box-shadow: 0 8px 15px rgba(80, 97, 196, 0.3);
+}
+
+/* Pause scrolling when hovering over the track */
+.marquee-track:hover {
+    animation-play-state: paused;
+}
+
+/* --- ANIMATIONS --- */
+
+/* Scroll Left Animation */
+.scroll-left {
+    animation: scrollLeft 40s linear infinite;
+}
+
+@keyframes scrollLeft {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); } /* Moves halfway because list is duplicated */
+}
+
+/* Scroll Right Animation */
+.scroll-right {
+    animation: scrollRight 45s linear infinite;
+}
+
+@keyframes scrollRight {
+    0% { transform: translateX(-50%); } /* Starts halfway */
+    100% { transform: translateX(0); }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .courses-list li {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+    .scroll-left { animation-duration: 25s; } /* Faster on mobile */
+    .scroll-right { animation-duration: 30s; }
+}
+
+
+
+/* =========================================
+   MOBILE RESPONSIVENESS (Add to bottom of file)
+   ========================================= */
+
+@media screen and (max-width: 768px) {
+
+    /* 1. General Spacing & Typography */
+    .about-me, .full-page, .horizontal, .courses-section {
+        padding: 2rem 0; /* Reduce huge vertical gaps */
+    }
+    .section-title {
+        font-size: 2rem; /* Smaller headings */
+        margin-top: 3rem;
+        margin-bottom: 2rem;
+    }
+    .container {
+        width: 90%; /* Ensure content doesn't touch screen edges */
+        padding: 0 15px;
+    }
+
+    /* 2. Intro Section (Image + Text) */
+    .about-content {
+        flex-direction: column; /* Stack vertically */
+        text-align: center;
+        gap: 1.5rem;
+    }
+    .about-content img {
+        max-width: 80%; /* Slightly smaller profile image */
+        margin: 0 auto;
+    }
+
+    /* 3. Books Section */
+    .books-grid {
+        /* Force single column so books don't get squished */
+        grid-template-columns: 1fr; 
+        gap: 2rem;
+    }
+    .book-image {
+        max-width: 180px; /* Smaller book covers */
+    }
+
+    /* 4. Vertical Marquee (Experience) */
+    .vertical-marquee-container {
+        height: 350px; /* Reduce window height on mobile */
+    }
+    .v-timeline-content {
+        padding: 1rem 1.5rem; /* Less padding inside cards */
+        max-width: 100%;
+    }
+    .v-timeline-content h4 {
+        font-size: 1.1rem;
+    }
+
+    /* 5. PhD Grid */
+    .phd-grid {
+        gap: 0.75rem;
+    }
+    .phd-card {
+        width: 100%; /* Full width buttons for easier tapping */
+        text-align: center;
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+
+    /* 6. Achievements Grid */
+    .achievements-grid {
+        grid-template-columns: 1fr; /* Stack vertically */
+    }
+
+    /* 7. Courses Marquee adjustments */
+    .courses-list li {
+        padding: 8px 15px;
+        font-size: 0.85rem;
+    }
+    /* Speed up animation slightly on mobile so it doesn't look static */
+    .scroll-left { animation-duration: 20s; }
+    .scroll-right { animation-duration: 25s; }
+
+    /* Responsive profile link */
+    .profile-link {
+        width: 100% !important;
+    }
+}

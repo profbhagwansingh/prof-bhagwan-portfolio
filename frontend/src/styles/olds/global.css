@@ -1,0 +1,367 @@
+/* General Body Styles - Common for all pages */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f4f4f9;
+    color: #333;
+    line-height: 1.6;
+}
+
+.logo-image {
+  flex: 1;
+  border-radius: 20%;
+  text-align: center;
+  max-width: 100%;
+  padding: 0 0.5rem 0 0 ;
+}
+
+.logo-image img {
+  max-width: 5.5rem;
+  text-align: center;
+  height: 5.5rem;
+  border-radius: 20%; /* Makes the image circular */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  /* padding: 0 1rem 0 0; */
+}
+
+/* Reusable Container - Common for all pages */
+.container {
+    max-width: 85%;
+    margin: auto;
+    padding: 0 20px;
+    overflow: hidden;
+}
+
+/* Header and Navigation Styles - Common for all pages */
+
+.cta-button:hover {
+    background-color: #3d4a9b;
+    transform: translateY(-2px);
+}
+
+/* Footer Styles - Common for all pages */
+footer {
+    background: #333;
+    color: #fff;
+    text-align: center;
+    padding: 1.5rem 0;
+    margin-top: 2rem;
+}
+
+
+.section-padding { padding: 4rem 0; }
+.bg-light { background-color: #f9f9f9; }
+.section-title { text-align: center; font-size: 2.5rem; margin-bottom: 2rem; }
+.text-center { text-align: center; }
+.intro-text { text-align: center; max-width: 800px; margin: 0 auto 2rem; font-size: 1.1rem; color: #555; }
+
+/* Utility spacing for CTAs */
+.section-cta { margin-top: 2.5rem; }
+
+.full-page{
+    display:flex;
+    flex-direction:column;
+    width:auto;
+}
+
+.horizontal {
+    display: flex;
+    flex-direction: row;
+    /* Optional: Adds space between items on desktop */
+    gap: 1rem; 
+}
+.horizontal-head{
+    display: flex;
+    /* flex-direction: row; */
+}
+
+@media (max-width: 768px) {
+    .horizontal {
+        /* Stack items vertically on mobile */
+        flex-direction: column;
+        /* Optional: Center items on the screen */
+
+    }
+}
+
+
+/* =========================================
+   HEADER & NAVIGATION (Desktop Default)
+   ========================================= */
+header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    color: #333;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Logo Styling */
+.logo-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-container .logo-image {
+    padding: 0;
+    flex: none;
+}
+
+.logo-container .logo-image img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.logo-text {
+    margin: 0;
+    color: #1B264F;
+    font-size: 1.35rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+header a { text-decoration: none; color: #333; }
+
+/* --- 1. DESKTOP NAV (Visible by default) --- */
+.desktop-nav {
+    display: block;
+}
+
+.desktop-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 24px;
+    align-items: center;
+}
+
+.desktop-nav a {
+    font-weight: 500;   
+    font-size: 0.95rem;
+    color: #555;
+    transition: all 0.2s ease;
+    padding: 6px 0;
+    position: relative;
+}
+
+.desktop-nav a:hover,
+.desktop-nav a.active {
+    color: #5061C4;
+}
+
+.desktop-nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #5061C4;
+    transition: width 0.3s ease;
+}
+
+.desktop-nav a:hover::after,
+.desktop-nav a.active::after {
+    width: 100%;
+}
+
+/* --- 2. MOBILE ELEMENTS (Hidden by default) --- */
+.mobile-nav {
+    display: none; /* Hide mobile menu on desktop */
+}
+
+.hamburger {
+    display: none; /* Hide hamburger on desktop */
+    cursor: pointer;
+}
+
+.bar {
+    display: block;
+    width: 25px;
+    height: 3px;
+    margin: 5px auto;
+    transition: all 0.3s ease-in-out;
+    background-color: #333;
+}
+
+/* =========================================
+   PHONE MODE (Max-Width: 768px)
+   ========================================= */
+@media (max-width: 768px) {
+
+    /* HIDE Desktop Nav */
+    .desktop-nav {
+        display: none;
+    }
+
+    /* SHOW Hamburger */
+    header .container {
+        display: flex;
+        justify-content: space-between; /* Pushes Logo left, Icon right */
+        align-items: center;
+        width: 85%; /* Keep your container width consistent */
+        margin: 0 auto;
+    }
+
+    /* 2. Force the Hamburger to the right */
+    .hamburger {
+        display: block;
+        z-index: 1001;
+        margin-left: auto; /* CRITICAL: Pushes the icon to the far right */
+    }
+
+    /* ... keep your existing animation code ... */
+    .hamburger.active .bar:nth-child(2) { opacity: 0; }
+    .hamburger.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .hamburger.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+    /* ... keep your existing mobile-nav code ... */
+    .mobile-nav {
+        display: block;
+        position: fixed;
+        top: 120px; 
+        left: -100%; 
+        width: 100%;
+        background-color: #fff;
+        box-shadow: 0 10px 10px rgba(0,0,0,0.1);
+        transition: left 0.3s ease-in-out;
+        z-index: 999;
+    }
+
+    .mobile-nav.active {
+        left: 0; 
+    }
+
+
+    .mobile-nav ul {
+        display: flex;
+        flex-direction: column;
+        list-style: none;
+        padding: 20px 0;
+        margin: 0;
+        text-align: center;
+    }
+
+    .mobile-nav li {
+        margin: 15px 0;
+    }
+
+    .mobile-nav a {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #333;
+    }
+}
+
+/* =========================================
+   SOCIAL SIDEBAR (Right Side)
+   ========================================= */
+.social-sidebar {
+    position: fixed;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%); /* Centers it vertically */
+    z-index: 1500; /* Above header (1000) but below modals (2000+) */
+    display: flex;
+    flex-direction: column;
+    gap: 5px; /* Space between icons */
+}
+
+.social-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 45px;  /* Width of the box */
+    height: 45px; /* Height of the box */
+    background-color: #333; /* Default dark background */
+    color: #fff;
+    text-decoration: none;
+    font-size: 0; /* Hides text if you add any */
+    transition: all 0.3s ease;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    box-shadow: -2px 2px 5px rgba(0,0,0,0.2);
+}
+
+.social-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.icon-club{
+  flex: 1;
+  border-radius: 100%;
+  text-align: center;
+  max-width: 60%;
+  padding: 0 ;
+}
+
+.icon-club img{
+
+  text-align: center;
+  height: 3.5rem;
+  border-radius: 100%; /* Makes the image circular */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  /* padding: 0 1rem 0 0; */
+}
+
+/* --- Brand Colors on Hover --- */
+
+/* Facebook Blue */
+.social-icon.facebook:hover {
+    background-color: #1877F2;
+    width: 55px; /* Slides out slightly */
+}
+
+/* X (Twitter) Black/Dark Grey */
+.social-icon.x-twitter:hover {
+    background-color: #000000;
+    width: 55px;
+}
+
+/* Instagram Gradient */
+.social-icon.instagram:hover {
+    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+    width: 55px;
+}
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 768px) {
+    /* Optional: Hide sidebar on mobile to save screen space */
+    /* .social-sidebar { display: none; } */
+    
+    /* OR make them smaller on mobile */
+    .social-icon {
+        width: 35px;
+        height: 35px;
+    }
+    .social-icon svg {
+        width: 18px;
+        height: 18px;
+    }
+}

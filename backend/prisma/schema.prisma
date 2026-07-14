@@ -1,0 +1,512 @@
+// ============================================================
+//  Prof. (Dr.) Bhagwan Singh Portfolio — Database Schema
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── ENUMS ───────────────────────────────────────────────────
+
+enum EcrrbStatus {
+  PENDING
+  REVIEWED
+  APPROVED
+  REJECTED
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  EDITOR
+}
+
+enum PublicationTag {
+  SCOPUS
+  PEER_REVIEWED
+  UGC_CARE
+  UGC_APPROVED
+  CONFERENCE
+}
+
+enum ScholarStatus {
+  AWARDED
+  PURSUING
+  POST_DOC
+}
+
+enum MediaType {
+  PHOTO
+  VIDEO
+  CLIPPING
+}
+
+enum SubmissionStatus {
+  NEW
+  READ
+  REPLIED
+  ARCHIVED
+}
+
+enum AlumniStatus {
+  NEW
+  REVIEWED
+  APPROVED
+  ARCHIVED
+}
+
+// ─── USERS & AUTH ────────────────────────────────────────────
+
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  passwordHash String
+  fullName     String
+  role         Role      @default(EDITOR)
+  isActive     Boolean   @default(true)
+  lastLogin    DateTime?
+  refreshToken String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  auditLogs AuditLog[]
+
+  @@map("users")
+}
+
+// ─── SITE SETTINGS ───────────────────────────────────────────
+
+model SiteSetting {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  value     String   @db.Text
+  category  String   @default("general")
+  updatedAt DateTime @updatedAt
+
+  @@map("site_settings")
+}
+
+// ─── HERO SECTION ────────────────────────────────────────────
+
+model HeroSection {
+  id        String   @id @default(uuid())
+  title     String
+  subtitle  String?
+  ctaText   String?
+  ctaLink   String?
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  images HeroImage[]
+
+  @@map("hero_sections")
+}
+
+model HeroImage {
+  id            String      @id @default(uuid())
+  heroSectionId String
+  heroSection   HeroSection @relation(fields: [heroSectionId], references: [id], onDelete: Cascade)
+  imageUrl      String
+  altText       String      @default("")
+  sortOrder     Int         @default(0)
+
+  @@map("hero_images")
+}
+
+// ─── ABOUT CONTENT ───────────────────────────────────────────
+
+model AboutContent {
+  id         String   @id @default(uuid())
+  sectionKey String   @unique
+  title      String
+  content    String   @db.Text
+  imageUrl   String?
+  sortOrder  Int      @default(0)
+  isActive   Boolean  @default(true)
+  updatedAt  DateTime @updatedAt
+
+  @@map("about_content")
+}
+
+// ─── EXPERIENCE TIMELINE ─────────────────────────────────────
+
+model ExperienceTimeline {
+  id           String  @id @default(uuid())
+  title        String
+  subtitle     String?
+  organization String
+  location     String?
+  dateRange    String
+  externalLink String?
+  sortOrder    Int     @default(0)
+  isActive     Boolean @default(true)
+
+  @@map("experience_timeline")
+}
+
+// ─── COURSES ─────────────────────────────────────────────────
+
+model Course {
+  id          String  @id @default(uuid())
+  name        String
+  syllabusUrl String?
+  category    String  @default("general")
+  sortOrder   Int     @default(0)
+  isActive    Boolean @default(true)
+
+  @@map("courses")
+}
+
+// ─── PUBLICATIONS ────────────────────────────────────────────
+
+model Publication {
+  id           String         @id @default(uuid())
+  title        String
+  journal      String?
+  year         Int
+  tag          PublicationTag @default(PEER_REVIEWED)
+  authors      String?
+  doi          String?
+  externalUrl  String?
+  abstractText String?        @db.Text
+  sortOrder    Int            @default(0)
+  isActive     Boolean        @default(true)
+  createdAt    DateTime       @default(now())
+
+  @@map("publications")
+}
+
+// ─── BOOKS ───────────────────────────────────────────────────
+
+model Book {
+  id            String  @id @default(uuid())
+  title         String
+  year          Int
+  subtitle      String?
+  coverImageUrl String?
+  purchaseUrl   String?
+  isbn          String?
+  sortOrder     Int     @default(0)
+  isActive      Boolean @default(true)
+
+  @@map("books")
+}
+
+// ─── BOOK CHAPTERS ───────────────────────────────────────────
+
+model BookChapter {
+  id        String   @id @default(uuid())
+  slNo      Int
+  title     String   @db.Text
+  authors   String?  @db.Text
+  publisher String?  @db.Text
+  isbn      String?
+  year      Int
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@map("book_chapters")
+}
+
+// ─── INVITED LECTURES ────────────────────────────────────────
+
+model InvitedLecture {
+  id                String    @id @default(uuid())
+  slNo              Int
+  title             String    @db.Text
+  conferenceDetails String    @db.Text
+  category          String    @default("National")
+  lectureDate       DateTime?
+  sortOrder         Int       @default(0)
+  isActive          Boolean   @default(true)
+  createdAt         DateTime  @default(now())
+
+  @@map("invited_lectures")
+}
+
+// ─── ECRRB APPLICATIONS ──────────────────────────────────────
+
+model EcrrbApplication {
+  id          String   @id @default(uuid())
+  // Step 1: Applicant Details
+  fullName    String
+  dateOfBirth DateTime
+  photoUrl    String?
+  designation String
+  affiliation String
+  email       String
+  phone       String
+  address     String   @db.Text
+
+  // Step 2: Category
+  category String
+
+  // Step 3: Qualifications
+  highestQualification String
+  specialization       String
+  yearsOfExperience    Int
+  experienceSummary    String @db.Text
+
+  // Step 4: Research Contribution
+  scopusId        String?
+  scopusLink      String?
+  totalScopusPubs Int?
+  hIndex          Int?
+  cvUrl           String?
+  scopusExportUrl String?
+  paperUrls       String[] // Array of file paths
+
+  // Step 5: Training
+  hasEthicsTraining Boolean @default(false)
+  certificateUrl    String?
+
+  // Step 6: Declaration
+  digitalSignature String
+  applicationDate  DateTime    @default(now())
+  status           EcrrbStatus @default(PENDING)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("ecrrb_applications")
+}
+
+// ─── ECRRB CERTIFICATIONS ────────────────────────────────────
+
+model EcrrbCertification {
+  id String @id @default(uuid())
+
+  // Step 1: Principal Investigator
+  piName          String
+  piDesignation   String
+  piInstitution   String
+  piEmail         String
+  piPhone         String
+  coInvestigators String? @db.Text
+  orcidScopusId   String?
+
+  // Step 2: Proposal Details
+  studyTitle     String
+  submissionType String
+  researchType   String
+  startDate      DateTime
+  duration       String
+  studySites     String?
+  journalName    String?
+
+  // Step 3: Objectives & Methodology
+  objectives           String  @db.Text
+  methodology          String  @db.Text
+  studyPopulation      String
+  sampleSize           Int
+  inclusionExclusion   String? @db.Text
+  vulnerable           String
+  vulnerableSafeguards String? @db.Text
+
+  // Step 4: Ethical Considerations
+  risks           String  @db.Text
+  benefits        String  @db.Text
+  consentProcess  String  @db.Text
+  confidentiality String  @db.Text
+  compensation    String?
+
+  // Step 5: Funding & Conflict of Interest
+  isFunded      String
+  fundingAgency String?
+  coiDeclared   Boolean @default(false)
+
+  // Step 6: Documents
+  protocolUrl      String?
+  icfUrl           String?
+  toolUrls         String[]
+  piCvUrl          String?
+  researchPaperUrl String?
+  priorApprovalUrl String?
+
+  // Step 7: Declarations
+  dec1             Boolean     @default(false)
+  dec2             Boolean     @default(false)
+  dec3             Boolean     @default(false)
+  digitalSignature String
+  applicationDate  DateTime
+  status           EcrrbStatus @default(PENDING)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("ecrrb_certifications")
+}
+
+// ─── ACHIEVEMENTS ────────────────────────────────────────────
+
+model Achievement {
+  id          String  @id @default(uuid())
+  title       String
+  description String  @db.Text
+  year        Int?
+  category    String  @default("award")
+  sortOrder   Int     @default(0)
+  isActive    Boolean @default(true)
+
+  @@map("achievements")
+}
+
+// ─── PHD SCHOLARS ────────────────────────────────────────────
+
+model PhdScholar {
+  id              String        @id @default(uuid())
+  name            String
+  imageUrl        String?
+  status          ScholarStatus @default(PURSUING)
+  researchTopic   String?
+  currentPosition String?
+  sortOrder       Int           @default(0)
+  isActive        Boolean       @default(true)
+
+  @@map("phd_scholars")
+}
+
+// ─── QUICK STATS ─────────────────────────────────────────────
+
+model QuickStat {
+  id        String  @id @default(uuid())
+  label     String
+  count     String
+  sortOrder Int     @default(0)
+  isActive  Boolean @default(true)
+
+  @@map("quick_stats")
+}
+
+// ─── GALLERY ─────────────────────────────────────────────────
+
+model GalleryCategory {
+  id        String @id @default(uuid())
+  name      String
+  slug      String @unique
+  sortOrder Int    @default(0)
+
+  items GalleryItem[]
+
+  @@map("gallery_categories")
+}
+
+model GalleryItem {
+  id           String          @id @default(uuid())
+  categoryId   String
+  category     GalleryCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  mediaType    MediaType       @default(PHOTO)
+  mediaUrl     String
+  thumbnailUrl String?
+  caption      String?
+  altText      String          @default("")
+  sortOrder    Int             @default(0)
+  isActive     Boolean         @default(true)
+  isSlideshow  Boolean         @default(false)
+  createdAt    DateTime        @default(now())
+
+  @@map("gallery_items")
+}
+
+// ─── CONTACT SUBMISSIONS ─────────────────────────────────────
+
+model ContactSubmission {
+  id        String           @id @default(uuid())
+  name      String
+  email     String
+  whatsapp  String?
+  message   String           @db.Text
+  status    SubmissionStatus @default(NEW)
+  createdAt DateTime         @default(now())
+
+  @@map("contact_submissions")
+}
+
+// ─── ALUMNI SUBMISSIONS ──────────────────────────────────────
+
+model AlumniSubmission {
+  id            String       @id @default(uuid())
+  fullName      String
+  email         String
+  whatsapp      String?
+  teachingMode  String?
+  degreeProgram String?
+  institute     String?
+  batchYear     Int?
+  rollNumber    String?
+  pictureUrl    String?
+  message       String?      @db.Text
+  status        AlumniStatus @default(NEW)
+  createdAt     DateTime     @default(now())
+
+  @@map("alumni_submissions")
+}
+
+// ─── SOCIAL LINKS ────────────────────────────────────────────
+
+model SocialLink {
+  id        String  @id @default(uuid())
+  platform  String
+  url       String
+  iconSvg   String? @db.Text
+  sortOrder Int     @default(0)
+  isActive  Boolean @default(true)
+
+  @@map("social_links")
+}
+
+// ─── ANNOUNCEMENTS ───────────────────────────────────────────
+
+model Announcement {
+  id          String    @id @default(uuid())
+  title       String
+  content     String    @db.Text
+  isPinned    Boolean   @default(false)
+  isActive    Boolean   @default(true)
+  publishDate DateTime  @default(now())
+  expiryDate  DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@map("announcements")
+}
+
+// ─── AUDIT LOGS ──────────────────────────────────────────────
+
+model AuditLog {
+  id           String   @id @default(uuid())
+  userId       String?
+  user         User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action       String
+  entityType   String
+  entityId     String?
+  previousData Json?
+  newData      Json?
+  ipAddress    String?
+  createdAt    DateTime @default(now())
+
+  @@map("audit_logs")
+}
+
+// ─── SEO METADATA ────────────────────────────────────────────
+
+model SeoMetadata {
+  id              String   @id @default(uuid())
+  pageSlug        String   @unique
+  metaTitle       String?
+  metaDescription String?  @db.Text
+  ogTitle         String?
+  ogDescription   String?  @db.Text
+  ogImage         String?
+  canonicalUrl    String?
+  structuredData  Json?
+  updatedAt       DateTime @updatedAt
+
+  @@map("seo_metadata")
+}

@@ -1,0 +1,343 @@
+// ============================================================
+//  Prof. (Dr.) Bhagwan Singh Portfolio — Database Schema
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── ENUMS ───────────────────────────────────────────────────
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  EDITOR
+}
+
+enum PublicationTag {
+  SCOPUS
+  PEER_REVIEWED
+  UGC_CARE
+  CONFERENCE
+}
+
+enum ScholarStatus {
+  AWARDED
+  PURSUING
+  POST_DOC
+}
+
+enum MediaType {
+  PHOTO
+  VIDEO
+  CLIPPING
+}
+
+enum SubmissionStatus {
+  NEW
+  READ
+  REPLIED
+  ARCHIVED
+}
+
+enum AlumniStatus {
+  NEW
+  REVIEWED
+  APPROVED
+  ARCHIVED
+}
+
+// ─── USERS & AUTH ────────────────────────────────────────────
+
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  passwordHash String
+  fullName     String
+  role         Role      @default(EDITOR)
+  isActive     Boolean   @default(true)
+  lastLogin    DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  auditLogs AuditLog[]
+
+  @@map("users")
+}
+
+// ─── SITE SETTINGS ───────────────────────────────────────────
+
+model SiteSetting {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  value     String   @db.Text
+  category  String   @default("general")
+  updatedAt DateTime @updatedAt
+
+  @@map("site_settings")
+}
+
+// ─── HERO SECTION ────────────────────────────────────────────
+
+model HeroSection {
+  id        String   @id @default(uuid())
+  title     String
+  subtitle  String?
+  ctaText   String?
+  ctaLink   String?
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  images HeroImage[]
+
+  @@map("hero_sections")
+}
+
+model HeroImage {
+  id            String      @id @default(uuid())
+  heroSectionId String
+  heroSection   HeroSection @relation(fields: [heroSectionId], references: [id], onDelete: Cascade)
+  imageUrl      String
+  altText       String      @default("")
+  sortOrder     Int         @default(0)
+
+  @@map("hero_images")
+}
+
+// ─── ABOUT CONTENT ───────────────────────────────────────────
+
+model AboutContent {
+  id         String   @id @default(uuid())
+  sectionKey String   @unique
+  title      String
+  content    String   @db.Text
+  imageUrl   String?
+  sortOrder  Int      @default(0)
+  isActive   Boolean  @default(true)
+  updatedAt  DateTime @updatedAt
+
+  @@map("about_content")
+}
+
+// ─── EXPERIENCE TIMELINE ─────────────────────────────────────
+
+model ExperienceTimeline {
+  id           String  @id @default(uuid())
+  title        String
+  subtitle     String?
+  organization String
+  location     String?
+  dateRange    String
+  externalLink String?
+  sortOrder    Int     @default(0)
+  isActive     Boolean @default(true)
+
+  @@map("experience_timeline")
+}
+
+// ─── COURSES ─────────────────────────────────────────────────
+
+model Course {
+  id          String  @id @default(uuid())
+  name        String
+  syllabusUrl String?
+  category    String  @default("general")
+  sortOrder   Int     @default(0)
+  isActive    Boolean @default(true)
+
+  @@map("courses")
+}
+
+// ─── PUBLICATIONS ────────────────────────────────────────────
+
+model Publication {
+  id           String         @id @default(uuid())
+  title        String
+  journal      String?
+  year         Int
+  tag          PublicationTag @default(PEER_REVIEWED)
+  doi          String?
+  externalUrl  String?
+  abstractText String?        @db.Text
+  sortOrder    Int            @default(0)
+  isActive     Boolean        @default(true)
+  createdAt    DateTime       @default(now())
+
+  @@map("publications")
+}
+
+// ─── BOOKS ───────────────────────────────────────────────────
+
+model Book {
+  id            String  @id @default(uuid())
+  title         String
+  year          Int
+  subtitle      String?
+  coverImageUrl String?
+  purchaseUrl   String?
+  isbn          String?
+  sortOrder     Int     @default(0)
+  isActive      Boolean @default(true)
+
+  @@map("books")
+}
+
+// ─── ACHIEVEMENTS ────────────────────────────────────────────
+
+model Achievement {
+  id          String  @id @default(uuid())
+  title       String
+  description String  @db.Text
+  year        Int?
+  category    String  @default("award")
+  sortOrder   Int     @default(0)
+  isActive    Boolean @default(true)
+
+  @@map("achievements")
+}
+
+// ─── PHD SCHOLARS ────────────────────────────────────────────
+
+model PhdScholar {
+  id              String        @id @default(uuid())
+  name            String
+  imageUrl        String?
+  status          ScholarStatus @default(PURSUING)
+  researchTopic   String?
+  currentPosition String?
+  sortOrder       Int           @default(0)
+  isActive        Boolean       @default(true)
+
+  @@map("phd_scholars")
+}
+
+// ─── GALLERY ─────────────────────────────────────────────────
+
+model GalleryCategory {
+  id        String @id @default(uuid())
+  name      String
+  slug      String @unique
+  sortOrder Int    @default(0)
+
+  items GalleryItem[]
+
+  @@map("gallery_categories")
+}
+
+model GalleryItem {
+  id           String          @id @default(uuid())
+  categoryId   String
+  category     GalleryCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  mediaType    MediaType       @default(PHOTO)
+  mediaUrl     String
+  thumbnailUrl String?
+  caption      String?
+  altText      String          @default("")
+  sortOrder    Int             @default(0)
+  isActive     Boolean         @default(true)
+  createdAt    DateTime        @default(now())
+
+  @@map("gallery_items")
+}
+
+// ─── CONTACT SUBMISSIONS ─────────────────────────────────────
+
+model ContactSubmission {
+  id        String           @id @default(uuid())
+  name      String
+  email     String
+  whatsapp  String?
+  message   String           @db.Text
+  status    SubmissionStatus @default(NEW)
+  createdAt DateTime         @default(now())
+
+  @@map("contact_submissions")
+}
+
+// ─── ALUMNI SUBMISSIONS ──────────────────────────────────────
+
+model AlumniSubmission {
+  id            String       @id @default(uuid())
+  fullName      String
+  email         String
+  whatsapp      String?
+  teachingMode  String?
+  degreeProgram String?
+  institute     String?
+  batchYear     Int?
+  rollNumber    String?
+  pictureUrl    String?
+  message       String?      @db.Text
+  status        AlumniStatus @default(NEW)
+  createdAt     DateTime     @default(now())
+
+  @@map("alumni_submissions")
+}
+
+// ─── SOCIAL LINKS ────────────────────────────────────────────
+
+model SocialLink {
+  id        String  @id @default(uuid())
+  platform  String
+  url       String
+  iconSvg   String? @db.Text
+  sortOrder Int     @default(0)
+  isActive  Boolean @default(true)
+
+  @@map("social_links")
+}
+
+// ─── ANNOUNCEMENTS ───────────────────────────────────────────
+
+model Announcement {
+  id          String    @id @default(uuid())
+  title       String
+  content     String    @db.Text
+  isPinned    Boolean   @default(false)
+  isActive    Boolean   @default(true)
+  publishDate DateTime  @default(now())
+  expiryDate  DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@map("announcements")
+}
+
+// ─── AUDIT LOGS ──────────────────────────────────────────────
+
+model AuditLog {
+  id           String   @id @default(uuid())
+  userId       String?
+  user         User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action       String
+  entityType   String
+  entityId     String?
+  previousData Json?
+  newData      Json?
+  ipAddress    String?
+  createdAt    DateTime @default(now())
+
+  @@map("audit_logs")
+}
+
+// ─── SEO METADATA ────────────────────────────────────────────
+
+model SeoMetadata {
+  id              String   @id @default(uuid())
+  pageSlug        String   @unique
+  metaTitle       String?
+  metaDescription String?  @db.Text
+  ogTitle         String?
+  ogDescription   String?  @db.Text
+  ogImage         String?
+  canonicalUrl    String?
+  structuredData  Json?
+  updatedAt       DateTime @updatedAt
+
+  @@map("seo_metadata")
+}

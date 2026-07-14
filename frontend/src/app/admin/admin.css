@@ -1,0 +1,269 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-playfair: 'Playfair Display', Georgia, serif;
+  --font-dm-sans:  'DM Sans', system-ui, sans-serif;
+
+  /* Light mode */
+  --bg-primary:   #faf9f7;
+  --bg-secondary: #f5f3ef;
+  --bg-card:      #ffffff;
+  --border:       #e8e5df;
+  --text-primary: #1a1a2e;
+  --text-soft:    #3d3d5c;
+  --text-muted:   #6b6b8a;
+  --accent:       #5061C4;
+  --accent-light: #eef0fb;
+}
+
+.dark {
+  --bg-primary:   #0f0f1a;
+  --bg-secondary: #16162a;
+  --bg-card:      #1e1e32;
+  --border:       #2a2a42;
+  --text-primary: #f0eff8;
+  --text-soft:    #c4c3d8;
+  --text-muted:   #8888a8;
+  --accent:       #7080d4;
+  --accent-light: #1e2040;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-dm-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.7;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-playfair);
+  line-height: 1.2;
+  color: var(--text-primary);
+}
+
+::selection {
+  background-color: #5061C4;
+  color: #ffffff;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-secondary); }
+::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  
+  .section-padding {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+  
+  .container-academic {
+    @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .card-base {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+  
+  .card-base:hover {
+    box-shadow: 0 8px 40px rgba(80, 97, 196, 0.15);
+    transform: translateY(-2px);
+  }
+  
+  .accent-line::before {
+    content: '';
+    display: block;
+    width: 3rem;
+    height: 3px;
+    background-color: var(--accent);
+    border-radius: 2px;
+    margin-bottom: 1rem;
+  }
+  
+  /* ═══════════════════════════════════════════════════════════════
+     HERO — Ken Burns Cinematic Crossfade Slideshow
+     ═══════════════════════════════════════════════════════════════ */
+
+  /* Each slide is an absolutely-positioned full-cover layer */
+  .hero-kb-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 1.6s cubic-bezier(0.4, 0, 0.15, 1);
+    will-change: opacity;
+    z-index: 1;
+  }
+
+  .hero-kb-slide.hero-kb-active {
+    opacity: 1;
+    z-index: 2;
+  }
+
+  .hero-kb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    will-change: transform;
+    /* Default: no animation until active */
+    transform: scale(1) translate(0, 0);
+  }
+
+  /* ── Ken Burns Variants ──────────────────────────────────────── */
+  /* Each variant applies a different slow pan/zoom when active */
+
+  .hero-kb-zoom-in .hero-kb-img {
+    transition: transform 8s cubic-bezier(0.25, 0, 0.25, 1);
+  }
+  .hero-kb-zoom-in.hero-kb-active .hero-kb-img {
+    transform: scale(1.15);
+  }
+
+  .hero-kb-pan-left .hero-kb-img {
+    transition: transform 8s cubic-bezier(0.25, 0, 0.25, 1);
+    transform: scale(1.12) translateX(3%);
+  }
+  .hero-kb-pan-left.hero-kb-active .hero-kb-img {
+    transform: scale(1.12) translateX(-3%);
+  }
+
+  .hero-kb-zoom-out .hero-kb-img {
+    transition: transform 8s cubic-bezier(0.25, 0, 0.25, 1);
+    transform: scale(1.2);
+  }
+  .hero-kb-zoom-out.hero-kb-active .hero-kb-img {
+    transform: scale(1.02);
+  }
+
+  .hero-kb-pan-right .hero-kb-img {
+    transition: transform 8s cubic-bezier(0.25, 0, 0.25, 1);
+    transform: scale(1.1) translateX(-3%);
+  }
+  .hero-kb-pan-right.hero-kb-active .hero-kb-img {
+    transform: scale(1.1) translateX(3%);
+  }
+
+  .hero-kb-pan-up .hero-kb-img {
+    transition: transform 8s cubic-bezier(0.25, 0, 0.25, 1);
+    transform: scale(1.12) translateY(3%);
+  }
+  .hero-kb-pan-up.hero-kb-active .hero-kb-img {
+    transform: scale(1.12) translateY(-3%);
+  }
+
+  /* ── Cinematic Overlay ───────────────────────────────────────── */
+  .hero-overlay {
+    background: linear-gradient(
+      135deg,
+      rgba(10, 10, 20, 0.78) 0%,
+      rgba(10, 10, 20, 0.55) 40%,
+      rgba(10, 10, 20, 0.45) 60%,
+      rgba(10, 10, 20, 0.65) 100%
+    );
+  }
+
+  /* ── Name Gradient ───────────────────────────────────────────── */
+  .hero-name-gradient {
+    background: linear-gradient(135deg, #a8b8f0 0%, #7890e0 40%, #c4b5fd 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* ── Profile Card (Glassmorphism) ────────────────────────────── */
+  .hero-profile-card {
+    padding: 2rem;
+    border-radius: 1.25rem;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(24px) saturate(1.4);
+    -webkit-backdrop-filter: blur(24px) saturate(1.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+  }
+
+  .hero-profile-card:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      0 16px 48px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  }
+
+  /* ── CTA Buttons ─────────────────────────────────────────────── */
+  .hero-cta-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.75rem;
+    background: linear-gradient(135deg, #5061C4 0%, #6878d4 100%);
+    color: #fff;
+    border-radius: 0.75rem;
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 20px rgba(80, 97, 196, 0.35);
+  }
+
+  .hero-cta-primary:hover {
+    background: linear-gradient(135deg, #6070d5 0%, #7888e0 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(80, 97, 196, 0.5);
+  }
+
+  .hero-cta-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.75rem;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 0.75rem;
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: all 0.25s ease;
+  }
+
+  .hero-cta-secondary:hover {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #fff;
+    transform: translateY(-2px);
+  }
+
+  /* ── Slide Progress Indicator ────────────────────────────────── */
+  .hero-progress-bar {
+    animation: hero-progress 6s linear forwards;
+  }
+}
+
+/* @keyframes must live outside @layer */
+@keyframes hero-progress {
+  from { width: 0; }
+  to   { width: 100%; }
+}
