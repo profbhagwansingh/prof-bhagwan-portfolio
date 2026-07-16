@@ -32,6 +32,7 @@ export function Header() {
             <li><Link href="/invited-lectures" className={isActive("/invited-lectures")}>Invited Lectures</Link></li>
             <li><Link href="/gallery" className={isActive("/gallery")}>Gallery</Link></li>
             <li><Link href="/talk-to-prof" className={isActive("/talk-to-prof")}>Talk to Prof</Link></li>
+            <li><Link href="/alumni" className={isActive("/alumni")}>Alumni Connect</Link></li>
             <li><Link href="/ecrrb" className={isActive("/ecrrb")}>Ethical Committee</Link></li>
           </ul>
         </nav>
@@ -54,6 +55,7 @@ export function Header() {
           <li><Link href="/about" onClick={() => setMobileMenuOpen(false)}>About</Link></li>
           <li><Link href="/gallery" onClick={() => setMobileMenuOpen(false)}>Gallery</Link></li>
           <li><Link href="/talk-to-prof" onClick={() => setMobileMenuOpen(false)}>Talk to Prof</Link></li>
+          <li><Link href="/alumni" onClick={() => setMobileMenuOpen(false)}>Alumni Connect</Link></li>
           <li><Link href="/ecrrb" onClick={() => setMobileMenuOpen(false)}>Ethical Committee</Link></li>
         </ul>
       </nav>
