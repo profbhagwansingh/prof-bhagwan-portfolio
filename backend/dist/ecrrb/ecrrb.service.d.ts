@@ -1,17 +1,12 @@
 import { PrismaService } from '../prisma/prisma.service';
 import { MediaService } from '../media/media.service';
+import 'multer';
 export declare class EcrrbService {
     private prisma;
     private mediaService;
     private readonly logger;
     constructor(prisma: PrismaService, mediaService: MediaService);
-    processApplication(data: any, files: {
-        photo?: Express.Multer.File[];
-        cv?: Express.Multer.File[];
-        scopusExport?: Express.Multer.File[];
-        papers?: Express.Multer.File[];
-        certificate?: Express.Multer.File[];
-    }): Promise<{
+    processApplication(data: any, files: any): Promise<{
         success: boolean;
         message: string;
         applicationId: string;

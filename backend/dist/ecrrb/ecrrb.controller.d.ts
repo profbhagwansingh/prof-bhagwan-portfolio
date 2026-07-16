@@ -1,14 +1,9 @@
+import 'multer';
 import { EcrrbService } from './ecrrb.service';
 export declare class EcrrbController {
     private readonly ecrrbService;
     constructor(ecrrbService: EcrrbService);
-    submitApplication(body: any, files: {
-        photo?: Express.Multer.File[];
-        cv?: Express.Multer.File[];
-        scopusExport?: Express.Multer.File[];
-        papers?: Express.Multer.File[];
-        certificate?: Express.Multer.File[];
-    }): Promise<{
+    submitApplication(body: any, files: any): Promise<{
         success: boolean;
         message: string;
         applicationId: string;
@@ -80,14 +75,7 @@ export declare class EcrrbController {
         createdAt: Date;
         updatedAt: Date;
     }>;
-    submitCertification(body: any, files: {
-        protocol?: Express.Multer.File[];
-        icf?: Express.Multer.File[];
-        tools?: Express.Multer.File[];
-        piCv?: Express.Multer.File[];
-        researchPaper?: Express.Multer.File[];
-        priorApproval?: Express.Multer.File[];
-    }): Promise<{
+    submitCertification(body: any, files: any): Promise<{
         success: boolean;
         message: string;
         applicationId: string;
