@@ -12,11 +12,8 @@ const isServer = typeof window === "undefined";
 const api = axios.create({
   baseURL: isServer
     ? (process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000")
-    : "",          // ← relative: browser calls go through Next.js rewrites proxy
+    : "",
   timeout: 10000,
-  headers: {
-    "Content-Type": "application/json",
-  },
 });
 
 // Attach JWT token for admin routes (browser only)
