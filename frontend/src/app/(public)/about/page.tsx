@@ -17,6 +17,7 @@ export default function AboutPage() {
   const [timeline, setTimeline] = useState<TimelineItem[]>([]);
   const [scholars, setScholars] = useState<any[]>([]);
   const [books, setBooks] = useState<any[]>([]);
+  const [courses, setCourses] = useState<any[]>([]);
   const [publicationsCount, setPublicationsCount] = useState<number>(0);
   const [chaptersCount, setChaptersCount] = useState<number>(0);
   const [lecturesCount, setLecturesCount] = useState<number>(0);
@@ -45,10 +46,15 @@ export default function AboutPage() {
       api.get("/api/publications").catch(() => ({ data: { value: [] } })),
       api.get("/api/publications/chapters").catch(() => ({ data: { value: [] } })),
       api.get("/api/content/invited-lectures").catch(() => ({ data: [] })),
-    ]).then(([timelineRes, scholarsRes, booksRes, aboutRes, pubRes, chapterRes, lectureRes]) => {
+      api.get("/api/content/courses").catch(() => ({ data: [] })),
+    ]).then(([timelineRes, scholarsRes, booksRes, aboutRes, pubRes, chapterRes, lectureRes, coursesRes]) => {
       setTimeline(Array.isArray(timelineRes.data) ? timelineRes.data : []);
       setScholars(Array.isArray(scholarsRes.data) ? scholarsRes.data : []);
       setBooks(Array.isArray(booksRes.data) ? booksRes.data : []);
+      
+      const cData = coursesRes?.data;
+      const fetchedCourses = Array.isArray(cData) ? cData : (cData?.data ?? cData?.items ?? []);
+      setCourses(fetchedCourses.filter((c: any) => c.isActive !== false));
       
       let pubCount = 0;
       if (Array.isArray(pubRes.data?.value)) pubCount = pubRes.data.value.length;
@@ -158,41 +164,34 @@ export default function AboutPage() {
               <div className="marquee-container">
                 <div className="marquee-track scroll-left">
                   <ul className="courses-list">
-                    <li onClick={() => window.open('/media/Courses Taught/Strategic Management.pdf', '_blank')}>Strategic Management</li>
-                    <li onClick={() => window.open('/media/Courses Taught/Marketing Management.pdf', '_blank')}>Marketing Management</li>
-                    <li onClick={() => window.open('/media/Courses Taught/Basic of Computers.pdf', '_blank')}>Basics of Computers & MIS</li>
-                    <li onClick={() => window.open('/media/Courses Taught/Business Envt.pdf', '_blank')}>Business Environment</li>
-                    <li onClick={() => window.open('/media/Courses Taught/Consumer behaviour.pdf', '_blank')}>Consumer Behaviour</li>
+                    {courses.slice(0, Math.ceil(courses.length / 2)).map(c => (
+                      <li key={c.id} onClick={() => c.syllabusUrl ? window.open(c.syllabusUrl, '_blank') : null}>{c.name}</li>
+                    ))}
                   </ul>
-                  {/* duplicated for marquee effect */}
                   <ul className="courses-list">
-                    <li onClick={() => window.open('/media/Courses Taught/Strategic Management.pdf', '_blank')}>Strategic Management</li>
-                    <li onClick={() => window.open('/media/Courses Taught/Marketing Management.pdf', '_blank')}>Marketing Management</li>
-                    <li onClick={() => window.open('/media/Courses Taught/Basic of Computers.pdf', '_blank')}>Basics of Computers & MIS</li>
-                    <li onClick={() => window.open('/media/Courses Taught/Business Envt.pdf', '_blank')}>Business Environment</li>
-                    <li onClick={() => window.open('/media/Courses Taught/Consumer behaviour.pdf', '_blank')}>Consumer Behaviour</li>
+                    {courses.slice(0, Math.ceil(courses.length / 2)).map(c => (
+                      <li key={`dup-${c.id}`} onClick={() => c.syllabusUrl ? window.open(c.syllabusUrl, '_blank') : null}>{c.name}</li>
+                    ))}
                   </ul>
                 </div>
               </div>
 
-              <div className="marquee-container">
-                <div className="marquee-track scroll-right">
-                  <ul className="courses-list">
-                    <li onClick={() => window.open('/media/Courses Taught/Digital Social Media Marketing.pdf', '_blank')}>Digital Social Media & Marketing</li>
-                    <li onClick={() => window.open('/media/Courses Taught/Web Based Advertising.pdf', '_blank')}>Web Based Advertising</li>
-                    <li onClick={() => window.open('/media/Courses Taught/MSC 439  Mobile Based Marketing MBM Jan July 2019.pdf', '_blank')}>Mobile Based Advertising</li>
-                    <li onClick={() => window.open('/media/Courses Taught/MSC 520  Internet Based Marketing IBM Aug - Dec 2017.pdf', '_blank')}>Internet Based Marketing</li>
-                    <li onClick={() => window.open('/media/Courses Taught/MSC 403_Retail Marketing.pdf', '_blank')}>Retail Management</li>
-                  </ul>
-                  <ul className="courses-list">
-                    <li onClick={() => window.open('/media/Courses Taught/Digital Social Media Marketing.pdf', '_blank')}>Digital Social Media & Marketing</li>
-                    <li onClick={() => window.open('/media/Courses Taught/Web Based Advertising.pdf', '_blank')}>Web Based Advertising</li>
-                    <li onClick={() => window.open('/media/Courses Taught/MSC 439  Mobile Based Marketing MBM Jan July 2019.pdf', '_blank')}>Mobile Based Advertising</li>
-                    <li onClick={() => window.open('/media/Courses Taught/MSC 520  Internet Based Marketing IBM Aug - Dec 2017.pdf', '_blank')}>Internet Based Marketing</li>
-                    <li onClick={() => window.open('/media/Courses Taught/MSC 403_Retail Marketing.pdf', '_blank')}>Retail Management</li>
-                  </ul>
+              {courses.length > 1 && (
+                <div className="marquee-container">
+                  <div className="marquee-track scroll-right">
+                    <ul className="courses-list">
+                      {courses.slice(Math.ceil(courses.length / 2)).map(c => (
+                        <li key={c.id} onClick={() => c.syllabusUrl ? window.open(c.syllabusUrl, '_blank') : null}>{c.name}</li>
+                      ))}
+                    </ul>
+                    <ul className="courses-list">
+                      {courses.slice(Math.ceil(courses.length / 2)).map(c => (
+                        <li key={`dup-${c.id}`} onClick={() => c.syllabusUrl ? window.open(c.syllabusUrl, '_blank') : null}>{c.name}</li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* ... other marquee tracks can be added here if needed ... */}
             </div>
