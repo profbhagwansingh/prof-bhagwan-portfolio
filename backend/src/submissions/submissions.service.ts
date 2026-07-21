@@ -1,16 +1,10 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { MediaService } from '../media/media.service';
 import { SubmissionStatus, AlumniStatus } from '@prisma/client';
 
 @Injectable()
 export class SubmissionsService {
-    private readonly logger = new Logger(SubmissionsService.name);
-
-    constructor(
-        private prisma: PrismaService,
-        private mediaService: MediaService,
-    ) { }
+    constructor(private prisma: PrismaService) { }
 
     // ─── CONTACT SUBMISSIONS ──────────────────────────────
     async createContact(data: { name: string; email: string; whatsapp?: string; message: string }) {
@@ -36,28 +30,8 @@ export class SubmissionsService {
     }
 
     // ─── ALUMNI SUBMISSIONS ───────────────────────────────
-    async createAlumni(data: any, file?: any) {
-        let pictureUrl: string | null = null;
-
-        // Upload profile picture if provided
-        if (file) {
-            try {
-                const result = await this.mediaService.saveFile(file);
-                pictureUrl = result.url;
-            } catch (err) {
-                this.logger.warn('Alumni photo upload failed, proceeding without photo', err);
-            }
-        }
-
-        // Strip out any base64 pictureUrl sent from body to avoid DB bloat
-        const { pictureUrl: _bodyPicUrl, ...rest } = data;
-
-        return this.prisma.alumniSubmission.create({
-            data: {
-                ...rest,
-                pictureUrl,
-            },
-        });
+    async createAlumni(data: any) {
+        return this.prisma.alumniSubmission.create({ data });
     }
 
     async getAlumni(status?: AlumniStatus, page = 1, limit = 20) {

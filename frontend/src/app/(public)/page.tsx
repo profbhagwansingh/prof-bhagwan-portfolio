@@ -36,24 +36,90 @@ export default function HomePage() {
   }, [images]);
 
   useEffect(() => {
-    api.get("/api/homepage-data")
+    // Fetch slideshow images dynamically to connect to backend
+    api.get("/api/gallery/admin/slideshow-files")
       .then(res => {
-        if (!res.data) return;
-        const data = res.data;
-        
-        if (Array.isArray(data.slideshowImages)) setImages(data.slideshowImages);
-        if (Array.isArray(data.courses)) setCourses(data.courses);
-        if (Array.isArray(data.quickStats)) setQuickStats(data.quickStats);
-        
-        if (typeof data.publicationCount === 'number') setPublicationCount(data.publicationCount);
-        if (typeof data.scholarsCount === 'number') setScholarsCount(data.scholarsCount);
-        if (typeof data.authoredBooksCount === 'number') setAuthoredBooksCount(data.authoredBooksCount);
-        if (typeof data.chaptersCount === 'number') setChaptersCount(data.chaptersCount);
-        if (typeof data.invitedLecturesCount === 'number') setInvitedLecturesCount(data.invitedLecturesCount);
-        
-        if (Array.isArray(data.siteSettings)) {
+        if (Array.isArray(res.data)) {
+          setImages(res.data);
+        }
+      })
+      .catch(console.error);
+      
+    // Fetch courses for Areas of Expertise
+    api.get("/api/content/courses")
+      .then(res => {
+        if (Array.isArray(res.data)) {
+          setCourses(res.data);
+        }
+      })
+      .catch(console.error);
+
+    // Fetch quick stats
+    api.get("/api/content/quick-stats")
+      .then(res => {
+        if (Array.isArray(res.data)) {
+          setQuickStats(res.data);
+        }
+      })
+      .catch(console.error);
+
+    // Fetch publication count to sync metrics
+    api.get("/api/publications")
+      .then(res => {
+        let count = 0;
+        if (Array.isArray(res.data?.value)) {
+          count = res.data.value.length;
+        } else if (Array.isArray(res.data)) {
+          count = res.data.length;
+        }
+        setPublicationCount(count);
+      })
+      .catch(console.error);
+
+    // Fetch scholars count to sync metrics
+    api.get("/api/content/scholars")
+      .then(res => {
+        if (Array.isArray(res.data)) {
+          setScholarsCount(res.data.length);
+        }
+      })
+      .catch(console.error);
+
+    // Fetch authored books count to sync metrics
+    api.get("/api/publications/books")
+      .then(res => {
+        if (Array.isArray(res.data)) {
+          setAuthoredBooksCount(res.data.length);
+        }
+      })
+      .catch(console.error);
+
+    // Fetch book chapters count to sync metrics
+    api.get("/api/publications/chapters")
+      .then(res => {
+        if (Array.isArray(res.data?.value)) {
+          setChaptersCount(res.data.value.length);
+        } else if (Array.isArray(res.data)) {
+          setChaptersCount(res.data.length);
+        }
+      })
+      .catch(console.error);
+
+    // Fetch invited lectures count to sync metrics
+    api.get("/api/content/invited-lectures")
+      .then(res => {
+        if (Array.isArray(res.data)) {
+          setInvitedLecturesCount(res.data.length);
+        }
+      })
+      .catch(console.error);
+
+    // Fetch site settings
+    api.get("/api/settings/public/all")
+      .then(res => {
+        if (Array.isArray(res.data)) {
           const map: Record<string, string> = {};
-          data.siteSettings.forEach((s: any) => { map[s.key] = s.value; });
+          res.data.forEach((s: any) => { map[s.key] = s.value; });
           setSettings(map);
         }
       })

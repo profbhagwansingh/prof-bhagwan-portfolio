@@ -1,75 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import * as fs from 'fs';
-import * as path from 'path';
 
 @Injectable()
 export class ContentService {
     constructor(private prisma: PrismaService) { }
-
-    // ─── HOMEPAGE BATCH DATA ────────────────────────────────
-    async getHomepageData() {
-        const [
-            quickStats,
-            courses,
-            scholarsCount,
-            invitedLecturesCount,
-            publicationCount,
-            authoredBooksCount,
-            chaptersCount,
-            siteSettings,
-        ] = await Promise.all([
-            this.prisma.quickStat.findMany({ orderBy: { sortOrder: 'asc' } }),
-            this.prisma.course.findMany({ where: { isActive: true }, orderBy: { sortOrder: 'asc' } }),
-            this.prisma.phdScholar.count({ where: { isActive: true } }),
-            this.prisma.invitedLecture.count(),
-            this.prisma.publication.count({ where: { isActive: true } }),
-            this.prisma.book.count({ where: { isActive: true } }),
-            this.prisma.bookChapter.count({ where: { isActive: true } }),
-            this.prisma.siteSetting.findMany(),
-        ]);
-
-        let slideshowImages = [];
-        try {
-            const dir = path.join(process.cwd(), '..', 'frontend', 'public', 'media', 'img', 'slideshow');
-            if (fs.existsSync(dir)) {
-                slideshowImages = fs.readdirSync(dir)
-                    .filter(f => !f.startsWith('.') && fs.statSync(path.join(dir, f)).isFile())
-                    .map(f => `/media/img/slideshow/${f}`);
-                
-                const orderSetting = await this.prisma.siteSetting.findUnique({ where: { key: 'slideshow_order' } });
-                if (orderSetting && orderSetting.value) {
-                    try {
-                        const order = JSON.parse(orderSetting.value);
-                        if (Array.isArray(order) && order.length > 0) {
-                            slideshowImages.sort((a, b) => {
-                                const indexA = order.indexOf(a);
-                                const indexB = order.indexOf(b);
-                                if (indexA === -1 && indexB === -1) return a.localeCompare(b);
-                                if (indexA === -1) return 1;
-                                if (indexB === -1) return -1;
-                                return indexA - indexB;
-                            });
-                        }
-                    } catch(e) {}
-                }
-            }
-        } catch (e) {
-            console.error('Error reading slideshow images:', e);
-        }
-
-        return {
-            quickStats,
-            courses,
-            scholarsCount,
-            invitedLecturesCount,
-            publicationCount,
-            authoredBooksCount,
-            chaptersCount,
-            siteSettings,
-            slideshowImages,
-        };
-    }
 
     // ─── HERO SECTIONS ──────────────────────────────────────
     async getHeroSections() {

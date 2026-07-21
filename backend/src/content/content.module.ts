@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ContentService } from './content.service';
 import { ContentController } from './content.controller';
-import { HomepageController } from './homepage.controller';
 
 @Module({
-    controllers: [ContentController, HomepageController],
+    controllers: [ContentController],
     providers: [ContentService],
     exports: [ContentService],
 })

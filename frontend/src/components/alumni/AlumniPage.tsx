@@ -13,7 +13,6 @@ export function AlumniPage() {
   const [visible, setVisible] = useState(false);
   const [status,  setStatus]  = useState<Status>("idle");
   const [preview, setPreview] = useState<string | null>(null);
-  const [picFile, setPicFile] = useState<File | null>(null);
   const [form, setForm] = useState({
     fullName: "", email: "", whatsapp: "",
     teachingMode: "", degreeProgram: "", institute: "",
@@ -31,7 +30,6 @@ export function AlumniPage() {
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    setPicFile(file);
     const reader = new FileReader();
     reader.onload = () => setPreview(reader.result as string);
     reader.readAsDataURL(file);
@@ -41,17 +39,7 @@ export function AlumniPage() {
     e.preventDefault();
     setStatus("loading");
     try {
-      const formData = new FormData();
-      // Append all text fields
-      Object.entries(form).forEach(([key, value]) => {
-        if (value) formData.append(key, value);
-      });
-      // Append profile picture file if selected
-      if (picFile) {
-        formData.append("picture", picFile);
-      }
-
-      await api.post("/api/submissions/alumni", formData);
+      await api.post("/api/submissions/alumni", { ...form, pictureUrl: preview });
       setStatus("success");
     } catch {
       setStatus("error");
@@ -132,7 +120,7 @@ export function AlumniPage() {
                     </div>
                     <div className="form-group" style={{ flex: '1 1 calc(50% - 10px)' }}>
                       <label>Batch Year *</label>
-                      <input name="batchYear" type="number" value={form.batchYear} onChange={handleChange} required placeholder="e.g. 2018" min="1990" max="2026" />
+                      <input name="batchYear" type="number" value={form.batchYear} onChange={handleChange} required placeholder="e.g. 2018" min="1990" max="2025" />
                     </div>
                     <div className="form-group" style={{ flex: '1 1 calc(50% - 10px)' }}>
                       <label>Roll Number</label>
@@ -145,7 +133,7 @@ export function AlumniPage() {
                     {preview ? (
                       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
                         <img src={preview} alt="Preview" style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '50%', border: '2px solid #3182ce' }} />
-                        <button type="button" onClick={() => { setPreview(null); setPicFile(null); }} style={{ color: '#e53e3e', textDecoration: 'underline', background: 'none', border: 'none', cursor: 'pointer' }}>
+                        <button type="button" onClick={() => setPreview(null)} style={{ color: '#e53e3e', textDecoration: 'underline', background: 'none', border: 'none', cursor: 'pointer' }}>
                           Remove
                         </button>
                       </div>

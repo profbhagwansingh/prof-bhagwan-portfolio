@@ -1,8 +1,7 @@
-import { Controller, Get, Post, Patch, Delete, Body, Param, Query, UseGuards, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, Query, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard, Roles } from '../auth/roles.guard';
 import { Throttle } from '@nestjs/throttler';
-import { FileInterceptor } from '@nestjs/platform-express';
 import { SubmissionsService } from './submissions.service';
 import { Role, SubmissionStatus, AlumniStatus } from '@prisma/client';
 
@@ -19,15 +18,9 @@ export class SubmissionsController {
 
     @Post('alumni')
     @Throttle({ default: { limit: 5, ttl: 60000 } })
-    @UseInterceptors(FileInterceptor('picture', { limits: { fileSize: 5 * 1024 * 1024 } }))
-    createAlumni(@Body() data: any, @UploadedFile() file?: any) {
-        // Parse batchYear from string to integer (multipart sends strings)
-        if (data.batchYear) {
-            data.batchYear = parseInt(data.batchYear, 10) || null;
-        }
-        return this.subService.createAlumni(data, file);
+    createAlumni(@Body() data: any) {
+        return this.subService.createAlumni(data);
     }
-
 
     // ─── ADMIN: View & manage submissions ─────────────────
     @Get('admin/contacts')
