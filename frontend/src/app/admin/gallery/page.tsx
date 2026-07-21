@@ -12,18 +12,7 @@ import { cn } from "@/lib/utils";
 import { useApiQuery, useApiMutation, useInvalidate } from "@/hooks";
 import { FormField, inputStyles, selectStyles } from "@/components/shared/FormField";
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
-
-// Dummy useToast hook since ToastProvider is missing
-const useToast = () => {
-  return {
-    toast: (opts: { type: string, title: string, description?: string }) => {
-      console.log(`[Toast] ${opts.type}: ${opts.title} - ${opts.description || ''}`);
-      if (opts.type === 'error') {
-        alert(`${opts.title}\n${opts.description || ''}`);
-      }
-    }
-  };
-};
+import { useToast } from "@/components/providers/ToastProvider";
 import { MediaUploader } from "@/components/shared/MediaUploader";
 import { galleryItemFormSchema, type GalleryItemFormData } from "@/lib/validations";
 import api from "@/lib/api";
