@@ -158,22 +158,22 @@ export default function AboutPage() {
               <div className="marquee-container">
                 <div className="marquee-track scroll-left">
                   <ul className="courses-list">
-                    <li onClick={() => window.open('/media/Courses Taught/Strategic Management.pdf', '_blank')}>Strategic Management</li>
-                    <li onClick={() => window.open('/media/Courses Taught/Marketing Management.pdf', '_blank')}>Marketing Management</li>
-                    <li onClick={() => window.open('/media/Courses Taught/Basic of Computers.pdf', '_blank')}>Basics of Computers & MIS</li>
-                    <li onClick={() => window.open('/media/Courses Taught/Business Envt.pdf', '_blank')}>Business Environment</li>
-                    <li onClick={() => window.open('/media/Courses Taught/Consumer behaviour.pdf', '_blank')}>Consumer Behaviour</li>
-                    <li onClick={() => window.open('/media/Courses Taught/Dr B singh MSC 401_Marketing Management.pdf', '_blank')}>MSC 401 Marketing Management</li>
-                    <li onClick={() => window.open('/media/Courses Taught/Dr B Singh MSC 504 2013 Internet Marketing.pdf', '_blank')}>MSC 504 Internet Marketing</li>
+                    <li onClick={() => window.open('/media/courses-taught/Strategic-Management.pdf', '_blank')}>Strategic Management</li>
+                    <li onClick={() => window.open('/media/courses-taught/Marketing-Management.pdf', '_blank')}>Marketing Management</li>
+                    <li onClick={() => window.open('/media/courses-taught/Basic-of-Computers.pdf', '_blank')}>Basics of Computers & MIS</li>
+                    <li onClick={() => window.open('/media/courses-taught/Business-Envt.pdf', '_blank')}>Business Environment</li>
+                    <li onClick={() => window.open('/media/courses-taught/Consumer-behaviour.pdf', '_blank')}>Consumer Behaviour</li>
+                    <li onClick={() => window.open('/media/courses-taught/Dr-B-singh-MSC-401_Marketing-Management.pdf', '_blank')}>MSC 401 Marketing Management</li>
+                    <li onClick={() => window.open('/media/courses-taught/Dr-B-Singh-MSC-504-2013-Internet-Marketing.pdf', '_blank')}>MSC 504 Internet Marketing</li>
                   </ul>
                   <ul className="courses-list">
-                    <li onClick={() => window.open('/media/Courses Taught/Strategic Management.pdf', '_blank')}>Strategic Management</li>
-                    <li onClick={() => window.open('/media/Courses Taught/Marketing Management.pdf', '_blank')}>Marketing Management</li>
-                    <li onClick={() => window.open('/media/Courses Taught/Basic of Computers.pdf', '_blank')}>Basics of Computers & MIS</li>
-                    <li onClick={() => window.open('/media/Courses Taught/Business Envt.pdf', '_blank')}>Business Environment</li>
-                    <li onClick={() => window.open('/media/Courses Taught/Consumer behaviour.pdf', '_blank')}>Consumer Behaviour</li>
-                    <li onClick={() => window.open('/media/Courses Taught/Dr B singh MSC 401_Marketing Management.pdf', '_blank')}>MSC 401 Marketing Management</li>
-                    <li onClick={() => window.open('/media/Courses Taught/Dr B Singh MSC 504 2013 Internet Marketing.pdf', '_blank')}>MSC 504 Internet Marketing</li>
+                    <li onClick={() => window.open('/media/courses-taught/Strategic-Management.pdf', '_blank')}>Strategic Management</li>
+                    <li onClick={() => window.open('/media/courses-taught/Marketing-Management.pdf', '_blank')}>Marketing Management</li>
+                    <li onClick={() => window.open('/media/courses-taught/Basic-of-Computers.pdf', '_blank')}>Basics of Computers & MIS</li>
+                    <li onClick={() => window.open('/media/courses-taught/Business-Envt.pdf', '_blank')}>Business Environment</li>
+                    <li onClick={() => window.open('/media/courses-taught/Consumer-behaviour.pdf', '_blank')}>Consumer Behaviour</li>
+                    <li onClick={() => window.open('/media/courses-taught/Dr-B-singh-MSC-401_Marketing-Management.pdf', '_blank')}>MSC 401 Marketing Management</li>
+                    <li onClick={() => window.open('/media/courses-taught/Dr-B-Singh-MSC-504-2013-Internet-Marketing.pdf', '_blank')}>MSC 504 Internet Marketing</li>
                   </ul>
                 </div>
               </div>
@@ -181,22 +181,22 @@ export default function AboutPage() {
               <div className="marquee-container">
                 <div className="marquee-track scroll-right">
                   <ul className="courses-list">
-                    <li onClick={() => window.open('/media/Courses Taught/Digital Social Media Marketing.pdf', '_blank')}>Digital Social Media & Marketing</li>
-                    <li onClick={() => window.open('/media/Courses Taught/Web Based Advertising.pdf', '_blank')}>Web Based Advertising</li>
-                    <li onClick={() => window.open('/media/Courses Taught/MSC 439  Mobile Based Marketing MBM Jan July 2019.pdf', '_blank')}>Mobile Based Marketing</li>
-                    <li onClick={() => window.open('/media/Courses Taught/MSC 520  Internet Based Marketing IBM Aug - Dec 2017.pdf', '_blank')}>Internet Based Marketing</li>
-                    <li onClick={() => window.open('/media/Courses Taught/MSC 403_Retail Marketing.pdf', '_blank')}>Retail Marketing</li>
-                    <li onClick={() => window.open('/media/Courses Taught/Dr B singh MSC 502_Marketing Research with Lecutre Plan.pdf', '_blank')}>MSC 502 Marketing Research</li>
-                    <li onClick={() => window.open('/media/Courses Taught/MSC 510 Advertising Research Syllabus.pdf', '_blank')}>MSC 510 Advertising Research</li>
+                    <li onClick={() => window.open('/media/courses-taught/Digital-Social-Media-Marketing.pdf', '_blank')}>Digital Social Media & Marketing</li>
+                    <li onClick={() => window.open('/media/courses-taught/Web-Based-Advertising.pdf', '_blank')}>Web Based Advertising</li>
+                    <li onClick={() => window.open('/media/courses-taught/MSC-439--Mobile-Based-Marketing-MBM-Jan-July-2019.pdf', '_blank')}>Mobile Based Marketing</li>
+                    <li onClick={() => window.open('/media/courses-taught/MSC-520--Internet-Based-Marketing-IBM-Aug---Dec-2017.pdf', '_blank')}>Internet Based Marketing</li>
+                    <li onClick={() => window.open('/media/courses-taught/MSC-403_Retail-Marketing.pdf', '_blank')}>Retail Marketing</li>
+                    <li onClick={() => window.open('/media/courses-taught/Dr-B-singh-MSC-502_Marketing-Research-with-Lecutre-Plan.pdf', '_blank')}>MSC 502 Marketing Research</li>
+                    <li onClick={() => window.open('/media/courses-taught/MSC-510-Advertising-Research-Syllabus.pdf', '_blank')}>MSC 510 Advertising Research</li>
                   </ul>
                   <ul className="courses-list">
-                    <li onClick={() => window.open('/media/Courses Taught/Digital Social Media Marketing.pdf', '_blank')}>Digital Social Media & Marketing</li>
-                    <li onClick={() => window.open('/media/Courses Taught/Web Based Advertising.pdf', '_blank')}>Web Based Advertising</li>
-                    <li onClick={() => window.open('/media/Courses Taught/MSC 439  Mobile Based Marketing MBM Jan July 2019.pdf', '_blank')}>Mobile Based Marketing</li>
-                    <li onClick={() => window.open('/media/Courses Taught/MSC 520  Internet Based Marketing IBM Aug - Dec 2017.pdf', '_blank')}>Internet Based Marketing</li>
-                    <li onClick={() => window.open('/media/Courses Taught/MSC 403_Retail Marketing.pdf', '_blank')}>Retail Marketing</li>
-                    <li onClick={() => window.open('/media/Courses Taught/Dr B singh MSC 502_Marketing Research with Lecutre Plan.pdf', '_blank')}>MSC 502 Marketing Research</li>
-                    <li onClick={() => window.open('/media/Courses Taught/MSC 510 Advertising Research Syllabus.pdf', '_blank')}>MSC 510 Advertising Research</li>
+                    <li onClick={() => window.open('/media/courses-taught/Digital-Social-Media-Marketing.pdf', '_blank')}>Digital Social Media & Marketing</li>
+                    <li onClick={() => window.open('/media/courses-taught/Web-Based-Advertising.pdf', '_blank')}>Web Based Advertising</li>
+                    <li onClick={() => window.open('/media/courses-taught/MSC-439--Mobile-Based-Marketing-MBM-Jan-July-2019.pdf', '_blank')}>Mobile Based Marketing</li>
+                    <li onClick={() => window.open('/media/courses-taught/MSC-520--Internet-Based-Marketing-IBM-Aug---Dec-2017.pdf', '_blank')}>Internet Based Marketing</li>
+                    <li onClick={() => window.open('/media/courses-taught/MSC-403_Retail-Marketing.pdf', '_blank')}>Retail Marketing</li>
+                    <li onClick={() => window.open('/media/courses-taught/Dr-B-singh-MSC-502_Marketing-Research-with-Lecutre-Plan.pdf', '_blank')}>MSC 502 Marketing Research</li>
+                    <li onClick={() => window.open('/media/courses-taught/MSC-510-Advertising-Research-Syllabus.pdf', '_blank')}>MSC 510 Advertising Research</li>
                   </ul>
                 </div>
               </div>
@@ -204,22 +204,22 @@ export default function AboutPage() {
               <div className="marquee-container">
                 <div className="marquee-track scroll-left">
                   <ul className="courses-list">
-                    <li onClick={() => window.open('/media/Courses Taught/Dr B singh MSC 405 IMC Integrated Marketing Communication 2014 with Lecture Plan.pdf', '_blank')}>IMC (2014)</li>
-                    <li onClick={() => window.open('/media/Courses Taught/MSC 405 IMC Integrated Marketing Communication 2017.pdf', '_blank')}>IMC (2017)</li>
-                    <li onClick={() => window.open('/media/Courses Taught/MSC 430 Digital Marketing SD - 4 Syllabus 2016.pdf', '_blank')}>MSC 430 Digital Marketing</li>
-                    <li onClick={() => window.open('/media/Courses Taught/MSC 522 Syllabus WBA 2015 web based Advertising WBA.pdf', '_blank')}>MSC 522 Web Based Advertising</li>
-                    <li onClick={() => window.open('/media/Courses Taught/MSC 607 PhD Advance Topics in Strategic Marketing %26 Management Syllabus 2019.pdf', '_blank')}>PhD Advance Strategic Marketing</li>
-                    <li onClick={() => window.open('/media/Courses Taught/CSR Computer Skills for Research PhD Course work Syllabus.pdf', '_blank')}>Computer Skills for Research</li>
-                    <li onClick={() => window.open('/media/Courses Taught/Research Publication Ethics RPE Syllabus by UGC.pdf', '_blank')}>Research Publication Ethics</li>
+                    <li onClick={() => window.open('/media/courses-taught/Dr-B-singh-MSC-405-IMC-Integrated-Marketing-Communication-2014-with-Lecture-Plan.pdf', '_blank')}>IMC (2014)</li>
+                    <li onClick={() => window.open('/media/courses-taught/MSC-405-IMC-Integrated-Marketing-Communication-2017.pdf', '_blank')}>IMC (2017)</li>
+                    <li onClick={() => window.open('/media/courses-taught/MSC-430-Digital-Marketing-SD---4-Syllabus-2016.pdf', '_blank')}>MSC 430 Digital Marketing</li>
+                    <li onClick={() => window.open('/media/courses-taught/MSC-522-Syllabus-WBA-2015-web-based-Advertising-WBA.pdf', '_blank')}>MSC 522 Web Based Advertising</li>
+                    <li onClick={() => window.open('/media/courses-taught/MSC-607-PhD-Advance-Topics-in-Strategic-Marketing-&-Management-Syllabus-2019.pdf', '_blank')}>PhD Advance Strategic Marketing</li>
+                    <li onClick={() => window.open('/media/courses-taught/CSR-Computer-Skills-for-Research-PhD-Course-work-Syllabus.pdf', '_blank')}>Computer Skills for Research</li>
+                    <li onClick={() => window.open('/media/courses-taught/Research-Publication-Ethics-RPE-Syllabus-by-UGC.pdf', '_blank')}>Research Publication Ethics</li>
                   </ul>
                   <ul className="courses-list">
-                    <li onClick={() => window.open('/media/Courses Taught/Dr B singh MSC 405 IMC Integrated Marketing Communication 2014 with Lecture Plan.pdf', '_blank')}>IMC (2014)</li>
-                    <li onClick={() => window.open('/media/Courses Taught/MSC 405 IMC Integrated Marketing Communication 2017.pdf', '_blank')}>IMC (2017)</li>
-                    <li onClick={() => window.open('/media/Courses Taught/MSC 430 Digital Marketing SD - 4 Syllabus 2016.pdf', '_blank')}>MSC 430 Digital Marketing</li>
-                    <li onClick={() => window.open('/media/Courses Taught/MSC 522 Syllabus WBA 2015 web based Advertising WBA.pdf', '_blank')}>MSC 522 Web Based Advertising</li>
-                    <li onClick={() => window.open('/media/Courses Taught/MSC 607 PhD Advance Topics in Strategic Marketing %26 Management Syllabus 2019.pdf', '_blank')}>PhD Advance Strategic Marketing</li>
-                    <li onClick={() => window.open('/media/Courses Taught/CSR Computer Skills for Research PhD Course work Syllabus.pdf', '_blank')}>Computer Skills for Research</li>
-                    <li onClick={() => window.open('/media/Courses Taught/Research Publication Ethics RPE Syllabus by UGC.pdf', '_blank')}>Research Publication Ethics</li>
+                    <li onClick={() => window.open('/media/courses-taught/Dr-B-singh-MSC-405-IMC-Integrated-Marketing-Communication-2014-with-Lecture-Plan.pdf', '_blank')}>IMC (2014)</li>
+                    <li onClick={() => window.open('/media/courses-taught/MSC-405-IMC-Integrated-Marketing-Communication-2017.pdf', '_blank')}>IMC (2017)</li>
+                    <li onClick={() => window.open('/media/courses-taught/MSC-430-Digital-Marketing-SD---4-Syllabus-2016.pdf', '_blank')}>MSC 430 Digital Marketing</li>
+                    <li onClick={() => window.open('/media/courses-taught/MSC-522-Syllabus-WBA-2015-web-based-Advertising-WBA.pdf', '_blank')}>MSC 522 Web Based Advertising</li>
+                    <li onClick={() => window.open('/media/courses-taught/MSC-607-PhD-Advance-Topics-in-Strategic-Marketing-&-Management-Syllabus-2019.pdf', '_blank')}>PhD Advance Strategic Marketing</li>
+                    <li onClick={() => window.open('/media/courses-taught/CSR-Computer-Skills-for-Research-PhD-Course-work-Syllabus.pdf', '_blank')}>Computer Skills for Research</li>
+                    <li onClick={() => window.open('/media/courses-taught/Research-Publication-Ethics-RPE-Syllabus-by-UGC.pdf', '_blank')}>Research Publication Ethics</li>
                   </ul>
                 </div>
               </div>
