@@ -1,8 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Poppins } from "next/font/google";
-import { ThemeProvider } from "@/components/providers/ThemeProvider";
-import { QueryProvider } from "@/components/providers/QueryProvider";
-import { ToastProvider } from "@/components/providers/ToastProvider";
+
 import { SITE_NAME, SITE_URL, SITE_DESCRIPTION } from "@/lib/constants";
 
 const poppins = Poppins({
@@ -95,13 +93,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
       </head>
       <body className={`flex flex-col min-h-screen font-sans`}>
-        <ThemeProvider>
-          <QueryProvider>
-            <ToastProvider>
-              {children}
-            </ToastProvider>
-          </QueryProvider>
-        </ThemeProvider>
+        {children}
       </body>
     </html>
   );
