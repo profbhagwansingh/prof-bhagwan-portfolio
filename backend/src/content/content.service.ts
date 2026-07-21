@@ -1,9 +1,60 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import * as fs from 'fs';
+import * as path from 'path';
 
 @Injectable()
 export class ContentService {
     constructor(private prisma: PrismaService) { }
+
+    // ─── HOMEPAGE CONSOLIDATED DATA ───────────────────────
+    async getHomepageData() {
+        // Run all queries in parallel
+        const [
+            quickStats,
+            courses,
+            scholarsCount,
+            invitedLecturesCount,
+            publicationsCount,
+            booksCount,
+            bookChaptersCount,
+            settings
+        ] = await Promise.all([
+            this.prisma.quickStat.findMany({ where: { isActive: true }, orderBy: { sortOrder: 'asc' } }),
+            this.prisma.course.findMany({ where: { isActive: true }, orderBy: { sortOrder: 'asc' } }),
+            this.prisma.phdScholar.count(),
+            this.prisma.invitedLecture.count(),
+            this.prisma.publication.count({ where: { isActive: true } }),
+            this.prisma.book.count({ where: { isActive: true } }),
+            this.prisma.bookChapter.count({ where: { isActive: true } }),
+            this.prisma.siteSetting.findMany()
+        ]);
+
+        let slideshow: string[] = [];
+        try {
+            const frontendPublicPath = path.join(process.cwd(), '..', 'frontend', 'public');
+            const slideshowDir = path.join(frontendPublicPath, 'media', 'img', 'slideshow');
+            if (fs.existsSync(slideshowDir)) {
+                slideshow = fs.readdirSync(slideshowDir)
+                    .filter(file => file.match(/\.(jpg|jpeg|png|gif|webp|avif)$/i))
+                    .map(file => `/media/img/slideshow/${file}`);
+            }
+        } catch (e) {
+            console.error('Failed to read slideshow directory:', e);
+        }
+
+        return {
+            quickStats,
+            courses,
+            scholarsCount,
+            invitedLecturesCount,
+            publicationsCount,
+            booksCount,
+            bookChaptersCount,
+            settings,
+            slideshow
+        };
+    }
 
     // ─── HERO SECTIONS ──────────────────────────────────────
     async getHeroSections() {

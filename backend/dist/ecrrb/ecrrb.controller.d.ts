@@ -9,23 +9,26 @@ export declare class EcrrbController {
         applicationId: string;
     }>;
     getAllApplications(): Promise<{
-        id: string;
-        fullName: string;
         email: string;
-        category: string;
+        fullName: string;
+        id: string;
         createdAt: Date;
+        category: string;
     }[]>;
     getApplicationDetails(id: string): Promise<{
-        id: string;
+        email: string;
         fullName: string;
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        category: string;
+        status: import(".prisma/client").$Enums.EcrrbStatus;
         dateOfBirth: Date;
         photoUrl: string | null;
         designation: string;
         affiliation: string;
-        email: string;
         phone: string;
         address: string;
-        category: string;
         highestQualification: string;
         specialization: string;
         yearsOfExperience: number;
@@ -41,21 +44,21 @@ export declare class EcrrbController {
         certificateUrl: string | null;
         digitalSignature: string;
         applicationDate: Date;
-        status: import(".prisma/client").$Enums.EcrrbStatus;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     deleteApplication(id: string): Promise<{
-        id: string;
+        email: string;
         fullName: string;
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        category: string;
+        status: import(".prisma/client").$Enums.EcrrbStatus;
         dateOfBirth: Date;
         photoUrl: string | null;
         designation: string;
         affiliation: string;
-        email: string;
         phone: string;
         address: string;
-        category: string;
         highestQualification: string;
         specialization: string;
         yearsOfExperience: number;
@@ -71,9 +74,6 @@ export declare class EcrrbController {
         certificateUrl: string | null;
         digitalSignature: string;
         applicationDate: Date;
-        status: import(".prisma/client").$Enums.EcrrbStatus;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     submitCertification(body: any, files: any): Promise<{
         success: boolean;
@@ -90,11 +90,11 @@ export declare class EcrrbController {
     }[]>;
     getCertificationDetails(id: string): Promise<{
         id: string;
-        digitalSignature: string;
-        applicationDate: Date;
-        status: import(".prisma/client").$Enums.EcrrbStatus;
         createdAt: Date;
         updatedAt: Date;
+        status: import(".prisma/client").$Enums.EcrrbStatus;
+        digitalSignature: string;
+        applicationDate: Date;
         piName: string;
         piDesignation: string;
         piInstitution: string;
@@ -136,11 +136,11 @@ export declare class EcrrbController {
     }>;
     deleteCertification(id: string): Promise<{
         id: string;
-        digitalSignature: string;
-        applicationDate: Date;
-        status: import(".prisma/client").$Enums.EcrrbStatus;
         createdAt: Date;
         updatedAt: Date;
+        status: import(".prisma/client").$Enums.EcrrbStatus;
+        digitalSignature: string;
+        applicationDate: Date;
         piName: string;
         piDesignation: string;
         piInstitution: string;

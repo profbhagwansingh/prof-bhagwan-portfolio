@@ -36,91 +36,25 @@ export default function HomePage() {
   }, [images]);
 
   useEffect(() => {
-    // Fetch slideshow images dynamically to connect to backend
-    api.get("/api/gallery/admin/slideshow-files")
+    // Fetch consolidated homepage data
+    api.get("/api/homepage-data")
       .then(res => {
-        if (Array.isArray(res.data)) {
-          setImages(res.data);
-        }
-      })
-      .catch(console.error);
-      
-    // Fetch courses for Areas of Expertise
-    api.get("/api/content/courses")
-      .then(res => {
-        if (Array.isArray(res.data)) {
-          setCourses(res.data);
-        }
-      })
-      .catch(console.error);
-
-    // Fetch quick stats
-    api.get("/api/content/quick-stats")
-      .then(res => {
-        if (Array.isArray(res.data)) {
-          setQuickStats(res.data);
-        }
-      })
-      .catch(console.error);
-
-    // Fetch publication count to sync metrics
-    api.get("/api/publications")
-      .then(res => {
-        let count = 0;
-        if (Array.isArray(res.data?.value)) {
-          count = res.data.value.length;
-        } else if (Array.isArray(res.data)) {
-          count = res.data.length;
-        }
-        setPublicationCount(count);
-      })
-      .catch(console.error);
-
-    // Fetch scholars count to sync metrics
-    api.get("/api/content/scholars")
-      .then(res => {
-        if (Array.isArray(res.data)) {
-          setScholarsCount(res.data.length);
-        }
-      })
-      .catch(console.error);
-
-    // Fetch authored books count to sync metrics
-    api.get("/api/publications/books")
-      .then(res => {
-        if (Array.isArray(res.data)) {
-          setAuthoredBooksCount(res.data.length);
-        }
-      })
-      .catch(console.error);
-
-    // Fetch book chapters count to sync metrics
-    api.get("/api/publications/chapters")
-      .then(res => {
-        if (Array.isArray(res.data?.value)) {
-          setChaptersCount(res.data.value.length);
-        } else if (Array.isArray(res.data)) {
-          setChaptersCount(res.data.length);
-        }
-      })
-      .catch(console.error);
-
-    // Fetch invited lectures count to sync metrics
-    api.get("/api/content/invited-lectures")
-      .then(res => {
-        if (Array.isArray(res.data)) {
-          setInvitedLecturesCount(res.data.length);
-        }
-      })
-      .catch(console.error);
-
-    // Fetch site settings
-    api.get("/api/settings/public/all")
-      .then(res => {
-        if (Array.isArray(res.data)) {
-          const map: Record<string, string> = {};
-          res.data.forEach((s: any) => { map[s.key] = s.value; });
-          setSettings(map);
+        const data = res.data;
+        if (data) {
+          if (data.slideshow) setImages(data.slideshow);
+          if (data.courses) setCourses(data.courses);
+          if (data.quickStats) setQuickStats(data.quickStats);
+          if (data.publicationsCount) setPublicationCount(data.publicationsCount);
+          if (data.scholarsCount) setScholarsCount(data.scholarsCount);
+          if (data.booksCount) setAuthoredBooksCount(data.booksCount);
+          if (data.bookChaptersCount) setChaptersCount(data.bookChaptersCount);
+          if (data.invitedLecturesCount) setInvitedLecturesCount(data.invitedLecturesCount);
+          
+          if (Array.isArray(data.settings)) {
+            const map: Record<string, string> = {};
+            data.settings.forEach((s: any) => { map[s.key] = s.value; });
+            setSettings(map);
+          }
         }
       })
       .catch(console.error);

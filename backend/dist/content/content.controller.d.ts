@@ -14,18 +14,18 @@ export declare class ContentController {
         id: string;
         isActive: boolean;
         createdAt: Date;
+        sortOrder: number;
         title: string;
         subtitle: string | null;
         ctaText: string | null;
         ctaLink: string | null;
-        sortOrder: number;
     })[]>;
     getAbout(): Promise<{
         id: string;
         isActive: boolean;
         updatedAt: Date;
-        title: string;
         sortOrder: number;
+        title: string;
         imageUrl: string | null;
         sectionKey: string;
         content: string;
@@ -33,9 +33,9 @@ export declare class ContentController {
     getTimeline(): Promise<{
         id: string;
         isActive: boolean;
+        sortOrder: number;
         title: string;
         subtitle: string | null;
-        sortOrder: number;
         organization: string;
         location: string | null;
         dateRange: string;
@@ -53,9 +53,9 @@ export declare class ContentController {
         id: string;
         isActive: boolean;
         year: number | null;
-        title: string;
         sortOrder: number;
         category: string;
+        title: string;
         description: string;
     }[]>;
     getScholars(): Promise<{
@@ -72,9 +72,9 @@ export declare class ContentController {
         id: string;
         isActive: boolean;
         year: number;
+        sortOrder: number;
         title: string;
         subtitle: string | null;
-        sortOrder: number;
         coverImageUrl: string | null;
         purchaseUrl: string | null;
         isbn: string | null;
@@ -100,17 +100,17 @@ export declare class ContentController {
     getQuickStats(): Promise<{
         id: string;
         isActive: boolean;
-        sortOrder: number;
         label: string;
         count: string;
+        sortOrder: number;
     }[]>;
     getInvitedLectures(): Promise<{
         id: string;
         isActive: boolean;
         createdAt: Date;
-        title: string;
         sortOrder: number;
         category: string;
+        title: string;
         slNo: number;
         conferenceDetails: string;
         lectureDate: Date | null;
@@ -119,11 +119,11 @@ export declare class ContentController {
         id: string;
         isActive: boolean;
         createdAt: Date;
+        sortOrder: number;
         title: string;
         subtitle: string | null;
         ctaText: string | null;
         ctaLink: string | null;
-        sortOrder: number;
     }>;
     addHeroImage(data: {
         heroSectionId: string;
@@ -147,8 +147,8 @@ export declare class ContentController {
         id: string;
         isActive: boolean;
         updatedAt: Date;
-        title: string;
         sortOrder: number;
+        title: string;
         imageUrl: string | null;
         sectionKey: string;
         content: string;
@@ -157,8 +157,8 @@ export declare class ContentController {
         id: string;
         isActive: boolean;
         updatedAt: Date;
-        title: string;
         sortOrder: number;
+        title: string;
         imageUrl: string | null;
         sectionKey: string;
         content: string;
@@ -166,9 +166,9 @@ export declare class ContentController {
     getAdminTimeline(): Promise<{
         id: string;
         isActive: boolean;
+        sortOrder: number;
         title: string;
         subtitle: string | null;
-        sortOrder: number;
         organization: string;
         location: string | null;
         dateRange: string;
@@ -177,9 +177,9 @@ export declare class ContentController {
     upsertTimeline(data: any): Promise<{
         id: string;
         isActive: boolean;
+        sortOrder: number;
         title: string;
         subtitle: string | null;
-        sortOrder: number;
         organization: string;
         location: string | null;
         dateRange: string;
@@ -188,9 +188,9 @@ export declare class ContentController {
     deleteTimeline(id: string): Promise<{
         id: string;
         isActive: boolean;
+        sortOrder: number;
         title: string;
         subtitle: string | null;
-        sortOrder: number;
         organization: string;
         location: string | null;
         dateRange: string;
@@ -216,18 +216,18 @@ export declare class ContentController {
         id: string;
         isActive: boolean;
         year: number | null;
-        title: string;
         sortOrder: number;
         category: string;
+        title: string;
         description: string;
     }>;
     deleteAchievement(id: string): Promise<{
         id: string;
         isActive: boolean;
         year: number | null;
-        title: string;
         sortOrder: number;
         category: string;
+        title: string;
         description: string;
     }>;
     upsertScholar(data: any): Promise<{
@@ -254,9 +254,9 @@ export declare class ContentController {
         id: string;
         isActive: boolean;
         year: number;
+        sortOrder: number;
         title: string;
         subtitle: string | null;
-        sortOrder: number;
         coverImageUrl: string | null;
         purchaseUrl: string | null;
         isbn: string | null;
@@ -265,9 +265,9 @@ export declare class ContentController {
         id: string;
         isActive: boolean;
         year: number;
+        sortOrder: number;
         title: string;
         subtitle: string | null;
-        sortOrder: number;
         coverImageUrl: string | null;
         purchaseUrl: string | null;
         isbn: string | null;
@@ -311,24 +311,24 @@ export declare class ContentController {
     upsertQuickStat(data: any): Promise<{
         id: string;
         isActive: boolean;
-        sortOrder: number;
         label: string;
         count: string;
+        sortOrder: number;
     }>;
     deleteQuickStat(id: string): Promise<{
         id: string;
         isActive: boolean;
-        sortOrder: number;
         label: string;
         count: string;
+        sortOrder: number;
     }>;
     upsertInvitedLecture(data: any): Promise<{
         id: string;
         isActive: boolean;
         createdAt: Date;
-        title: string;
         sortOrder: number;
         category: string;
+        title: string;
         slNo: number;
         conferenceDetails: string;
         lectureDate: Date | null;
@@ -337,9 +337,9 @@ export declare class ContentController {
         id: string;
         isActive: boolean;
         createdAt: Date;
-        title: string;
         sortOrder: number;
         category: string;
+        title: string;
         slNo: number;
         conferenceDetails: string;
         lectureDate: Date | null;

@@ -10,12 +10,13 @@ exports.ContentModule = void 0;
 const common_1 = require("@nestjs/common");
 const content_service_1 = require("./content.service");
 const content_controller_1 = require("./content.controller");
+const homepage_controller_1 = require("./homepage.controller");
 let ContentModule = class ContentModule {
 };
 exports.ContentModule = ContentModule;
 exports.ContentModule = ContentModule = __decorate([
     (0, common_1.Module)({
-        controllers: [content_controller_1.ContentController],
+        controllers: [content_controller_1.ContentController, homepage_controller_1.HomepageController],
         providers: [content_service_1.ContentService],
         exports: [content_service_1.ContentService],
     })

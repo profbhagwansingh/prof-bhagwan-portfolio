@@ -2,6 +2,36 @@ import { PrismaService } from '../prisma/prisma.service';
 export declare class ContentService {
     private prisma;
     constructor(prisma: PrismaService);
+    getHomepageData(): Promise<{
+        quickStats: {
+            id: string;
+            isActive: boolean;
+            label: string;
+            count: string;
+            sortOrder: number;
+        }[];
+        courses: {
+            id: string;
+            isActive: boolean;
+            name: string;
+            sortOrder: number;
+            syllabusUrl: string | null;
+            category: string;
+        }[];
+        scholarsCount: number;
+        invitedLecturesCount: number;
+        publicationsCount: number;
+        booksCount: number;
+        bookChaptersCount: number;
+        settings: {
+            id: string;
+            updatedAt: Date;
+            category: string;
+            key: string;
+            value: string;
+        }[];
+        slideshow: string[];
+    }>;
     getHeroSections(): Promise<({
         images: {
             id: string;
@@ -14,21 +44,21 @@ export declare class ContentService {
         id: string;
         isActive: boolean;
         createdAt: Date;
+        sortOrder: number;
         title: string;
         subtitle: string | null;
         ctaText: string | null;
         ctaLink: string | null;
-        sortOrder: number;
     })[]>;
     upsertHeroSection(data: any): Promise<{
         id: string;
         isActive: boolean;
         createdAt: Date;
+        sortOrder: number;
         title: string;
         subtitle: string | null;
         ctaText: string | null;
         ctaLink: string | null;
-        sortOrder: number;
     }>;
     addHeroImage(heroSectionId: string, imageUrl: string, altText?: string): Promise<{
         id: string;
@@ -48,8 +78,8 @@ export declare class ContentService {
         id: string;
         isActive: boolean;
         updatedAt: Date;
-        title: string;
         sortOrder: number;
+        title: string;
         imageUrl: string | null;
         sectionKey: string;
         content: string;
@@ -58,8 +88,8 @@ export declare class ContentService {
         id: string;
         isActive: boolean;
         updatedAt: Date;
-        title: string;
         sortOrder: number;
+        title: string;
         imageUrl: string | null;
         sectionKey: string;
         content: string;
@@ -67,9 +97,9 @@ export declare class ContentService {
     getTimeline(): Promise<{
         id: string;
         isActive: boolean;
+        sortOrder: number;
         title: string;
         subtitle: string | null;
-        sortOrder: number;
         organization: string;
         location: string | null;
         dateRange: string;
@@ -78,9 +108,9 @@ export declare class ContentService {
     getAllTimeline(): Promise<{
         id: string;
         isActive: boolean;
+        sortOrder: number;
         title: string;
         subtitle: string | null;
-        sortOrder: number;
         organization: string;
         location: string | null;
         dateRange: string;
@@ -89,9 +119,9 @@ export declare class ContentService {
     upsertTimeline(data: any): Promise<{
         id: string;
         isActive: boolean;
+        sortOrder: number;
         title: string;
         subtitle: string | null;
-        sortOrder: number;
         organization: string;
         location: string | null;
         dateRange: string;
@@ -100,9 +130,9 @@ export declare class ContentService {
     deleteTimeline(id: string): Promise<{
         id: string;
         isActive: boolean;
+        sortOrder: number;
         title: string;
         subtitle: string | null;
-        sortOrder: number;
         organization: string;
         location: string | null;
         dateRange: string;
@@ -136,27 +166,27 @@ export declare class ContentService {
         id: string;
         isActive: boolean;
         year: number | null;
-        title: string;
         sortOrder: number;
         category: string;
+        title: string;
         description: string;
     }[]>;
     upsertAchievement(data: any): Promise<{
         id: string;
         isActive: boolean;
         year: number | null;
-        title: string;
         sortOrder: number;
         category: string;
+        title: string;
         description: string;
     }>;
     deleteAchievement(id: string): Promise<{
         id: string;
         isActive: boolean;
         year: number | null;
-        title: string;
         sortOrder: number;
         category: string;
+        title: string;
         description: string;
     }>;
     getScholars(): Promise<{
@@ -193,9 +223,9 @@ export declare class ContentService {
         id: string;
         isActive: boolean;
         year: number;
+        sortOrder: number;
         title: string;
         subtitle: string | null;
-        sortOrder: number;
         coverImageUrl: string | null;
         purchaseUrl: string | null;
         isbn: string | null;
@@ -204,9 +234,9 @@ export declare class ContentService {
         id: string;
         isActive: boolean;
         year: number;
+        sortOrder: number;
         title: string;
         subtitle: string | null;
-        sortOrder: number;
         coverImageUrl: string | null;
         purchaseUrl: string | null;
         isbn: string | null;
@@ -215,9 +245,9 @@ export declare class ContentService {
         id: string;
         isActive: boolean;
         year: number;
+        sortOrder: number;
         title: string;
         subtitle: string | null;
-        sortOrder: number;
         coverImageUrl: string | null;
         purchaseUrl: string | null;
         isbn: string | null;
@@ -280,9 +310,9 @@ export declare class ContentService {
         id: string;
         isActive: boolean;
         createdAt: Date;
-        title: string;
         sortOrder: number;
         category: string;
+        title: string;
         slNo: number;
         conferenceDetails: string;
         lectureDate: Date | null;
@@ -291,9 +321,9 @@ export declare class ContentService {
         id: string;
         isActive: boolean;
         createdAt: Date;
-        title: string;
         sortOrder: number;
         category: string;
+        title: string;
         slNo: number;
         conferenceDetails: string;
         lectureDate: Date | null;
@@ -302,9 +332,9 @@ export declare class ContentService {
         id: string;
         isActive: boolean;
         createdAt: Date;
-        title: string;
         sortOrder: number;
         category: string;
+        title: string;
         slNo: number;
         conferenceDetails: string;
         lectureDate: Date | null;
@@ -312,22 +342,22 @@ export declare class ContentService {
     getQuickStats(): Promise<{
         id: string;
         isActive: boolean;
-        sortOrder: number;
         label: string;
         count: string;
+        sortOrder: number;
     }[]>;
     upsertQuickStat(data: any): Promise<{
         id: string;
         isActive: boolean;
-        sortOrder: number;
         label: string;
         count: string;
+        sortOrder: number;
     }>;
     deleteQuickStat(id: string): Promise<{
         id: string;
         isActive: boolean;
-        sortOrder: number;
         label: string;
         count: string;
+        sortOrder: number;
     }>;
 }

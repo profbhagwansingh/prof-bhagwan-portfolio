@@ -7,8 +7,8 @@ export declare class PublicationsService {
         isActive: boolean;
         createdAt: Date;
         year: number;
-        title: string;
         sortOrder: number;
+        title: string;
         journal: string | null;
         tag: import(".prisma/client").$Enums.PublicationTag;
         authors: string | null;
@@ -21,8 +21,8 @@ export declare class PublicationsService {
         isActive: boolean;
         createdAt: Date;
         year: number;
-        title: string;
         sortOrder: number;
+        title: string;
         journal: string | null;
         tag: import(".prisma/client").$Enums.PublicationTag;
         authors: string | null;
@@ -35,8 +35,8 @@ export declare class PublicationsService {
         isActive: boolean;
         createdAt: Date;
         year: number;
-        title: string;
         sortOrder: number;
+        title: string;
         journal: string | null;
         tag: import(".prisma/client").$Enums.PublicationTag;
         authors: string | null;
@@ -49,8 +49,8 @@ export declare class PublicationsService {
         isActive: boolean;
         createdAt: Date;
         year: number;
-        title: string;
         sortOrder: number;
+        title: string;
         journal: string | null;
         tag: import(".prisma/client").$Enums.PublicationTag;
         authors: string | null;
@@ -62,9 +62,9 @@ export declare class PublicationsService {
         id: string;
         isActive: boolean;
         year: number;
+        sortOrder: number;
         title: string;
         subtitle: string | null;
-        sortOrder: number;
         coverImageUrl: string | null;
         purchaseUrl: string | null;
         isbn: string | null;
@@ -73,9 +73,9 @@ export declare class PublicationsService {
         id: string;
         isActive: boolean;
         year: number;
+        sortOrder: number;
         title: string;
         subtitle: string | null;
-        sortOrder: number;
         coverImageUrl: string | null;
         purchaseUrl: string | null;
         isbn: string | null;
@@ -84,9 +84,9 @@ export declare class PublicationsService {
         id: string;
         isActive: boolean;
         year: number;
+        sortOrder: number;
         title: string;
         subtitle: string | null;
-        sortOrder: number;
         coverImageUrl: string | null;
         purchaseUrl: string | null;
         isbn: string | null;
@@ -96,8 +96,8 @@ export declare class PublicationsService {
         isActive: boolean;
         createdAt: Date;
         year: number;
-        title: string;
         sortOrder: number;
+        title: string;
         isbn: string | null;
         slNo: number;
         authors: string | null;
@@ -108,8 +108,8 @@ export declare class PublicationsService {
         isActive: boolean;
         createdAt: Date;
         year: number;
-        title: string;
         sortOrder: number;
+        title: string;
         isbn: string | null;
         slNo: number;
         authors: string | null;
@@ -120,8 +120,8 @@ export declare class PublicationsService {
         isActive: boolean;
         createdAt: Date;
         year: number;
-        title: string;
         sortOrder: number;
+        title: string;
         isbn: string | null;
         slNo: number;
         authors: string | null;
@@ -132,8 +132,8 @@ export declare class PublicationsService {
         isActive: boolean;
         createdAt: Date;
         year: number;
-        title: string;
         sortOrder: number;
+        title: string;
         isbn: string | null;
         slNo: number;
         authors: string | null;

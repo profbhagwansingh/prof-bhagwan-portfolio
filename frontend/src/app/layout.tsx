@@ -3,6 +3,28 @@ import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { QueryProvider } from "@/components/providers/QueryProvider";
 import { ToastProvider } from "@/components/providers/ToastProvider";
 import { SITE_NAME, SITE_URL, SITE_DESCRIPTION } from "@/lib/constants";
+import { Poppins, Playfair_Display, DM_Sans } from "next/font/google";
+
+const poppins = Poppins({
+  weight: ["300", "400", "500", "600", "700"],
+  subsets: ["latin"],
+  variable: "--font-poppins",
+  display: "swap",
+});
+
+const playfair = Playfair_Display({
+  weight: ["400", "600", "700"],
+  subsets: ["latin"],
+  variable: "--font-playfair",
+  display: "swap",
+});
+
+const dmSans = DM_Sans({
+  weight: ["400", "500", "700"],
+  subsets: ["latin"],
+  variable: "--font-dm-sans",
+  display: "swap",
+});
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -83,11 +105,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={`${poppins.variable} ${playfair.variable} ${dmSans.variable}`} suppressHydrationWarning>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Tangerine:wght@400;700&display=swap" rel="stylesheet" />
       </head>
       <body className="flex flex-col min-h-screen">
         <ThemeProvider>
