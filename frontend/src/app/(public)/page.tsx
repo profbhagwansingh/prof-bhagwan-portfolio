@@ -318,17 +318,45 @@ export default function HomePage() {
           <h2 className="section-title">Areas of Expertise</h2>
           <ul className="skills-list">
             {courses.length > 0 ? (
-              courses.map(course => (
-                <li key={course.id}>
-                  {course.syllabusUrl ? (
-                    <a href={course.syllabusUrl} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>
-                      {course.name}
-                    </a>
-                  ) : (
-                    course.name
-                  )}
-                </li>
-              ))
+              courses.map(course => {
+                const coursePdfMap: Record<string, string> = {
+                  "strategic management": "/media/Courses Taught/Strategic Management.pdf",
+                  "marketing management": "/media/Courses Taught/Marketing Management.pdf",
+                  "basics of computers & mis": "/media/Courses Taught/Basic of Computers.pdf",
+                  "basics of computers": "/media/Courses Taught/Basic of Computers.pdf",
+                  "business environment": "/media/Courses Taught/Business Envt.pdf",
+                  "consumer behaviour": "/media/Courses Taught/Consumer behaviour.pdf",
+                  "consumer behavior": "/media/Courses Taught/Consumer behaviour.pdf",
+                  "digital social media & marketing": "/media/Courses Taught/Digital Social Media Marketing.pdf",
+                  "digital social media marketing": "/media/Courses Taught/Digital Social Media Marketing.pdf",
+                  "digital marketing": "/media/Courses Taught/MSC 430 Digital Marketing SD - 4 Syllabus 2016.pdf",
+                  "web based advertising": "/media/Courses Taught/Web Based Advertising.pdf",
+                  "mobile based marketing": "/media/Courses Taught/MSC 439  Mobile Based Marketing MBM Jan July 2019.pdf",
+                  "mobile based advertising": "/media/Courses Taught/MSC 439  Mobile Based Marketing MBM Jan July 2019.pdf",
+                  "internet based marketing": "/media/Courses Taught/MSC 520  Internet Based Marketing IBM Aug - Dec 2017.pdf",
+                  "internet marketing": "/media/Courses Taught/Dr B Singh MSC 504 2013 Internet Marketing.pdf",
+                  "retail marketing": "/media/Courses Taught/MSC 403_Retail Marketing.pdf",
+                  "retail management": "/media/Courses Taught/MSC 403_Retail Marketing.pdf",
+                  "marketing research": "/media/Courses Taught/Dr B singh MSC 502_Marketing Research with Lecutre Plan.pdf",
+                  "advertising research": "/media/Courses Taught/MSC 510 Advertising Research Syllabus.pdf",
+                  "integrated marketing communication": "/media/Courses Taught/MSC 405 IMC Integrated Marketing Communication 2017.pdf",
+                  "imc": "/media/Courses Taught/MSC 405 IMC Integrated Marketing Communication 2017.pdf",
+                  "computer skills for research": "/media/Courses Taught/CSR Computer Skills for Research PhD Course work Syllabus.pdf",
+                  "research publication ethics": "/media/Courses Taught/Research Publication Ethics RPE Syllabus by UGC.pdf",
+                };
+                const pdfUrl = course.syllabusUrl || coursePdfMap[course.name.toLowerCase()] || null;
+                return (
+                  <li key={course.id} style={{ cursor: pdfUrl ? 'pointer' : 'default' }}>
+                    {pdfUrl ? (
+                      <a href={pdfUrl} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>
+                        {course.name}
+                      </a>
+                    ) : (
+                      course.name
+                    )}
+                  </li>
+                );
+              })
             ) : (
               <p style={{ textAlign: 'center', width: '100%' }}>Loading expertise...</p>
             )}
