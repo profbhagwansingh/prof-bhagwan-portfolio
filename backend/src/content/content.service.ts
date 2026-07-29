@@ -33,8 +33,7 @@ export class ContentService {
 
         let slideshow: string[] = [];
         try {
-            const files = await this.galleryService.scanSlideshowFiles();
-            slideshow = files.map(f => `/media/img/slideshow/${f}`);
+            slideshow = await this.galleryService.scanSlideshowFiles();
         } catch (e) {
             console.error('Failed to get slideshow files:', e);
         }
