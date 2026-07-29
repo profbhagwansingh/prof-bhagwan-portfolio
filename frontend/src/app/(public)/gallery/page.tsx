@@ -83,9 +83,9 @@ export default function GalleryPage() {
   };
 
   return (
-    <main className="bg-[#fcfcfc] min-h-screen">
-      <section className="gallery-section text-center py-12">
-        <h1 className="text-3xl md:text-4xl font-bold tracking-tight uppercase">THE LIBRARY</h1>
+    <main className="bg-white min-h-screen">
+      <section className="gallery-section text-center py-12 border-b border-gray-100">
+        <h1 className="text-3xl md:text-4xl font-bold tracking-tight uppercase text-gray-900">THE LIBRARY</h1>
       </section>
 
       {loading ? (
@@ -97,22 +97,23 @@ export default function GalleryPage() {
           <p style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>No gallery content available.</p>
         </div>
       ) : (
-        <div className="px-4 md:px-8 lg:px-12 max-w-[1400px] mx-auto pb-20">
+        <div className="px-4 md:px-8 lg:px-12 max-w-[1400px] mx-auto py-12">
           {folderData.map((fd, index) => (
-            <div key={fd.info.folder} className="mb-16">
-              <h2 className="text-2xl uppercase tracking-wider mb-8 text-gray-800 flex items-center gap-4">
-                <span className="w-8 h-[1px] bg-gray-400"></span>
+            <div key={fd.info.folder} className="mb-20">
+              <h2 className="text-xl md:text-2xl uppercase tracking-widest mb-10 text-gray-800 flex items-center gap-6">
+                <span className="w-12 h-[2px] bg-gray-900"></span>
                 {fd.info.label}
               </h2>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 auto-rows-[250px] md:auto-rows-[300px] gap-4">
-                {(fd.expanded ? fd.files : fd.files.slice(0, 6)).map((src, i) => {
+              <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-[150px] md:auto-rows-[250px] gap-2 md:gap-4 grid-flow-dense">
+                {(fd.expanded ? fd.files : fd.files.slice(0, 10)).map((src, i) => {
                   const isVideo = /\.(mp4|webm|ogg|mov)$/i.test(src);
                   
-                  // Bento grid span logic matching the image (1, 2, 1 | 2, 1, 1)
-                  let spanClass = "col-span-1";
-                  if (i % 6 === 1 || i % 6 === 3) {
-                    spanClass = "md:col-span-2";
+                  // Ambient masonry pattern matching the image:
+                  // 0: span 2x2, 1-6: span 1x1, 7: span 2x2, 8-9: span 1x1
+                  let spanClass = "col-span-1 row-span-1";
+                  if (i % 10 === 0 || i % 10 === 7) {
+                    spanClass = "col-span-2 row-span-2";
                   }
 
                   const caption = formatCaption(src);
@@ -120,7 +121,7 @@ export default function GalleryPage() {
                   return (
                     <div 
                       key={i} 
-                      className={`relative group overflow-hidden bg-gray-100 cursor-pointer ${spanClass}`}
+                      className={`relative group overflow-hidden bg-gray-50 cursor-pointer ${spanClass}`}
                       onClick={() => !isVideo && openLightbox(src, caption)}
                     >
                       {isVideo ? (
@@ -132,31 +133,25 @@ export default function GalleryPage() {
                             </div>
                          </a>
                       ) : (
-                        <>
-                          <img 
-                            src={src} 
-                            alt={caption} 
-                            loading="lazy" 
-                            className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" 
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 transition-opacity duration-300" />
-                          <div className="absolute bottom-4 left-4 right-4">
-                            <h3 className="text-white text-sm md:text-base font-medium tracking-wide truncate">{caption}</h3>
-                          </div>
-                        </>
+                        <img 
+                          src={src} 
+                          alt={caption} 
+                          loading="lazy" 
+                          className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" 
+                        />
                       )}
                     </div>
                   );
                 })}
               </div>
 
-              {fd.files.length > 6 && (
-                <div className="mt-8">
+              {fd.files.length > 10 && (
+                <div className="mt-12 text-center">
                   <button 
-                    className="text-sm font-medium tracking-wide uppercase border border-gray-300 px-6 py-2 hover:bg-gray-100 transition-colors" 
+                    className="text-sm font-semibold tracking-widest uppercase border border-gray-900 text-gray-900 px-8 py-3 hover:bg-gray-900 hover:text-white transition-colors duration-300" 
                     onClick={() => toggleExpand(index)}
                   >
-                    {fd.expanded ? 'View Less' : `View More (${fd.files.length - 6} more)`}
+                    {fd.expanded ? 'View Less' : `View More (${fd.files.length - 10} more)`}
                   </button>
                 </div>
               )}
