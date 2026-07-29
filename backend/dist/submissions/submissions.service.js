@@ -36,7 +36,18 @@ let SubmissionsService = class SubmissionsService {
         return this.prisma.contactSubmission.delete({ where: { id } });
     }
     async createAlumni(data) {
-        return this.prisma.alumniSubmission.create({ data });
+        const batchYear = data.batchYear ? parseInt(data.batchYear, 10) : null;
+        const pictureUrl = (typeof data.pictureUrl === 'string' && !data.pictureUrl.startsWith('data:'))
+            ? data.pictureUrl
+            : null;
+        const { batchYear: _b, pictureUrl: _p, ...rest } = data;
+        return this.prisma.alumniSubmission.create({
+            data: {
+                ...rest,
+                batchYear: isNaN(batchYear) ? null : batchYear,
+                pictureUrl,
+            },
+        });
     }
     async getAlumni(status, page = 1, limit = 20) {
         const where = {};

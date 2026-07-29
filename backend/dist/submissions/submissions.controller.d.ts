@@ -25,12 +25,12 @@ export declare class SubmissionsController {
         status: import(".prisma/client").$Enums.AlumniStatus;
         whatsapp: string | null;
         message: string | null;
+        batchYear: number | null;
+        pictureUrl: string | null;
         teachingMode: string | null;
         degreeProgram: string | null;
         institute: string | null;
-        batchYear: number | null;
         rollNumber: string | null;
-        pictureUrl: string | null;
     }>;
     getContacts(status?: SubmissionStatus, page?: string): Promise<{
         items: {
@@ -73,12 +73,12 @@ export declare class SubmissionsController {
             status: import(".prisma/client").$Enums.AlumniStatus;
             whatsapp: string | null;
             message: string | null;
+            batchYear: number | null;
+            pictureUrl: string | null;
             teachingMode: string | null;
             degreeProgram: string | null;
             institute: string | null;
-            batchYear: number | null;
             rollNumber: string | null;
-            pictureUrl: string | null;
         }[];
         total: number;
         page: number;
@@ -92,12 +92,12 @@ export declare class SubmissionsController {
         status: import(".prisma/client").$Enums.AlumniStatus;
         whatsapp: string | null;
         message: string | null;
+        batchYear: number | null;
+        pictureUrl: string | null;
         teachingMode: string | null;
         degreeProgram: string | null;
         institute: string | null;
-        batchYear: number | null;
         rollNumber: string | null;
-        pictureUrl: string | null;
     }>;
     deleteAlumni(id: string): Promise<{
         email: string;
@@ -107,12 +107,12 @@ export declare class SubmissionsController {
         status: import(".prisma/client").$Enums.AlumniStatus;
         whatsapp: string | null;
         message: string | null;
+        batchYear: number | null;
+        pictureUrl: string | null;
         teachingMode: string | null;
         degreeProgram: string | null;
         institute: string | null;
-        batchYear: number | null;
         rollNumber: string | null;
-        pictureUrl: string | null;
     }>;
     getStats(): Promise<{
         contacts: {

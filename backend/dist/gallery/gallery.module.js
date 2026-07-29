@@ -23,6 +23,7 @@ exports.GalleryModule = GalleryModule = __decorate([
         ],
         controllers: [gallery_controller_1.GalleryController],
         providers: [gallery_service_1.GalleryService],
+        exports: [gallery_service_1.GalleryService],
     })
 ], GalleryModule);
 //# sourceMappingURL=gallery.module.js.map

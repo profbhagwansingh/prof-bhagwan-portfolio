@@ -11,5 +11,6 @@ import { GalleryController } from './gallery.controller';
     ],
     controllers: [GalleryController],
     providers: [GalleryService],
+    exports: [GalleryService],
 })
 export class GalleryModule { }

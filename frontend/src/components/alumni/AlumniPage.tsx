@@ -39,7 +39,11 @@ export function AlumniPage() {
     e.preventDefault();
     setStatus("loading");
     try {
-      await api.post("/api/submissions/alumni", { ...form, pictureUrl: preview });
+      // pictureUrl (Base64 data-URI from FileReader) is intentionally excluded —
+      // sending raw Base64 in JSON causes a DB overflow / 500 error on the backend.
+      // The profile photo preview is shown locally only.
+      const { ...payload } = form;
+      await api.post("/api/submissions/alumni", payload);
       setStatus("success");
     } catch {
       setStatus("error");

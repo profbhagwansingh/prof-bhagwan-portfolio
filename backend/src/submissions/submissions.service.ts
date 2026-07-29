@@ -31,7 +31,27 @@ export class SubmissionsService {
 
     // ─── ALUMNI SUBMISSIONS ───────────────────────────────
     async createAlumni(data: any) {
-        return this.prisma.alumniSubmission.create({ data });
+        // batchYear comes from an <input type="text"> so it arrives as a string.
+        // Prisma schema defines it as Int? — parse it or null it out to avoid type error.
+        const batchYear = data.batchYear ? parseInt(data.batchYear, 10) : null;
+
+        // pictureUrl from the frontend is a raw Base64 data-URL which can be
+        // hundreds of KB. The schema column is a plain String (VARCHAR), not Text,
+        // so very large values cause a DB/Prisma error.  We accept it only when
+        // it is a normal URL path (uploaded file) — not an inline data-URI.
+        const pictureUrl = (typeof data.pictureUrl === 'string' && !data.pictureUrl.startsWith('data:'))
+            ? data.pictureUrl
+            : null;
+
+        const { batchYear: _b, pictureUrl: _p, ...rest } = data;
+
+        return this.prisma.alumniSubmission.create({
+            data: {
+                ...rest,
+                batchYear: isNaN(batchYear as any) ? null : batchYear,
+                pictureUrl,
+            },
+        });
     }
 
     async getAlumni(status?: AlumniStatus, page = 1, limit = 20) {
