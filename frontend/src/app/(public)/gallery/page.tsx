@@ -20,41 +20,32 @@ export default function GalleryPage() {
   const [lightboxImg, setLightboxImg] = useState("");
   const [lightboxCaption, setLightboxCaption] = useState("");
 
-  const [folderData, setFolderData] = useState<FolderData[]>([]);
+  const [allImages, setAllImages] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     const fetchGalleryData = async () => {
       try {
-        // Step 1: Fetch the list of admin-managed folders (only non-empty ones)
         const foldersRes = await api.get("/api/gallery/folders");
         const folders: FolderInfo[] = Array.isArray(foldersRes.data) ? foldersRes.data : [];
 
         if (folders.length === 0) {
-          setFolderData([]);
+          setAllImages([]);
           setLoading(false);
           return;
         }
 
-        // Step 2: For each folder, fetch its files
         const fileRequests = folders.map(f =>
           api.get(`/api/gallery/files?folder=${encodeURIComponent(f.folder)}`)
             .then(res => Array.isArray(res.data) ? res.data as string[] : [])
             .catch(() => [] as string[])
         );
 
-        const allFiles = await Promise.all(fileRequests);
+        const allFilesArrays = await Promise.all(fileRequests);
+        const combinedFiles = allFilesArrays.flat();
 
-        // Step 3: Combine into FolderData, filtering out folders with no actual files
-        const combined: FolderData[] = folders
-          .map((info, i) => ({
-            info,
-            files: allFiles[i],
-            expanded: false,
-          }))
-          .filter(fd => fd.files.length > 0);
-
-        setFolderData(combined);
+        setAllImages(combinedFiles);
       } catch (err) {
         console.error("Failed to fetch gallery data:", err);
       } finally {
@@ -64,12 +55,6 @@ export default function GalleryPage() {
 
     fetchGalleryData();
   }, []);
-
-  const toggleExpand = (index: number) => {
-    setFolderData(prev =>
-      prev.map((fd, i) => i === index ? { ...fd, expanded: !fd.expanded } : fd)
-    );
-  };
 
   const openLightbox = (src: string, alt: string) => {
     setLightboxImg(src);
@@ -91,54 +76,52 @@ export default function GalleryPage() {
         <div className="media-category">
           <p style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>Loading gallery...</p>
         </div>
-      ) : folderData.length === 0 ? (
+      ) : allImages.length === 0 ? (
         <div className="media-category">
           <p style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>No gallery content available.</p>
         </div>
       ) : (
-        folderData.map((fd, index) => (
-          <div key={fd.info.folder} className="media-category">
-            <h3 className="section-subtitle" style={{ textTransform: 'capitalize' }}>
-              {fd.info.label}
-            </h3>
-            <div className={`collapsible-grid ${fd.expanded ? 'expanded' : ''} pt-4 pb-4`}>
-              <div className="flex flex-col md:flex-row gap-3">
-                {[0, 1, 2, 3].map((colIndex) => {
-                  const colFiles = fd.files.filter((_, i) => i % 4 === colIndex);
-                  if (colFiles.length === 0) return null;
-                  return (
-                    <div key={colIndex} className="flex flex-col gap-3 flex-1">
-                      {colFiles.map((src, i) => {
-                        const isVideo = /\.(mp4|webm|ogg|mov)$/i.test(src);
-                        if (isVideo) {
-                          return (
-                            <a key={i} href={src} target="_blank" rel="noopener noreferrer" className="media-item video-item is-visible">
-                              <div style={{ width: '100%', aspectRatio: '16/9', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#111', borderRadius: '8px' }}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="white">
-                                  <path d="M8 5v14l11-7z" />
-                                </svg>
-                              </div>
-                            </a>
-                          );
-                        }
+        <div className="media-category" style={{ padding: '0 2rem' }}>
+          <div className={`collapsible-grid ${expanded ? 'expanded' : ''} pt-4 pb-8`}>
+            <div className="flex flex-col md:flex-row gap-4">
+              {/* Using 4 columns for desktop to ensure images are reasonably sized in the collage */}
+              {[0, 1, 2, 3].map((colIndex) => {
+                const colFiles = allImages.filter((_, i) => i % 4 === colIndex);
+                if (colFiles.length === 0) return null;
+                return (
+                  <div key={colIndex} className="flex flex-col gap-4 flex-1">
+                    {colFiles.map((src, i) => {
+                      const isVideo = /\.(mp4|webm|ogg|mov)$/i.test(src);
+                      if (isVideo) {
                         return (
-                          <div key={i} className="media-item is-visible" onClick={() => openLightbox(src, fd.info.label)}>
-                            <img src={src} alt={fd.info.label} loading="lazy" className="rounded-lg shadow-sm hover:shadow-md transition-shadow" style={{ width: '100%', height: 'auto', display: 'block' }} />
-                          </div>
+                          <a key={i} href={src} target="_blank" rel="noopener noreferrer" className="media-item video-item is-visible overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 block">
+                            <div style={{ width: '100%', aspectRatio: '16/9', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#111' }}>
+                              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="white">
+                                <path d="M8 5v14l11-7z" />
+                              </svg>
+                            </div>
+                          </a>
                         );
-                      })}
-                    </div>
-                  );
-                })}
-              </div>
+                      }
+                      return (
+                        <div key={i} className="media-item is-visible overflow-hidden rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 cursor-pointer bg-slate-100" onClick={() => openLightbox(src, "Gallery Collage")}>
+                          <img src={src} alt="Gallery Collage" loading="lazy" className="w-full h-auto block hover:scale-105 transition-transform duration-700 ease-out" />
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              })}
             </div>
-            {fd.files.length > 12 && (
-              <button className="view-more-btn" onClick={() => toggleExpand(index)}>
-                {fd.expanded ? 'View Less' : `View More (${fd.files.length} images)`}
-              </button>
-            )}
           </div>
-        ))
+          {allImages.length > 20 && (
+            <div style={{ textAlign: 'center', marginTop: '2rem', marginBottom: '2rem' }}>
+              <button className="view-more-btn" onClick={() => setExpanded(!expanded)} style={{ margin: '0 auto' }}>
+                {expanded ? 'View Less' : `View More (${allImages.length} images)`}
+              </button>
+            </div>
+          )}
+        </div>
       )}
 
       {/* Lightbox Modal */}
