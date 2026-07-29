@@ -101,26 +101,36 @@ export default function GalleryPage() {
             <h3 className="section-subtitle" style={{ textTransform: 'capitalize' }}>
               {fd.info.label}
             </h3>
-            <div className={`media-grid collapsible-grid ${fd.expanded ? 'expanded' : ''}`}>
-              {fd.files.map((src, i) => {
-                const isVideo = /\.(mp4|webm|ogg|mov)$/i.test(src);
-                if (isVideo) {
+            <div className={`collapsible-grid ${fd.expanded ? 'expanded' : ''} pt-4 pb-4`}>
+              <div className="flex flex-col md:flex-row gap-3">
+                {[0, 1, 2, 3].map((colIndex) => {
+                  const colFiles = fd.files.filter((_, i) => i % 4 === colIndex);
+                  if (colFiles.length === 0) return null;
                   return (
-                    <a key={i} href={src} target="_blank" rel="noopener noreferrer" className="media-item video-item is-visible">
-                      <div style={{ width: '100%', aspectRatio: '16/9', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#111', borderRadius: '8px' }}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="white">
-                          <path d="M8 5v14l11-7z" />
-                        </svg>
-                      </div>
-                    </a>
+                    <div key={colIndex} className="flex flex-col gap-3 flex-1">
+                      {colFiles.map((src, i) => {
+                        const isVideo = /\.(mp4|webm|ogg|mov)$/i.test(src);
+                        if (isVideo) {
+                          return (
+                            <a key={i} href={src} target="_blank" rel="noopener noreferrer" className="media-item video-item is-visible">
+                              <div style={{ width: '100%', aspectRatio: '16/9', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#111', borderRadius: '8px' }}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="white">
+                                  <path d="M8 5v14l11-7z" />
+                                </svg>
+                              </div>
+                            </a>
+                          );
+                        }
+                        return (
+                          <div key={i} className="media-item is-visible" onClick={() => openLightbox(src, fd.info.label)}>
+                            <img src={src} alt={fd.info.label} loading="lazy" className="rounded-lg shadow-sm hover:shadow-md transition-shadow" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                          </div>
+                        );
+                      })}
+                    </div>
                   );
-                }
-                return (
-                  <div key={i} className="media-item is-visible" onClick={() => openLightbox(src, fd.info.label)}>
-                    <img src={src} alt={fd.info.label} loading="lazy" />
-                  </div>
-                );
-              })}
+                })}
+              </div>
             </div>
             {fd.files.length > 12 && (
               <button className="view-more-btn" onClick={() => toggleExpand(index)}>

@@ -27,6 +27,7 @@ const users_module_1 = require("./users/users.module");
 const schedule_1 = require("@nestjs/schedule");
 const backup_module_1 = require("./backup/backup.module");
 const ecrrb_module_1 = require("./ecrrb/ecrrb.module");
+const testimonials_module_1 = require("./testimonials/testimonials.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -72,6 +73,7 @@ exports.AppModule = AppModule = __decorate([
             schedule_1.ScheduleModule.forRoot(),
             backup_module_1.BackupModule,
             ecrrb_module_1.EcrrbModule,
+            testimonials_module_1.TestimonialsModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [

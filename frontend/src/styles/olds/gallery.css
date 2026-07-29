@@ -165,9 +165,9 @@
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     cursor: pointer;
-    break-inside: avoid;
+    break-inside: avoid-column;
     margin-bottom: 12px;
-    display: inline-block;
+    display: block;
     width: 100%;
     opacity: 0; 
     transform: translateY(20px); 

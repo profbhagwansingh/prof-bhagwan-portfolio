@@ -273,7 +273,7 @@ export default function GalleryAdminPage() {
   const fetchFolders = useCallback(async () => {
     setFoldersLoading(true);
     try {
-      const { data } = await api.get("/api/gallery/admin/folders");
+      const { data } = await api.get(`/api/gallery/admin/folders?t=${Date.now()}`);
       const list = Array.isArray(data) ? data : [];
       setFolders(list);
       // Initialize sort order inputs from the data
@@ -303,7 +303,7 @@ export default function GalleryAdminPage() {
     setFolderFilesLoading(true);
     setFolderError(null);
     try {
-      const { data } = await api.get(`/api/gallery/admin/files?folder=${encodeURIComponent(folder)}`);
+      const { data } = await api.get(`/api/gallery/admin/files?folder=${encodeURIComponent(folder)}&t=${Date.now()}`);
       setFolderFiles(Array.isArray(data) ? data : []);
     } catch (err: any) {
       setFolderError(`Failed: ${err?.message}`);
@@ -403,7 +403,7 @@ export default function GalleryAdminPage() {
 
   const fetchSlideshow = useCallback(async () => {
     setSlideshowLoading(true); setSlideshowError(null);
-    try { const { data } = await api.get("/api/gallery/admin/slideshow-files"); setSlideshowFiles(Array.isArray(data) ? data : []); }
+    try { const { data } = await api.get(`/api/gallery/admin/slideshow-files?t=${Date.now()}`); setSlideshowFiles(Array.isArray(data) ? data : []); }
     catch (err: any) { setSlideshowError(`Failed: ${err?.message}`); }
     setSlideshowLoading(false);
   }, []);

@@ -17,6 +17,7 @@ const navItems = [
   { href: "/admin/book-chapters",    label: "Book Chapters",    icon: BookOpen },
   { href: "/admin/invited-lectures", label: "Invited Lectures", icon: Mic },
   { href: "/admin/gallery",          label: "Gallery",          icon: Image },
+  { href: "/admin/testimonials",     label: "Testimonials",     icon: MessageSquare },
   { href: "/admin/content",          label: "Content",          icon: BookOpen },
   { href: "/admin/submissions",      label: "Submissions",      icon: MessageSquare },
   { href: "/admin/alumni",           label: "Alumni",           icon: Users },

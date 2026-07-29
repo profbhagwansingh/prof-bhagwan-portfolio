@@ -37,7 +37,7 @@ export default function HomePage() {
 
   useEffect(() => {
     // Fetch consolidated homepage data
-    api.get("/api/homepage-data")
+    api.get(`/api/homepage-data?t=${Date.now()}`)
       .then(res => {
         const data = res.data;
         if (data) {

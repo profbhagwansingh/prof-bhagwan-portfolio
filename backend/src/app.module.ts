@@ -18,6 +18,7 @@ import { UsersModule } from './users/users.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { BackupModule } from './backup/backup.module';
 import { EcrrbModule } from './ecrrb/ecrrb.module';
+import { TestimonialsModule } from './testimonials/testimonials.module';
 
 @Module({
   imports: [
@@ -85,6 +86,7 @@ import { EcrrbModule } from './ecrrb/ecrrb.module';
     ScheduleModule.forRoot(),
     BackupModule,
     EcrrbModule,
+    TestimonialsModule,
   ],
   controllers: [AppController],
   providers: [
