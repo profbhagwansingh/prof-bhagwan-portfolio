@@ -84,48 +84,40 @@ export default function GalleryPage() {
 
   return (
     <main className="bg-white min-h-screen">
-      <section className="gallery-section text-center py-12 border-b border-gray-100">
-        <h1 className="text-3xl md:text-4xl font-bold tracking-tight uppercase text-gray-900">THE LIBRARY</h1>
+      <section className="text-center py-16 border-b border-gray-100 bg-white">
+        <h1 className="text-3xl md:text-4xl font-bold tracking-[0.2em] uppercase text-gray-900">THE LIBRARY</h1>
       </section>
 
       {loading ? (
-        <div className="media-category">
-          <p style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>Loading gallery...</p>
+        <div className="py-20 text-center text-gray-500 tracking-wide">
+          <p>Loading gallery...</p>
         </div>
       ) : folderData.length === 0 ? (
-        <div className="media-category">
-          <p style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>No gallery content available.</p>
+        <div className="py-20 text-center text-gray-500 tracking-wide">
+          <p>No gallery content available.</p>
         </div>
       ) : (
-        <div className="px-4 md:px-8 lg:px-12 max-w-[1400px] mx-auto py-12">
+        <div className="px-4 md:px-8 lg:px-12 max-w-[1600px] mx-auto py-16">
           {folderData.map((fd, index) => (
-            <div key={fd.info.folder} className="mb-20">
+            <div key={fd.info.folder} className="mb-24">
               <h2 className="text-xl md:text-2xl uppercase tracking-widest mb-10 text-gray-800 flex items-center gap-6">
                 <span className="w-12 h-[2px] bg-gray-900"></span>
                 {fd.info.label}
               </h2>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-[150px] md:auto-rows-[250px] gap-2 md:gap-4 grid-flow-dense">
-                {(fd.expanded ? fd.files : fd.files.slice(0, 10)).map((src, i) => {
+              <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
+                {(fd.expanded ? fd.files : fd.files.slice(0, 12)).map((src, i) => {
                   const isVideo = /\.(mp4|webm|ogg|mov)$/i.test(src);
-                  
-                  // Ambient masonry pattern matching the image:
-                  // 0: span 2x2, 1-6: span 1x1, 7: span 2x2, 8-9: span 1x1
-                  let spanClass = "col-span-1 row-span-1";
-                  if (i % 10 === 0 || i % 10 === 7) {
-                    spanClass = "col-span-2 row-span-2";
-                  }
-
                   const caption = formatCaption(src);
 
                   return (
                     <div 
                       key={i} 
-                      className={`relative group overflow-hidden bg-gray-50 cursor-pointer ${spanClass}`}
+                      className="relative group break-inside-avoid overflow-hidden bg-gray-50 cursor-pointer"
                       onClick={() => !isVideo && openLightbox(src, caption)}
                     >
                       {isVideo ? (
-                         <a href={src} target="_blank" rel="noopener noreferrer" className="w-full h-full block relative">
+                         <a href={src} target="_blank" rel="noopener noreferrer" className="w-full block relative" style={{ aspectRatio: '16/9' }}>
                             <div className="w-full h-full flex items-center justify-center bg-[#111]">
                               <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="white">
                                 <path d="M8 5v14l11-7z" />
@@ -137,7 +129,7 @@ export default function GalleryPage() {
                           src={src} 
                           alt={caption} 
                           loading="lazy" 
-                          className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" 
+                          className="w-full h-auto block transition-transform duration-700 ease-out group-hover:scale-105" 
                         />
                       )}
                     </div>
