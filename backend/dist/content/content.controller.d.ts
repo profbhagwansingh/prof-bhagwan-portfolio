@@ -6,9 +6,9 @@ export declare class ContentController {
         images: {
             id: string;
             sortOrder: number;
+            altText: string;
             heroSectionId: string;
             imageUrl: string;
-            altText: string;
         }[];
     } & {
         id: string;
@@ -46,8 +46,8 @@ export declare class ContentController {
         isActive: boolean;
         name: string;
         sortOrder: number;
-        syllabusUrl: string | null;
         category: string;
+        syllabusUrl: string | null;
     }[]>;
     getAchievements(): Promise<{
         id: string;
@@ -100,9 +100,9 @@ export declare class ContentController {
     getQuickStats(): Promise<{
         id: string;
         isActive: boolean;
+        sortOrder: number;
         label: string;
         count: string;
-        sortOrder: number;
     }[]>;
     getInvitedLectures(): Promise<{
         id: string;
@@ -132,16 +132,16 @@ export declare class ContentController {
     }): Promise<{
         id: string;
         sortOrder: number;
+        altText: string;
         heroSectionId: string;
         imageUrl: string;
-        altText: string;
     }>;
     deleteHeroImage(id: string): Promise<{
         id: string;
         sortOrder: number;
+        altText: string;
         heroSectionId: string;
         imageUrl: string;
-        altText: string;
     }>;
     getAdminAbout(): Promise<{
         id: string;
@@ -201,16 +201,16 @@ export declare class ContentController {
         isActive: boolean;
         name: string;
         sortOrder: number;
-        syllabusUrl: string | null;
         category: string;
+        syllabusUrl: string | null;
     }>;
     deleteCourse(id: string): Promise<{
         id: string;
         isActive: boolean;
         name: string;
         sortOrder: number;
-        syllabusUrl: string | null;
         category: string;
+        syllabusUrl: string | null;
     }>;
     upsertAchievement(data: any): Promise<{
         id: string;
@@ -311,16 +311,16 @@ export declare class ContentController {
     upsertQuickStat(data: any): Promise<{
         id: string;
         isActive: boolean;
+        sortOrder: number;
         label: string;
         count: string;
-        sortOrder: number;
     }>;
     deleteQuickStat(id: string): Promise<{
         id: string;
         isActive: boolean;
+        sortOrder: number;
         label: string;
         count: string;
-        sortOrder: number;
     }>;
     upsertInvitedLecture(data: any): Promise<{
         id: string;

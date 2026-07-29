@@ -96,13 +96,13 @@ export default function AboutPage() {
     });
   }, []);
 
-  const openPhdModal = (src: string, caption: string) => {
+  const openImageModal = (src: string, caption: string) => {
     setModalImg(src);
     setModalCaption(caption);
     setModalOpen(true);
   };
 
-  const closePhdModal = () => {
+  const closeImageModal = () => {
     setModalOpen(false);
   };
 
@@ -212,7 +212,7 @@ export default function AboutPage() {
                       <div 
                         key={scholar.id} 
                         className={`phd-card ${scholar.status.toLowerCase()}`}
-                        onClick={() => openPhdModal(scholar.imageUrl || '/media/img/research-scholars/default.png', scholar.name)}
+                        onClick={() => openImageModal(scholar.imageUrl || '/media/img/research-scholars/default.png', scholar.name)}
                       >
                         {scholar.name}
                       </div>
@@ -227,7 +227,11 @@ export default function AboutPage() {
               <div className="achievements-section animate-on-scroll">
                 <h3 className="section-title">Key Achievements & Awards</h3>
                 <div className="achievements-grid">
-                  <div className="achievement-card">
+                  <div 
+                    className="achievement-card" 
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => openImageModal('/media/img/achievements/crisp.png', 'CRISP Model')}
+                  >
                     <h4>Developed CRISP Model</h4>
                     <p>Developed the CRISP Model for presentation of RTP (Research/Thesis/Project), appreciated and adopted by reputed national universities.</p>
                   </div>
@@ -301,7 +305,7 @@ export default function AboutPage() {
 
       {/* Modal for PhD Scholars */}
       <div id="phdModal" className="modal" style={{ display: modalOpen ? 'block' : 'none' }}>
-        <span className="close" onClick={closePhdModal}>&times;</span>
+        <span className="close" onClick={closeImageModal}>&times;</span>
         <img className="modal-content" id="modalImg" src={modalImg} alt="PhD Scholar" />
         <div id="modalCaption">{modalCaption}</div>
       </div>

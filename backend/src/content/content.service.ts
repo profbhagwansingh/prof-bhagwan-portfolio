@@ -2,10 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import * as fs from 'fs';
 import * as path from 'path';
+import { GalleryService } from '../gallery/gallery.service';
 
 @Injectable()
 export class ContentService {
-    constructor(private prisma: PrismaService) { }
+    constructor(private prisma: PrismaService, private galleryService: GalleryService) { }
 
     // ─── HOMEPAGE CONSOLIDATED DATA ───────────────────────
     async getHomepageData() {
@@ -32,15 +33,10 @@ export class ContentService {
 
         let slideshow: string[] = [];
         try {
-            const frontendPublicPath = path.join(process.cwd(), '..', 'frontend', 'public');
-            const slideshowDir = path.join(frontendPublicPath, 'media', 'img', 'slideshow');
-            if (fs.existsSync(slideshowDir)) {
-                slideshow = fs.readdirSync(slideshowDir)
-                    .filter(file => file.match(/\.(jpg|jpeg|png|gif|webp|avif)$/i))
-                    .map(file => `/media/img/slideshow/${file}`);
-            }
+            const files = await this.galleryService.scanSlideshowFiles();
+            slideshow = files.map(f => `/media/img/slideshow/${f}`);
         } catch (e) {
-            console.error('Failed to read slideshow directory:', e);
+            console.error('Failed to get slideshow files:', e);
         }
 
         return {

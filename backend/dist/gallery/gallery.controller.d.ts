@@ -9,39 +9,39 @@ export declare class GalleryController {
             isActive: boolean;
             createdAt: Date;
             sortOrder: number;
-            altText: string;
             categoryId: string;
             mediaType: import(".prisma/client").$Enums.MediaType;
             mediaUrl: string;
             thumbnailUrl: string | null;
             caption: string | null;
+            altText: string;
             isSlideshow: boolean;
         }[];
     } & {
         id: string;
         name: string;
-        sortOrder: number;
         slug: string;
+        sortOrder: number;
     })[]>;
     getItems(category?: string, type?: MediaType, isSlideshow?: boolean, page?: string, limit?: string): Promise<{
         items: ({
             category: {
                 id: string;
                 name: string;
-                sortOrder: number;
                 slug: string;
+                sortOrder: number;
             };
         } & {
             id: string;
             isActive: boolean;
             createdAt: Date;
             sortOrder: number;
-            altText: string;
             categoryId: string;
             mediaType: import(".prisma/client").$Enums.MediaType;
             mediaUrl: string;
             thumbnailUrl: string | null;
             caption: string | null;
+            altText: string;
             isSlideshow: boolean;
         })[];
         total: number;
@@ -58,26 +58,26 @@ export declare class GalleryController {
     upsertCategory(data: any): Promise<{
         id: string;
         name: string;
-        sortOrder: number;
         slug: string;
+        sortOrder: number;
     }>;
     deleteCategory(id: string): Promise<{
         id: string;
         name: string;
-        sortOrder: number;
         slug: string;
+        sortOrder: number;
     }>;
     upsertItem(data: any): Promise<{
         id: string;
         isActive: boolean;
         createdAt: Date;
         sortOrder: number;
-        altText: string;
         categoryId: string;
         mediaType: import(".prisma/client").$Enums.MediaType;
         mediaUrl: string;
         thumbnailUrl: string | null;
         caption: string | null;
+        altText: string;
         isSlideshow: boolean;
     }>;
     deleteItem(id: string): Promise<{
@@ -85,12 +85,12 @@ export declare class GalleryController {
         isActive: boolean;
         createdAt: Date;
         sortOrder: number;
-        altText: string;
         categoryId: string;
         mediaType: import(".prisma/client").$Enums.MediaType;
         mediaUrl: string;
         thumbnailUrl: string | null;
         caption: string | null;
+        altText: string;
         isSlideshow: boolean;
     }>;
     toggleSlideshow(id: string, isSlideshow: boolean): Promise<{
@@ -98,12 +98,12 @@ export declare class GalleryController {
         isActive: boolean;
         createdAt: Date;
         sortOrder: number;
-        altText: string;
         categoryId: string;
         mediaType: import(".prisma/client").$Enums.MediaType;
         mediaUrl: string;
         thumbnailUrl: string | null;
         caption: string | null;
+        altText: string;
         isSlideshow: boolean;
     }>;
     getSlideshowFiles(): Promise<string[]>;

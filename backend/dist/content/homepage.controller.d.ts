@@ -6,17 +6,17 @@ export declare class HomepageController {
         quickStats: {
             id: string;
             isActive: boolean;
+            sortOrder: number;
             label: string;
             count: string;
-            sortOrder: number;
         }[];
         courses: {
             id: string;
             isActive: boolean;
             name: string;
             sortOrder: number;
-            syllabusUrl: string | null;
             category: string;
+            syllabusUrl: string | null;
         }[];
         scholarsCount: number;
         invitedLecturesCount: number;
