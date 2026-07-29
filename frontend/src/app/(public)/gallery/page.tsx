@@ -20,32 +20,38 @@ export default function GalleryPage() {
   const [lightboxImg, setLightboxImg] = useState("");
   const [lightboxCaption, setLightboxCaption] = useState("");
 
-  const [allImages, setAllImages] = useState<string[]>([]);
+  const [folderData, setFolderData] = useState<FolderData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     const fetchGalleryData = async () => {
       try {
-        const foldersRes = await api.get("/api/gallery/folders");
+        const foldersRes = await api.get(`/api/gallery/folders?t=${Date.now()}`);
         const folders: FolderInfo[] = Array.isArray(foldersRes.data) ? foldersRes.data : [];
 
         if (folders.length === 0) {
-          setAllImages([]);
+          setFolderData([]);
           setLoading(false);
           return;
         }
 
         const fileRequests = folders.map(f =>
-          api.get(`/api/gallery/files?folder=${encodeURIComponent(f.folder)}`)
+          api.get(`/api/gallery/files?folder=${encodeURIComponent(f.folder)}&t=${Date.now()}`)
             .then(res => Array.isArray(res.data) ? res.data as string[] : [])
             .catch(() => [] as string[])
         );
 
-        const allFilesArrays = await Promise.all(fileRequests);
-        const combinedFiles = allFilesArrays.flat();
+        const allFiles = await Promise.all(fileRequests);
 
-        setAllImages(combinedFiles);
+        const combined: FolderData[] = folders
+          .map((info, i) => ({
+            info,
+            files: allFiles[i],
+            expanded: false,
+          }))
+          .filter(fd => fd.files.length > 0);
+
+        setFolderData(combined);
       } catch (err) {
         console.error("Failed to fetch gallery data:", err);
       } finally {
@@ -55,6 +61,12 @@ export default function GalleryPage() {
 
     fetchGalleryData();
   }, []);
+
+  const toggleExpand = (index: number) => {
+    setFolderData(prev =>
+      prev.map((fd, i) => i === index ? { ...fd, expanded: !fd.expanded } : fd)
+    );
+  };
 
   const openLightbox = (src: string, alt: string) => {
     setLightboxImg(src);
@@ -66,69 +78,98 @@ export default function GalleryPage() {
     setLightboxOpen(false);
   };
 
+  const formatCaption = (filename: string) => {
+    return filename.split('/').pop()?.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ") || "Gallery Image";
+  };
+
   return (
-    <main>
-      <section className="gallery-section">
-        <h1>Invest in Time with positive vibes and ROI will be always good</h1>
+    <main className="bg-[#fcfcfc] min-h-screen">
+      <section className="gallery-section text-center py-12">
+        <h1 className="text-3xl md:text-4xl font-bold tracking-tight uppercase">THE LIBRARY</h1>
       </section>
 
       {loading ? (
         <div className="media-category">
           <p style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>Loading gallery...</p>
         </div>
-      ) : allImages.length === 0 ? (
+      ) : folderData.length === 0 ? (
         <div className="media-category">
           <p style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>No gallery content available.</p>
         </div>
       ) : (
-        <div className="media-category" style={{ padding: '0 2rem' }}>
-          <div className={`collapsible-grid ${expanded ? 'expanded' : ''} pt-4 pb-8`}>
-            <div className="flex flex-col md:flex-row gap-4">
-              {/* Using 4 columns for desktop to ensure images are reasonably sized in the collage */}
-              {[0, 1, 2, 3].map((colIndex) => {
-                const colFiles = allImages.filter((_, i) => i % 4 === colIndex);
-                if (colFiles.length === 0) return null;
-                return (
-                  <div key={colIndex} className="flex flex-col gap-4 flex-1">
-                    {colFiles.map((src, i) => {
-                      const isVideo = /\.(mp4|webm|ogg|mov)$/i.test(src);
-                      if (isVideo) {
-                        return (
-                          <a key={i} href={src} target="_blank" rel="noopener noreferrer" className="media-item video-item is-visible overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 block">
-                            <div style={{ width: '100%', aspectRatio: '16/9', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#111' }}>
+        <div className="px-4 md:px-8 lg:px-12 max-w-[1400px] mx-auto pb-20">
+          {folderData.map((fd, index) => (
+            <div key={fd.info.folder} className="mb-16">
+              <h2 className="text-2xl uppercase tracking-wider mb-8 text-gray-800 flex items-center gap-4">
+                <span className="w-8 h-[1px] bg-gray-400"></span>
+                {fd.info.label}
+              </h2>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 auto-rows-[250px] md:auto-rows-[300px] gap-4">
+                {(fd.expanded ? fd.files : fd.files.slice(0, 6)).map((src, i) => {
+                  const isVideo = /\.(mp4|webm|ogg|mov)$/i.test(src);
+                  
+                  // Bento grid span logic matching the image (1, 2, 1 | 2, 1, 1)
+                  let spanClass = "col-span-1";
+                  if (i % 6 === 1 || i % 6 === 3) {
+                    spanClass = "md:col-span-2";
+                  }
+
+                  const caption = formatCaption(src);
+
+                  return (
+                    <div 
+                      key={i} 
+                      className={`relative group overflow-hidden bg-gray-100 cursor-pointer ${spanClass}`}
+                      onClick={() => !isVideo && openLightbox(src, caption)}
+                    >
+                      {isVideo ? (
+                         <a href={src} target="_blank" rel="noopener noreferrer" className="w-full h-full block relative">
+                            <div className="w-full h-full flex items-center justify-center bg-[#111]">
                               <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="white">
                                 <path d="M8 5v14l11-7z" />
                               </svg>
                             </div>
-                          </a>
-                        );
-                      }
-                      return (
-                        <div key={i} className="media-item is-visible overflow-hidden rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 cursor-pointer bg-slate-100" onClick={() => openLightbox(src, "Gallery Collage")}>
-                          <img src={src} alt="Gallery Collage" loading="lazy" className="w-full h-auto block hover:scale-105 transition-transform duration-700 ease-out" />
-                        </div>
-                      );
-                    })}
-                  </div>
-                );
-              })}
+                         </a>
+                      ) : (
+                        <>
+                          <img 
+                            src={src} 
+                            alt={caption} 
+                            loading="lazy" 
+                            className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" 
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 transition-opacity duration-300" />
+                          <div className="absolute bottom-4 left-4 right-4">
+                            <h3 className="text-white text-sm md:text-base font-medium tracking-wide truncate">{caption}</h3>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {fd.files.length > 6 && (
+                <div className="mt-8">
+                  <button 
+                    className="text-sm font-medium tracking-wide uppercase border border-gray-300 px-6 py-2 hover:bg-gray-100 transition-colors" 
+                    onClick={() => toggleExpand(index)}
+                  >
+                    {fd.expanded ? 'View Less' : `View More (${fd.files.length - 6} more)`}
+                  </button>
+                </div>
+              )}
             </div>
-          </div>
-          {allImages.length > 20 && (
-            <div style={{ textAlign: 'center', marginTop: '2rem', marginBottom: '2rem' }}>
-              <button className="view-more-btn" onClick={() => setExpanded(!expanded)} style={{ margin: '0 auto' }}>
-                {expanded ? 'View Less' : `View More (${allImages.length} images)`}
-              </button>
-            </div>
-          )}
+          ))}
         </div>
       )}
 
       {/* Lightbox Modal */}
-      <div id="lightboxModal" className="lightbox" style={{ display: lightboxOpen ? 'flex' : 'none' }}>
-        <span className="close-lightbox" onClick={closeLightbox}>&times;</span>
-        <img className="lightbox-content" id="lightboxImg" src={lightboxImg} alt={lightboxCaption} />
-        <div id="lightboxCaption">{lightboxCaption}</div>
+      <div id="lightboxModal" className="lightbox" style={{ display: lightboxOpen ? 'flex' : 'none', zIndex: 50, position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.95)', alignItems: 'center', justifyItems: 'center', flexDirection: 'column', padding: '20px' }}>
+        <span className="close-lightbox" style={{ position: 'absolute', top: '20px', right: '30px', color: 'white', fontSize: '40px', cursor: 'pointer' }} onClick={closeLightbox}>&times;</span>
+        <img className="lightbox-content" id="lightboxImg" src={lightboxImg} alt={lightboxCaption} style={{ maxHeight: '80vh', maxWidth: '100%', objectFit: 'contain', margin: 'auto' }} />
+        <div id="lightboxCaption" style={{ color: 'white', textAlign: 'center', marginTop: '15px', fontSize: '18px' }}>{lightboxCaption}</div>
       </div>
     </main>
   );
