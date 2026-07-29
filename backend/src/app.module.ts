@@ -54,14 +54,24 @@ import { EcrrbModule } from './ecrrb/ecrrb.module';
       },
     ]),
 
-    ServeStaticModule.forRoot({
-      rootPath: join(process.cwd(), 'uploads'),
-      serveRoot: '/uploads/',
-      serveStaticOptions: {
-        cacheControl: true,
-        maxAge: '30d',
+    ServeStaticModule.forRoot(
+      {
+        rootPath: join(process.cwd(), 'uploads'),
+        serveRoot: '/uploads/',
+        serveStaticOptions: {
+          cacheControl: true,
+          maxAge: '30d',
+        },
       },
-    }),
+      {
+        rootPath: join(process.cwd(), '..', 'frontend', 'public', 'media'),
+        serveRoot: '/media/',
+        serveStaticOptions: {
+          cacheControl: true,
+          maxAge: '30d',
+        },
+      }
+    ),
 
     PrismaModule,
     AuthModule,

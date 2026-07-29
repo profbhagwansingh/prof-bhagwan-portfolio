@@ -9,16 +9,24 @@ const nextConfig = {
   // which avoids CORS issues in both dev and production.
   async rewrites() {
     const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
-    return [
-      {
-        source: "/api/:path*",
-        destination: `${backendUrl}/api/:path*`,
-      },
-      {
-        source: "/uploads/:path*",
-        destination: `${backendUrl}/uploads/:path*`,
-      },
-    ];
+    return {
+      afterFiles: [
+        {
+          source: "/api/:path*",
+          destination: `${backendUrl}/api/:path*`,
+        },
+        {
+          source: "/uploads/:path*",
+          destination: `${backendUrl}/uploads/:path*`,
+        },
+      ],
+      fallback: [
+        {
+          source: "/media/:path*",
+          destination: `${backendUrl}/media/:path*`,
+        },
+      ],
+    };
   },
 
   images: {

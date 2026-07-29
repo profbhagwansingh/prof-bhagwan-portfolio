@@ -52,6 +52,13 @@ exports.AppModule = AppModule = __decorate([
                     cacheControl: true,
                     maxAge: '30d',
                 },
+            }, {
+                rootPath: (0, path_1.join)(process.cwd(), '..', 'frontend', 'public', 'media'),
+                serveRoot: '/media/',
+                serveStaticOptions: {
+                    cacheControl: true,
+                    maxAge: '30d',
+                },
             }),
             prisma_module_1.PrismaModule,
             auth_module_1.AuthModule,
