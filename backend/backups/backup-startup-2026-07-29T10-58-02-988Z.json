@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-07-12T08:21:18.275Z",
+  "timestamp": "2026-07-29T10:58:02.988Z",
   "type": "startup",
   "data": {
     "users": [
@@ -10,10 +10,10 @@
         "fullName": "Super Admin",
         "role": "SUPER_ADMIN",
         "isActive": true,
-        "lastLogin": null,
-        "refreshToken": null,
+        "lastLogin": "2026-07-29T09:01:39.310Z",
+        "refreshToken": "$2b$10$ZgsoCpzkYMQkjtB0i1mpOe3KKrsEed48wnxxzItYoeaPE2kY82r4e",
         "createdAt": "2026-07-11T18:38:59.621Z",
-        "updatedAt": "2026-07-11T18:38:59.621Z"
+        "updatedAt": "2026-07-29T09:01:39.311Z"
       },
       {
         "id": "d550f301-159c-405a-b820-18cc13bf234e",
@@ -22,35 +22,57 @@
         "fullName": "Admin",
         "role": "SUPER_ADMIN",
         "isActive": true,
-        "lastLogin": "2026-07-12T07:38:34.490Z",
-        "refreshToken": "$2b$10$4Nb0GtRq7qY26jZAdm7ibevTcjCVH4QNo9htefACZkSEJPN5DpbHG",
+        "lastLogin": "2026-07-13T18:36:02.663Z",
+        "refreshToken": "$2b$10$JfLkIsnABfhhUP1o3waDZORLRcBkD56iTonOwKehxPdOsJ1NAM/Vy",
         "createdAt": "2026-07-11T19:16:44.808Z",
-        "updatedAt": "2026-07-12T07:38:34.494Z"
+        "updatedAt": "2026-07-13T18:36:02.669Z"
       }
     ],
     "heroSections": [],
-    "aboutContent": [],
-    "experienceTimeline": [
+    "aboutContent": [
       {
-        "id": "53559351-2e1a-4488-9674-5211b8aac8dc",
-        "title": "Professor of Management",
-        "subtitle": null,
-        "organization": "Department of Business Administration (DBA), School of Management Sciences (SMS), Central University of Jharkhand (CUJ)",
-        "location": "Ranchi, Jharkhand",
-        "dateRange": "March 2020 - Present",
-        "externalLink": "https://cuj.ac.in/DOBA/Bhagwan_singh.php",
-        "sortOrder": 1,
-        "isActive": true
-      },
+        "id": "75e2f4c6-962a-4b7f-8352-78a5004f2168",
+        "sectionKey": "main_about",
+        "title": "Care for People, Planet & Peace",
+        "content": "{\"subtitle\":\"Distinguished Professor of Management\",\"text\":\"Prof. (Dr.) Bhagwan Singh is a distinguished professor of management, widely recognized as an eminent academician with over 25 years of profound experience in higher education and research. He currently holds a professorship in the Department of Business Administration (DBA), School of Management Sciences (SMS) at the Central University of Jharkhand (CUJ). Throughout his illustrious tenure, he has undertaken pivotal leadership mandates, including serving as Dean, Head, Finance Officer (I/c), Chief Placement Officer (CPO), and Professor-in-Charge of Estate. Furthermore, his administrative acumen is reflected in his appointments to esteemed statutory and apex bodies—such as the Academic Council, Executive Council, and University Court—as well as various high-level confidential committees across central, state, and reputable external organizations.\\n\\nDr. Singh’s scholarly pursuits lie at the vanguard of Marketing and Information Technology. A prolific author, he has published two influential textbooks on digital and internet marketing, alongside a repository of over 32 research papers in high-impact, reputable journals and numerous contributed book chapters. Anchored by a holistic worldview, his academic endeavors and personal philosophy are deeply dedicated to the harmony of People, Planet, and Peace.\"}",
+        "imageUrl": "/media/img/slideshow/img_8_1743658756162.jpg",
+        "sortOrder": 0,
+        "isActive": true,
+        "updatedAt": "2026-07-13T17:57:48.041Z"
+      }
+    ],
+    "experienceTimeline": [
       {
         "id": "a1b2c3d4-1111-2222-3333-444455556666",
         "title": "Dean & Head",
-        "subtitle": "Additional Administrative Responsibility",
+        "subtitle": "Administrative Responsibility",
         "organization": "Department of Business Administration (DBA), School of Management Sciences (SMS), Central University of Jharkhand (CUJ)",
         "location": "Ranchi, Jharkhand",
         "dateRange": "Nov 2020 - Jan 2024",
         "externalLink": null,
         "sortOrder": 2,
+        "isActive": true
+      },
+      {
+        "id": "3e0c0ff6-dcd0-4bbd-9521-07085fa2fd3e",
+        "title": "Professor In-Charge Estate                 ",
+        "subtitle": "  (PIC Estate) Additional Responsibility",
+        "organization": "Central University of Jharkhand, Ranchi, Jharkhand",
+        "location": "Manatu, Ranchi, Jharkhand",
+        "dateRange": "June 2026 Onwards",
+        "externalLink": null,
+        "sortOrder": 0,
+        "isActive": true
+      },
+      {
+        "id": "53559351-2e1a-4488-9674-5211b8aac8dc",
+        "title": "Professor ",
+        "subtitle": "Catering Management ",
+        "organization": "Department of Business Administration (DBA), School of Management Sciences (SMS), Central University of Jharkhand (CUJ)",
+        "location": "Ranchi, Jharkhand",
+        "dateRange": "March 2020 - Hitherto",
+        "externalLink": "https://cuj.ac.in/DOBA/Bhagwan_singh.php",
+        "sortOrder": 1,
         "isActive": true
       },
       {
@@ -65,12 +87,45 @@
         "isActive": true
       },
       {
+        "id": "5715dbbe-b466-49d9-b493-a42f901a117b",
+        "title": "Lecturer and Administrator",
+        "subtitle": null,
+        "organization": "PCTI Lucknow, Uttar Pradesh",
+        "location": "Lucknow, Uttar Pradesh",
+        "dateRange": "September 2000 - October 2005",
+        "externalLink": null,
+        "sortOrder": 8,
+        "isActive": true
+      },
+      {
+        "id": "e7b7a53f-da89-4701-8a08-cbf724b26011",
+        "title": "Associate Professor",
+        "subtitle": "Dept. of Marketing & Supply Chain Management (M&SCM), School of Business & Management Studies (SBMS),",
+        "organization": "Central University of Himachal Pradesh (CUHP)",
+        "location": "Dharmshala, H. P.",
+        "dateRange": "March 2012 - March 2020",
+        "externalLink": null,
+        "sortOrder": 6,
+        "isActive": true
+      },
+      {
+        "id": "76160e30-3b73-4305-b692-e3f56f2e8d06",
+        "title": "Head of Department (HoD)",
+        "subtitle": "Dept. of Marketing & Supply Chain Management (M&SCM) ",
+        "organization": "School of Business & Management Studies (SBMS),",
+        "location": "Dharamshala, Himachal Pradesh",
+        "dateRange": "Feb 2013 - May 2019 (TWO Terms)",
+        "externalLink": null,
+        "sortOrder": 5,
+        "isActive": true
+      },
+      {
         "id": "e1e45564-84e0-4c24-8be5-f88f7d905e6e",
-        "title": "Founder Dean & Associate Professor",
+        "title": "Founder Dean ",
         "subtitle": null,
         "organization": "School of Commerce and Management Studies, Central University of Himachal Pradesh (CUHP)",
         "location": "Dharamshala, Himachal Pradesh",
-        "dateRange": "March 2012 - March 2020",
+        "dateRange": "May 2019 - Jan 2020",
         "externalLink": null,
         "sortOrder": 4,
         "isActive": true
@@ -83,18 +138,7 @@
         "location": "Varanasi, Uttar Pradesh",
         "dateRange": "October 2005 - March 2012",
         "externalLink": null,
-        "sortOrder": 5,
-        "isActive": true
-      },
-      {
-        "id": "5715dbbe-b466-49d9-b493-a42f901a117b",
-        "title": "Lecturer and Administrator",
-        "subtitle": null,
-        "organization": "In Reputed Organizations",
-        "location": null,
-        "dateRange": "Before October 2005",
-        "externalLink": null,
-        "sortOrder": 6,
+        "sortOrder": 7,
         "isActive": true
       }
     ],
@@ -105,14 +149,6 @@
         "syllabusUrl": "/media/courses/Strategic Management.pdf",
         "category": "Management",
         "sortOrder": 1,
-        "isActive": true
-      },
-      {
-        "id": "8ef77c0e-6b7c-4b4d-b85c-7eadc7fca33d",
-        "name": "Marketing Management",
-        "syllabusUrl": "/media/courses/Marketing Management.pdf",
-        "category": "Management",
-        "sortOrder": 2,
         "isActive": true
       },
       {
@@ -266,6 +302,14 @@
         "category": "Management",
         "sortOrder": 21,
         "isActive": true
+      },
+      {
+        "id": "8ef77c0e-6b7c-4b4d-b85c-7eadc7fca33d",
+        "name": "Marketing Management",
+        "syllabusUrl": "/media/courses/Marketing Management.pdf",
+        "category": "Management",
+        "sortOrder": 2,
+        "isActive": true
       }
     ],
     "publications": [
@@ -310,20 +354,6 @@
         "sortOrder": 3,
         "isActive": true,
         "createdAt": "2026-07-12T06:25:26.704Z"
-      },
-      {
-        "id": "af42b4c2-2ff9-4d23-a3e4-bd3e9e1cae81",
-        "title": "A study of Prospects and Problems of Online Education in Bihar",
-        "journal": "Global Journal of Enterprise Information System | Vol: 15 | Page: 30 | ISSN: 0975-1432",
-        "year": 2023,
-        "tag": "UGC_CARE",
-        "authors": null,
-        "doi": null,
-        "externalUrl": null,
-        "abstractText": null,
-        "sortOrder": 4,
-        "isActive": true,
-        "createdAt": "2026-07-12T06:25:26.791Z"
       },
       {
         "id": "bf121d8b-a092-4bff-9fab-ef9b1cddcf81",
@@ -452,48 +482,6 @@
         "createdAt": "2026-07-12T06:25:27.543Z"
       },
       {
-        "id": "07ecaa3e-82db-4786-97c5-2dacf0eb2a1d",
-        "title": "Usage of Web Based Advertising (WBA)",
-        "journal": "Arni University International Journal | Vol: 1 | Page: 183 | ISSN: 2270-4241",
-        "year": 2016,
-        "tag": "PEER_REVIEWED",
-        "authors": null,
-        "doi": null,
-        "externalUrl": null,
-        "abstractText": null,
-        "sortOrder": 14,
-        "isActive": true,
-        "createdAt": "2026-07-12T06:25:27.642Z"
-      },
-      {
-        "id": "e856169a-6ba3-4fb4-a76c-16f344e4a093",
-        "title": "Green Marketing: A Marketing Framework of STP towards Eco- Advantage",
-        "journal": "SMS Journal of Entrepreneurship &Innovations, Refereed Journal | Vol: 2 | Page: 22 | ISSN: 2349-7920",
-        "year": 2016,
-        "tag": "UGC_CARE",
-        "authors": null,
-        "doi": null,
-        "externalUrl": null,
-        "abstractText": null,
-        "sortOrder": 15,
-        "isActive": true,
-        "createdAt": "2026-07-12T06:25:27.723Z"
-      },
-      {
-        "id": "c18cd2ed-59e5-45ef-b11c-4ee4b1a9e711",
-        "title": "Analysis of Eco-Labels for Green Washing In North Indian States",
-        "journal": "SMS Journal of Entrepreneurship &Innovations, Refereed Journal | Vol: 1 | Page: 23 | ISSN: 2349-7920",
-        "year": 2016,
-        "tag": "UGC_CARE",
-        "authors": null,
-        "doi": null,
-        "externalUrl": null,
-        "abstractText": null,
-        "sortOrder": 16,
-        "isActive": true,
-        "createdAt": "2026-07-12T06:25:27.806Z"
-      },
-      {
         "id": "f94e25ff-ddaf-4230-a3ab-381d64c346fd",
         "title": "Marketing Management: WBA is upcoming revolution in Advertising Thought and Strategy",
         "journal": "International Journal of Economics & Managerial Thoughts | Vol: 5 | Page: 8 | ISSN: 2229-3736",
@@ -508,26 +496,26 @@
         "createdAt": "2026-07-12T06:25:27.887Z"
       },
       {
-        "id": "c1a4960b-b68c-446e-aca5-7ca00e01e7c0",
-        "title": "A Study on Current Status of Green Marketing in North India",
-        "journal": "Pacific Business Review | Vol: 7 | Page: 16 | ISSN: 0974-438X",
-        "year": 2015,
-        "tag": "SCOPUS",
-        "authors": null,
+        "id": "07ecaa3e-82db-4786-97c5-2dacf0eb2a1d",
+        "title": "Usage of Web Based Advertising (WBA)",
+        "journal": "Arni University International Journal | Vol: 1 | Page: 183 | ISSN: 2270-4241",
+        "year": 2016,
+        "tag": "PEER_REVIEWED",
+        "authors": ".",
         "doi": null,
         "externalUrl": null,
         "abstractText": null,
-        "sortOrder": 18,
+        "sortOrder": 14,
         "isActive": true,
-        "createdAt": "2026-07-12T06:25:27.969Z"
+        "createdAt": "2026-07-12T06:25:27.642Z"
       },
       {
         "id": "77db6f02-62d7-4f16-8b43-594ae19cf4a8",
         "title": "A Study of the Prospects and Problems of Web Based Advertising (WBA) in Eastern U. P.",
         "journal": "Global Journal of Enterprise Information System | Vol: 7 | Page: 131 | ISSN: 0975-1432",
         "year": 2015,
-        "tag": "UGC_CARE",
-        "authors": null,
+        "tag": "PEER_REVIEWED",
+        "authors": ".",
         "doi": null,
         "externalUrl": null,
         "abstractText": null,
@@ -536,18 +524,32 @@
         "createdAt": "2026-07-12T06:25:28.052Z"
       },
       {
-        "id": "4854f8d0-a3cb-4e38-b040-2e8c7882de42",
-        "title": "Consumer Preference for Eco- Friendly Products of Home Appliance Companies",
-        "journal": "Indian Journal of Commerce Association | Vol: 67 | Page: 76 | ISSN: 0019-512X",
-        "year": 2014,
-        "tag": "UGC_CARE",
-        "authors": null,
+        "id": "c1a4960b-b68c-446e-aca5-7ca00e01e7c0",
+        "title": "A Study on Current Status of Green Marketing in North India",
+        "journal": "Pacific Business Review | Vol: 7 | Page: 16 | ISSN: 0974-438X",
+        "year": 2015,
+        "tag": "PEER_REVIEWED",
+        "authors": ".",
         "doi": null,
         "externalUrl": null,
         "abstractText": null,
-        "sortOrder": 20,
+        "sortOrder": 18,
         "isActive": true,
-        "createdAt": "2026-07-12T06:25:28.131Z"
+        "createdAt": "2026-07-12T06:25:27.969Z"
+      },
+      {
+        "id": "af42b4c2-2ff9-4d23-a3e4-bd3e9e1cae81",
+        "title": "A study of Prospects and Problems of Online Education in Bihar",
+        "journal": "Global Journal of Enterprise Information System | Vol: 15 | Page: 30 | ISSN: 0975-1432",
+        "year": 2023,
+        "tag": "PEER_REVIEWED",
+        "authors": ".",
+        "doi": null,
+        "externalUrl": null,
+        "abstractText": null,
+        "sortOrder": 4,
+        "isActive": true,
+        "createdAt": "2026-07-12T06:25:26.791Z"
       },
       {
         "id": "b10c25fd-dc53-4f39-ad3f-8795255f7202",
@@ -562,48 +564,6 @@
         "sortOrder": 21,
         "isActive": true,
         "createdAt": "2026-07-12T06:25:28.213Z"
-      },
-      {
-        "id": "1cb194e5-629b-415c-91f6-2f482c9469b0",
-        "title": "Women Entrepreneurship developing platform by WBA",
-        "journal": "SMS Journal of Entrepreneurship & Innovations, Refereed Journal | Vol: 1 | Page: 94 | ISSN: 2349-7920",
-        "year": 2014,
-        "tag": "UGC_CARE",
-        "authors": null,
-        "doi": null,
-        "externalUrl": null,
-        "abstractText": null,
-        "sortOrder": 22,
-        "isActive": true,
-        "createdAt": "2026-07-12T06:25:28.295Z"
-      },
-      {
-        "id": "94fa3056-4c00-4ba6-b39f-a40167d9009f",
-        "title": "Customer Satisfaction Analysis on Services of Delhi Metro",
-        "journal": "Asian Journal of Multidisciplinary Studies (AJMS) | Vol: 2 | Page: 124 | ISSN: 2321-8819",
-        "year": 2014,
-        "tag": "SCOPUS",
-        "authors": null,
-        "doi": null,
-        "externalUrl": null,
-        "abstractText": null,
-        "sortOrder": 23,
-        "isActive": true,
-        "createdAt": "2026-07-12T06:25:28.376Z"
-      },
-      {
-        "id": "6622827e-12f7-4c45-9dd8-93f466493764",
-        "title": "Factors affecting Green Buying Behaviour (GBB) of Consumers",
-        "journal": "Commerce Spectrum (International Journal of Commerce &Business Studies) | Vol: 3 | Page: 69 | ISSN: 2249-992X",
-        "year": 2013,
-        "tag": "UGC_CARE",
-        "authors": null,
-        "doi": null,
-        "externalUrl": null,
-        "abstractText": null,
-        "sortOrder": 24,
-        "isActive": true,
-        "createdAt": "2026-07-12T06:25:28.461Z"
       },
       {
         "id": "d5fec6b3-977c-4bfe-95c2-b7eb5f5f6c76",
@@ -662,12 +622,124 @@
         "createdAt": "2026-07-12T06:25:28.796Z"
       },
       {
+        "id": "eafaf8c7-4c4e-45f3-bf5c-6b4a708f99ac",
+        "title": "Corporate Social Responsibility and Firm Value: Evidence from Indian Manufacturing",
+        "journal": "Indian Journal of Corporate Governance",
+        "year": 2023,
+        "tag": "PEER_REVIEWED",
+        "authors": ".",
+        "doi": null,
+        "externalUrl": null,
+        "abstractText": null,
+        "sortOrder": 0,
+        "isActive": true,
+        "createdAt": "2026-05-29T23:47:01.098Z"
+      },
+      {
+        "id": "d36e1453-b4d0-4ec4-ba10-9b5107256e3a",
+        "title": "India-foreign migration for job: an opinion of professional skilled youths of India",
+        "journal": "International Journal of Public Sector Performance Management",
+        "year": 2026,
+        "tag": "SCOPUS",
+        "authors": ".",
+        "doi": null,
+        "externalUrl": "https://www.scopus.com/authid/detail.uri?authorId=57216082742",
+        "abstractText": null,
+        "sortOrder": 0,
+        "isActive": true,
+        "createdAt": "2026-07-13T15:50:02.253Z"
+      },
+      {
+        "id": "ceda8d1f-20e7-4c37-9a26-e68695109227",
+        "title": "Green Marketing: A Marketing Framework of 'STP' Towards Eco-Advantage",
+        "journal": "SMS Journal of Entrepreneurship & Innovation",
+        "year": 2016,
+        "tag": "UGC_CARE",
+        "authors": ".",
+        "doi": null,
+        "externalUrl": null,
+        "abstractText": null,
+        "sortOrder": 0,
+        "isActive": true,
+        "createdAt": "2026-07-12T07:38:19.021Z"
+      },
+      {
+        "id": "1cb194e5-629b-415c-91f6-2f482c9469b0",
+        "title": "Women Entrepreneurship developing platform by WBA",
+        "journal": "SMS Journal of Entrepreneurship & Innovations, Refereed Journal | Vol: 1 | Page: 94 | ISSN: 2349-7920",
+        "year": 2014,
+        "tag": "PEER_REVIEWED",
+        "authors": ".",
+        "doi": null,
+        "externalUrl": null,
+        "abstractText": null,
+        "sortOrder": 22,
+        "isActive": true,
+        "createdAt": "2026-07-12T06:25:28.295Z"
+      },
+      {
+        "id": "6622827e-12f7-4c45-9dd8-93f466493764",
+        "title": "Factors affecting Green Buying Behaviour (GBB) of Consumers",
+        "journal": "Commerce Spectrum (International Journal of Commerce &Business Studies) | Vol: 3 | Page: 69 | ISSN: 2249-992X",
+        "year": 2013,
+        "tag": "PEER_REVIEWED",
+        "authors": ".",
+        "doi": null,
+        "externalUrl": null,
+        "abstractText": null,
+        "sortOrder": 24,
+        "isActive": true,
+        "createdAt": "2026-07-12T06:25:28.461Z"
+      },
+      {
+        "id": "0e251e35-c373-4ff7-92d5-f92486fe8c5d",
+        "title": "Business Prospects For Entrepreneurs In Skill Based Online Education",
+        "journal": "SMS Journal of Entrepreneurship & Innovation",
+        "year": 2019,
+        "tag": "PEER_REVIEWED",
+        "authors": ".",
+        "doi": null,
+        "externalUrl": null,
+        "abstractText": null,
+        "sortOrder": 0,
+        "isActive": true,
+        "createdAt": "2026-07-12T07:38:48.830Z"
+      },
+      {
+        "id": "94fa3056-4c00-4ba6-b39f-a40167d9009f",
+        "title": "Customer Satisfaction Analysis on Services of Delhi Metro",
+        "journal": "Asian Journal of Multidisciplinary Studies (AJMS) | Vol: 2 | Page: 124 | ISSN: 2321-8819",
+        "year": 2014,
+        "tag": "PEER_REVIEWED",
+        "authors": ".",
+        "doi": null,
+        "externalUrl": null,
+        "abstractText": null,
+        "sortOrder": 23,
+        "isActive": true,
+        "createdAt": "2026-07-12T06:25:28.376Z"
+      },
+      {
+        "id": "5aa5d807-5908-413d-bd96-4ee92c84526c",
+        "title": " The Primacy of Content Quality: A Review of Factors Influencing Consumer Perception and Intention Towards OTT Platforms",
+        "journal": "TPM – Testing, Psychometrics, Methodology in Applied Psychology",
+        "year": 2025,
+        "tag": "SCOPUS",
+        "authors": ".",
+        "doi": null,
+        "externalUrl": null,
+        "abstractText": null,
+        "sortOrder": 0,
+        "isActive": true,
+        "createdAt": "2026-07-13T15:56:06.893Z"
+      },
+      {
         "id": "7e825b8e-0522-4092-8dd2-93de563f212c",
-        "title": "Opportunity For Women Entrepreneurs To Encash Virtual World Through Web Based Advertising (wba)",
+        "title": "Opportunity For Women Entrepreneurs To Encash Virtual World Through Web Based Advertising (WBA)",
         "journal": "SMS Journal of Entrepreneurship & Innovation",
         "year": 2015,
-        "tag": "PEER_REVIEWED",
-        "authors": "Dr. Bhagwan Singh",
+        "tag": "UGC_APPROVED",
+        "authors": ".",
         "doi": null,
         "externalUrl": null,
         "abstractText": null,
@@ -680,8 +752,8 @@
         "title": "Analysis of Eco-labels for Green Washing in North Indian States",
         "journal": "SMS Journal of Entrepreneurship & Innovation",
         "year": 2015,
-        "tag": "PEER_REVIEWED",
-        "authors": "Bhagwan Singh, Sachin Kumar",
+        "tag": "UGC_APPROVED",
+        "authors": ".",
         "doi": null,
         "externalUrl": null,
         "abstractText": null,
@@ -690,97 +762,125 @@
         "createdAt": "2026-07-12T07:38:18.935Z"
       },
       {
-        "id": "ceda8d1f-20e7-4c37-9a26-e68695109227",
-        "title": "Green Marketing: A Marketing Framework of 'STP' Towards Eco-Advantage",
-        "journal": "SMS Journal of Entrepreneurship & Innovation",
-        "year": 2016,
+        "id": "4854f8d0-a3cb-4e38-b040-2e8c7882de42",
+        "title": "Consumer Preference for Eco- Friendly Products of Home Appliance Companies",
+        "journal": "Indian Journal of Commerce Association | Vol: 67 | Page: 76 | ISSN: 0019-512X",
+        "year": 2014,
+        "tag": "UGC_APPROVED",
+        "authors": ".",
+        "doi": null,
+        "externalUrl": null,
+        "abstractText": null,
+        "sortOrder": 20,
+        "isActive": true,
+        "createdAt": "2026-07-12T06:25:28.131Z"
+      },
+      {
+        "id": "edc84283-7f11-4369-95a6-6544947fd873",
+        "title": "Entrepreneurship Ecosystem in India: Challenges and Opportunities Post-Pandemic",
+        "journal": "Journal of Entrepreneurship & Innovation",
+        "year": 2022,
+        "tag": "UGC_CARE",
+        "authors": "Prof. (Dr.) Bhagwan Singh",
+        "doi": null,
+        "externalUrl": null,
+        "abstractText": null,
+        "sortOrder": 0,
+        "isActive": true,
+        "createdAt": "2026-05-29T23:47:01.102Z"
+      },
+      {
+        "id": "e86734ee-e28d-4264-877d-d7e552fa842d",
+        "title": "Leadership Styles and Employee Engagement in Higher Education Institutions",
+        "journal": "Management & Labour Studies",
+        "year": 2022,
         "tag": "PEER_REVIEWED",
-        "authors": "Bhagwan Singh, Deepak Jaiswal",
+        "authors": "Prof. (Dr.) Bhagwan Singh",
         "doi": null,
         "externalUrl": null,
         "abstractText": null,
         "sortOrder": 0,
         "isActive": true,
-        "createdAt": "2026-07-12T07:38:19.021Z"
+        "createdAt": "2026-05-29T23:47:01.103Z"
       },
       {
-        "id": "876d7862-82be-4b3c-94e1-3d19dc1b427f",
-        "title": "Flourishing Demand for shopping websites as an opportunity for forthcoming Entrepreneurs",
-        "journal": "SMS Journal of Entrepreneurship & Innovation",
-        "year": 2017,
-        "tag": "UGC_APPROVED",
-        "authors": "Bhagwan Singh",
+        "id": "82e015c2-3ba3-49dd-9f56-7a862ff19683",
+        "title": "Work-Life Balance and Organisational Commitment Among Faculty Members",
+        "journal": "Indian Journal of Industrial Relations",
+        "year": 2021,
+        "tag": "UGC_CARE",
+        "authors": "Prof. (Dr.) Bhagwan Singh",
         "doi": null,
         "externalUrl": null,
         "abstractText": null,
         "sortOrder": 0,
         "isActive": true,
-        "createdAt": "2026-07-12T07:38:19.109Z"
+        "createdAt": "2026-05-29T23:47:01.106Z"
       },
       {
-        "id": "d6b05a56-358e-45a5-b711-61a161fa6098",
-        "title": "Opportunities For Entrepreneursin Household Solid Waste Management In Smart City Dharamshala, Himachal Pradesh",
-        "journal": "SMS Journal of Entrepreneurship & Innovation",
-        "year": 2018,
-        "tag": "UGC_APPROVED",
-        "authors": "Dr. Sachin, SunitaYadav, Dr. Bhagwan Singh",
-        "doi": null,
-        "externalUrl": null,
-        "abstractText": null,
-        "sortOrder": 0,
-        "isActive": true,
-        "createdAt": "2026-07-12T07:38:19.195Z"
-      },
-      {
-        "id": "e0d8277e-cd4a-4f69-8335-32da6805d843",
-        "title": "Solid Waste To Theme Based Parks In Himachal Pradesh, India: A Healthy, Sustainable, Eco-friendly And Skilled Initiative For Entrepreneurs",
-        "journal": "SMS Journal of Entrepreneurship & Innovation",
-        "year": 2018,
-        "tag": "UGC_APPROVED",
-        "authors": "Sachin Kumar, SunitaYadav, Bhagwan Singh",
-        "doi": null,
-        "externalUrl": null,
-        "abstractText": null,
-        "sortOrder": 0,
-        "isActive": true,
-        "createdAt": "2026-07-12T07:38:48.654Z"
-      },
-      {
-        "id": "0e251e35-c373-4ff7-92d5-f92486fe8c5d",
-        "title": "Business Prospects For Entrepreneurs In Skill Based Online Education",
-        "journal": "SMS Journal of Entrepreneurship & Innovation",
-        "year": 2019,
+        "id": "dd5c39c6-3529-4439-bb5f-bbb57744b85f",
+        "title": "Corporate Governance and Financial Performance: Evidence from BSE Listed Companies",
+        "journal": "Finance India",
+        "year": 2021,
         "tag": "PEER_REVIEWED",
-        "authors": "G S Rathore, Bhagwan Singh, Sachin Kumar, Rita Rai, Kamlesh Kumar",
+        "authors": "Prof. (Dr.) Bhagwan Singh",
         "doi": null,
         "externalUrl": null,
         "abstractText": null,
         "sortOrder": 0,
         "isActive": true,
-        "createdAt": "2026-07-12T07:38:48.830Z"
+        "createdAt": "2026-05-29T23:47:01.106Z"
+      },
+      {
+        "id": "024ed8a1-3fca-4491-9e59-e5ffe06637ff",
+        "title": "E-Commerce Adoption Barriers in Rural India: An Empirical Analysis",
+        "journal": "Asian Journal of Management",
+        "year": 2020,
+        "tag": "UGC_CARE",
+        "authors": "Prof. (Dr.) Bhagwan Singh",
+        "doi": null,
+        "externalUrl": null,
+        "abstractText": null,
+        "sortOrder": 0,
+        "isActive": true,
+        "createdAt": "2026-05-29T23:47:01.108Z"
+      },
+      {
+        "id": "d92c5cb5-5217-45e3-be82-080f22f9c2a1",
+        "title": "Sustainability Reporting Practices in Indian Corporations: A Content Analysis",
+        "journal": "National Conference on Sustainable Business",
+        "year": 2020,
+        "tag": "CONFERENCE",
+        "authors": "Prof. (Dr.) Bhagwan Singh",
+        "doi": null,
+        "externalUrl": null,
+        "abstractText": null,
+        "sortOrder": 0,
+        "isActive": true,
+        "createdAt": "2026-05-29T23:47:01.108Z"
       }
     ],
     "books": [
       {
-        "id": "0ca3f4e1-7bca-4e39-bbad-85a5c44f4125",
-        "title": "Web based Advertising ",
-        "year": 2017,
-        "subtitle": "A Tool of Digital & Internet Based Marketing",
-        "coverImageUrl": "https://res.cloudinary.com/duyauosco/image/upload/v1783838961/profbhagwan/gafsjdw4clzwllbzoii1.jpg",
-        "purchaseUrl": "https://amzn.in/d/0aYPhgz0",
-        "isbn": "",
-        "sortOrder": 0,
-        "isActive": true
-      },
-      {
-        "id": "5c9b1d41-19cf-4d30-a164-56acf38b137e",
-        "title": "Internet Based Marketing ",
-        "year": 2017,
-        "subtitle": "Trends, Issues & Challenges for Digital Marketing",
-        "coverImageUrl": "https://res.cloudinary.com/duyauosco/image/upload/v1783839313/profbhagwan/ygubvfs8pgmcgwaexbnd.jpg",
+        "id": "a565aed0-5583-4e76-963b-baba1b8a1486",
+        "title": "Internet Based Marketing",
+        "year": 2015,
+        "subtitle": "Trends, Issues and Challenges for Digital Marketing & Web Based Advertising",
+        "coverImageUrl": "https://res.cloudinary.com/duyauosco/image/upload/v1783971824/profbhagwan/ttbolnzralomlueyldyd.jpg",
         "purchaseUrl": "",
         "isbn": "",
         "sortOrder": 1,
+        "isActive": true
+      },
+      {
+        "id": "eb50d9d2-11df-4c91-b164-6b6e424626e1",
+        "title": "Web Based Advertising",
+        "year": 2017,
+        "subtitle": "A Tool of Digital and Internet Based Marketing",
+        "coverImageUrl": "https://res.cloudinary.com/duyauosco/image/upload/v1784626912/profbhagwan/u1omupyirphxp6h9h7hq.jpg",
+        "purchaseUrl": "https://amzn.in/d/0hhKs1sL",
+        "isbn": "",
+        "sortOrder": 0,
         "isActive": true
       }
     ],
@@ -1746,96 +1846,6 @@
     "achievements": [],
     "phdScholars": [
       {
-        "id": "9dbd66f8-e841-4fc4-bc1e-b8ecf838e8fe",
-        "name": "Dr. Sachin Kumar",
-        "imageUrl": "/media/img/research-scholars/sachine.png",
-        "status": "POST_DOC",
-        "researchTopic": "Green Marketing (Post-Doctoral)",
-        "currentPosition": null,
-        "sortOrder": 1,
-        "isActive": true
-      },
-      {
-        "id": "74101853-6644-4707-8c4b-cbb482ef04c1",
-        "name": "Dr. Rishi Kant",
-        "imageUrl": "/media/img/research-scholars/rishi.png",
-        "status": "AWARDED",
-        "researchTopic": "Management",
-        "currentPosition": null,
-        "sortOrder": 2,
-        "isActive": true
-      },
-      {
-        "id": "c1b901fd-22d7-4afe-ae25-ecfa0db64769",
-        "name": "Dr. Devender Kumar",
-        "imageUrl": "/media/img/research-scholars/devender.png",
-        "status": "AWARDED",
-        "researchTopic": "Management",
-        "currentPosition": null,
-        "sortOrder": 3,
-        "isActive": true
-      },
-      {
-        "id": "b9621d1c-2f50-472a-a20b-1055c81d5030",
-        "name": "Dr. Deepak Jaiswal",
-        "imageUrl": "/media/img/research-scholars/deepak.png",
-        "status": "AWARDED",
-        "researchTopic": "Management",
-        "currentPosition": null,
-        "sortOrder": 4,
-        "isActive": true
-      },
-      {
-        "id": "f90ac7d0-51c7-4cbc-8951-135ef90e71f5",
-        "name": "Dr. Kamlesh Kumar",
-        "imageUrl": "/media/img/research-scholars/kamlesh.png",
-        "status": "AWARDED",
-        "researchTopic": "Management",
-        "currentPosition": null,
-        "sortOrder": 5,
-        "isActive": true
-      },
-      {
-        "id": "0a7e7dfa-8766-4e6b-b426-71372a32b07d",
-        "name": "Amitabh Avinash",
-        "imageUrl": "/media/img/research-scholars/amitabh.png",
-        "status": "PURSUING",
-        "researchTopic": "Management",
-        "currentPosition": null,
-        "sortOrder": 7,
-        "isActive": true
-      },
-      {
-        "id": "210f4975-dfc9-4f94-8cbe-c21bd49f71e6",
-        "name": "Hemant Raj",
-        "imageUrl": "/media/img/research-scholars/hemat.png",
-        "status": "PURSUING",
-        "researchTopic": "Management",
-        "currentPosition": null,
-        "sortOrder": 8,
-        "isActive": true
-      },
-      {
-        "id": "e1703fd6-2a75-45e0-b623-26d1ad5ebb25",
-        "name": "Dhirendra Narayan Das",
-        "imageUrl": "/media/img/research-scholars/narayan das.png",
-        "status": "PURSUING",
-        "researchTopic": "Management",
-        "currentPosition": null,
-        "sortOrder": 9,
-        "isActive": true
-      },
-      {
-        "id": "888b88fb-a22c-4f0d-b704-05d75ca96ddf",
-        "name": "Kumar Shivam",
-        "imageUrl": "/media/img/research-scholars/kumar.png",
-        "status": "PURSUING",
-        "researchTopic": "Management",
-        "currentPosition": null,
-        "sortOrder": 10,
-        "isActive": true
-      },
-      {
         "id": "4732ba11-ee60-418e-89a3-001552e3ec9f",
         "name": "Anil Topo",
         "imageUrl": "/media/img/research-scholars/anil.jpg",
@@ -1856,9 +1866,99 @@
         "isActive": true
       },
       {
+        "id": "9dbd66f8-e841-4fc4-bc1e-b8ecf838e8fe",
+        "name": "Dr. Sachin Kumar",
+        "imageUrl": "/media/img/research-scholars/sachine.jpg",
+        "status": "POST_DOC",
+        "researchTopic": "Green Marketing (Post-Doctoral)",
+        "currentPosition": null,
+        "sortOrder": 1,
+        "isActive": true
+      },
+      {
+        "id": "74101853-6644-4707-8c4b-cbb482ef04c1",
+        "name": "Dr. Rishi Kant",
+        "imageUrl": "/media/img/research-scholars/rishi.jpg",
+        "status": "AWARDED",
+        "researchTopic": "Management",
+        "currentPosition": null,
+        "sortOrder": 2,
+        "isActive": true
+      },
+      {
+        "id": "c1b901fd-22d7-4afe-ae25-ecfa0db64769",
+        "name": "Dr. Devender Kumar",
+        "imageUrl": "/media/img/research-scholars/devender.jpg",
+        "status": "AWARDED",
+        "researchTopic": "Management",
+        "currentPosition": null,
+        "sortOrder": 3,
+        "isActive": true
+      },
+      {
+        "id": "b9621d1c-2f50-472a-a20b-1055c81d5030",
+        "name": "Dr. Deepak Jaiswal",
+        "imageUrl": "/media/img/research-scholars/deepak.jpg",
+        "status": "AWARDED",
+        "researchTopic": "Management",
+        "currentPosition": null,
+        "sortOrder": 4,
+        "isActive": true
+      },
+      {
+        "id": "f90ac7d0-51c7-4cbc-8951-135ef90e71f5",
+        "name": "Dr. Kamlesh Kumar",
+        "imageUrl": "/media/img/research-scholars/kamlesh.jpg",
+        "status": "AWARDED",
+        "researchTopic": "Management",
+        "currentPosition": null,
+        "sortOrder": 5,
+        "isActive": true
+      },
+      {
+        "id": "0a7e7dfa-8766-4e6b-b426-71372a32b07d",
+        "name": "Amitabh Avinash",
+        "imageUrl": "/media/img/research-scholars/amitabh.jpg",
+        "status": "PURSUING",
+        "researchTopic": "Management",
+        "currentPosition": null,
+        "sortOrder": 7,
+        "isActive": true
+      },
+      {
+        "id": "210f4975-dfc9-4f94-8cbe-c21bd49f71e6",
+        "name": "Hemant Raj",
+        "imageUrl": "/media/img/research-scholars/hemat.jpg",
+        "status": "PURSUING",
+        "researchTopic": "Management",
+        "currentPosition": null,
+        "sortOrder": 8,
+        "isActive": true
+      },
+      {
+        "id": "e1703fd6-2a75-45e0-b623-26d1ad5ebb25",
+        "name": "Dhirendra Narayan Das",
+        "imageUrl": "/media/img/research-scholars/narayan das.jpg",
+        "status": "PURSUING",
+        "researchTopic": "Management",
+        "currentPosition": null,
+        "sortOrder": 9,
+        "isActive": true
+      },
+      {
+        "id": "888b88fb-a22c-4f0d-b704-05d75ca96ddf",
+        "name": "Kumar Shivam",
+        "imageUrl": "/media/img/research-scholars/kumar.jpg",
+        "status": "PURSUING",
+        "researchTopic": "Management",
+        "currentPosition": null,
+        "sortOrder": 10,
+        "isActive": true
+      },
+      {
         "id": "6043fda1-b51c-47ad-add0-db08d8d85b5f",
         "name": "Dr Ajit Kumar Das",
-        "imageUrl": "/media/img/research-scholars/ajit kumar.png",
+        "imageUrl": "/media/img/research-scholars/ajit kumar.jpg",
         "status": "AWARDED",
         "researchTopic": "Management",
         "currentPosition": null,
@@ -1875,19 +1975,6 @@
         "slug": "slideshow",
         "sortOrder": 0,
         "items": [
-          {
-            "id": "c8e85a8b-f588-4c18-bf2a-b76f5d8e183b",
-            "categoryId": "03a59c12-38f5-4c04-b267-26ad846605a7",
-            "mediaType": "PHOTO",
-            "mediaUrl": "/media/img/slideshow/.trashed-1746251695-img_9_1743658774819.jpg",
-            "thumbnailUrl": null,
-            "caption": "Slideshow Image .trashed-1746251695-img_9_1743658774819.jpg",
-            "altText": "",
-            "sortOrder": 0,
-            "isActive": true,
-            "isSlideshow": true,
-            "createdAt": "2026-05-29T23:47:11.077Z"
-          },
           {
             "id": "d224349b-4d11-4355-9b80-ee12ed5dfdaf",
             "categoryId": "03a59c12-38f5-4c04-b267-26ad846605a7",
@@ -2201,19 +2288,6 @@
             "createdAt": "2026-05-29T23:47:11.125Z"
           },
           {
-            "id": "0fb8ee5b-9c7c-4116-ab03-49df2fccc699",
-            "categoryId": "03a59c12-38f5-4c04-b267-26ad846605a7",
-            "mediaType": "PHOTO",
-            "mediaUrl": "/media/img/slideshow/20190504_090117.jpg",
-            "thumbnailUrl": null,
-            "caption": "Slideshow Image 20190504_090117.jpg",
-            "altText": "",
-            "sortOrder": 0,
-            "isActive": true,
-            "isSlideshow": true,
-            "createdAt": "2026-05-29T23:47:11.127Z"
-          },
-          {
             "id": "04f4f68f-3dc5-45f6-a1f2-ea47107240aa",
             "categoryId": "03a59c12-38f5-4c04-b267-26ad846605a7",
             "mediaType": "PHOTO",
@@ -2394,19 +2468,6 @@
             "isActive": true,
             "isSlideshow": true,
             "createdAt": "2026-05-29T23:47:11.148Z"
-          },
-          {
-            "id": "7dc0cfb5-d50d-4932-9919-6f8a86844a91",
-            "categoryId": "03a59c12-38f5-4c04-b267-26ad846605a7",
-            "mediaType": "PHOTO",
-            "mediaUrl": "/media/img/slideshow/20211220_211734.jpg",
-            "thumbnailUrl": null,
-            "caption": "Slideshow Image 20211220_211734.jpg",
-            "altText": "",
-            "sortOrder": 0,
-            "isActive": true,
-            "isSlideshow": true,
-            "createdAt": "2026-05-29T23:47:11.150Z"
           },
           {
             "id": "08f74030-521c-4e05-b9c9-04bc9a96ca2d",
@@ -2836,6 +2897,45 @@
             "isActive": true,
             "isSlideshow": true,
             "createdAt": "2026-05-29T23:47:11.207Z"
+          },
+          {
+            "id": "c8e85a8b-f588-4c18-bf2a-b76f5d8e183b",
+            "categoryId": "03a59c12-38f5-4c04-b267-26ad846605a7",
+            "mediaType": "PHOTO",
+            "mediaUrl": "/media/img/slideshow/.trashed-1746251695-img_9_1743658774819.jpg",
+            "thumbnailUrl": null,
+            "caption": "Slideshow Image .trashed-1746251695-img_9_1743658774819.jpg",
+            "altText": "",
+            "sortOrder": 0,
+            "isActive": true,
+            "isSlideshow": true,
+            "createdAt": "2026-05-29T23:47:11.077Z"
+          },
+          {
+            "id": "0fb8ee5b-9c7c-4116-ab03-49df2fccc699",
+            "categoryId": "03a59c12-38f5-4c04-b267-26ad846605a7",
+            "mediaType": "PHOTO",
+            "mediaUrl": "/media/img/slideshow/20190504_090117.jpg",
+            "thumbnailUrl": null,
+            "caption": "Slideshow Image 20190504_090117.jpg",
+            "altText": "",
+            "sortOrder": 0,
+            "isActive": true,
+            "isSlideshow": true,
+            "createdAt": "2026-05-29T23:47:11.127Z"
+          },
+          {
+            "id": "7dc0cfb5-d50d-4932-9919-6f8a86844a91",
+            "categoryId": "03a59c12-38f5-4c04-b267-26ad846605a7",
+            "mediaType": "PHOTO",
+            "mediaUrl": "/media/img/slideshow/20211220_211734.jpg",
+            "thumbnailUrl": null,
+            "caption": "Slideshow Image 20211220_211734.jpg",
+            "altText": "",
+            "sortOrder": 0,
+            "isActive": true,
+            "isSlideshow": true,
+            "createdAt": "2026-05-29T23:47:11.150Z"
           },
           {
             "id": "41c2a4a7-0136-4d9b-8e30-7e6336314bb3",

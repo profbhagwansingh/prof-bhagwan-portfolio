@@ -285,6 +285,20 @@ export default function GalleryAdminPage() {
     setFoldersLoading(false);
   }, []);
 
+  const handleSaveFolderOrder = async () => {
+    if (!orderDirty) return;
+    setIsSavingOrder(true);
+    try {
+      await api.patch("/api/gallery/admin/folders/order", { order: folderOrders });
+      toast({ type: "success", title: "Sort order saved" });
+      setOrderDirty(false);
+      fetchFolders();
+    } catch (err: any) { 
+      toast({ type: "error", title: "Failed", description: err?.message }); 
+    }
+    setIsSavingOrder(false);
+  };
+
   const fetchFolderFiles = useCallback(async (folder: string) => {
     setFolderFilesLoading(true);
     setFolderError(null);
@@ -516,16 +530,7 @@ export default function GalleryAdminPage() {
             <div className="flex gap-2">
               {orderDirty && (
                 <button
-                  onClick={async () => {
-                    setIsSavingOrder(true);
-                    try {
-                      await api.patch("/api/gallery/admin/folders/order", { order: folderOrders });
-                      toast({ type: "success", title: "Sort order saved" });
-                      setOrderDirty(false);
-                      fetchFolders();
-                    } catch (err: any) { toast({ type: "error", title: "Failed", description: err?.message }); }
-                    setIsSavingOrder(false);
-                  }}
+                  onClick={handleSaveFolderOrder}
                   disabled={isSavingOrder}
                   className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-medium transition-colors shadow-sm disabled:opacity-50"
                 >
@@ -574,6 +579,13 @@ export default function GalleryAdminPage() {
                       const val = parseInt(e.target.value) || 0;
                       setFolderOrders(prev => ({ ...prev, [f.folder]: val }));
                       setOrderDirty(true);
+                    }}
+                    onBlur={handleSaveFolderOrder}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        (e.target as HTMLInputElement).blur();
+                      }
                     }}
                     onClick={(e) => e.stopPropagation()}
                     className="w-12 h-10 text-center text-sm font-bold rounded-lg border border-[var(--border)] bg-[var(--bg-secondary)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 flex-shrink-0"
