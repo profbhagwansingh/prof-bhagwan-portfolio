@@ -21,7 +21,7 @@ export default function GalleryPage() {
   useEffect(() => {
     const fetchGalleryData = async () => {
       try {
-        const foldersRes = await api.get(`/api/gallery/folders?t=${Date.now()}`);
+        const foldersRes = await api.get('/api/gallery/folders');
         const folders: FolderInfo[] = Array.isArray(foldersRes.data) ? foldersRes.data : [];
 
         if (folders.length === 0) {
@@ -31,7 +31,7 @@ export default function GalleryPage() {
         }
 
         const fileRequests = folders.map(f =>
-          api.get(`/api/gallery/files?folder=${encodeURIComponent(f.folder)}&t=${Date.now()}`)
+          api.get(`/api/gallery/files?folder=${encodeURIComponent(f.folder)}`)
             .then(res => Array.isArray(res.data) ? res.data as string[] : [])
             .catch(() => [] as string[])
         );
