@@ -10,7 +10,7 @@ type FileData = {
 };
 
 export default function GalleryPage() {
-  const [allFiles, setAllFiles] = useState<FileData[]>([]);
+  const [folderData, setFolderData] = useState<{ folder: string; files: FileData[] }[]>([]);
   const [loading, setLoading] = useState(true);
   
   // Lightbox State
@@ -26,7 +26,7 @@ export default function GalleryPage() {
         const folders = Array.isArray(foldersRes.data) ? foldersRes.data : [];
 
         if (folders.length === 0) {
-          setAllFiles([]);
+          setFolderData([]);
           setLoading(false);
           return;
         }
@@ -46,25 +46,21 @@ export default function GalleryPage() {
 
         const folderResults = await Promise.all(fileRequests);
         
-        // Flatten into a single array for masonry layout
-        const combinedFiles: FileData[] = [];
-        
-        folderResults.forEach((result) => {
-          result.files.forEach((src) => {
+        // Map the results to our sectioned structure
+        const combinedData = folderResults.map((result) => {
+          const files = result.files.map((src) => {
             const fileName = src.split('/').pop() || "";
-            // Create a clean caption from filename
             const caption = fileName.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ") || "Gallery Image";
-            combinedFiles.push({ src, caption, folder: result.folder });
+            return { src, caption, folder: result.folder };
           });
+          return { folder: result.folder, files };
         });
 
-        // Shuffle the array slightly for a dynamic mixed look, but keep mostly ordered
-        // This makes the masonry grid look more organic as requested.
-        setAllFiles(combinedFiles);
+        setFolderData(combinedData);
         setLoading(false);
       } catch (err) {
         console.error("Error fetching gallery data:", err);
-        setAllFiles([]);
+        setFolderData([]);
         setLoading(false);
       }
     };
@@ -105,13 +101,12 @@ export default function GalleryPage() {
           <div className="w-12 h-12 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin"></div>
           <p className="text-ink-muted tracking-wide font-medium">Loading gallery...</p>
         </div>
-      ) : allFiles.length === 0 ? (
+      ) : folderData.length === 0 ? (
         <div className="py-32 text-center text-ink-muted tracking-wide">
           <p className="text-xl font-medium">No gallery content available.</p>
           <p className="text-sm mt-2 opacity-70">Check back later for updates.</p>
         </div>
-      ) : (
-        <div className="px-4 md:px-8 lg:px-12 max-w-[1800px] mx-auto py-16">
+        <div className="px-4 md:px-8 lg:px-12 max-w-[1800px] mx-auto py-16 space-y-24">
           <style dangerouslySetInnerHTML={{__html: `
             .custom-gallery-grid {
               display: grid;
@@ -148,46 +143,62 @@ export default function GalleryPage() {
             }
           `}} />
           
-          <div className="custom-gallery-grid">
-            {allFiles.map((file, i) => {
-              const isVideo = /\.(mp4|webm|ogg|mov)$/i.test(file.src);
-
-              return (
-                <div 
-                  key={i} 
-                  className="custom-gallery-item group"
-                  onClick={() => !isVideo && openLightbox(file.src, file.caption)}
-                >
-                  {isVideo ? (
-                     <a href={file.src} target="_blank" rel="noopener noreferrer" className="block relative w-full h-full">
-                        <div className="absolute inset-0 w-full h-full flex items-center justify-center bg-ink">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="white" className="opacity-80 group-hover:opacity-100 transition-opacity">
-                            <path d="M8 5v14l11-7z" />
-                          </svg>
-                        </div>
-                     </a>
-                  ) : (
-                    <>
-                      <img 
-                        src={file.src} 
-                        alt={file.caption} 
-                        loading="lazy" 
-                        className="custom-gallery-img" 
-                      />
-                      {/* Gradient Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-                      
-                      {/* Caption Text */}
-                      <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-out flex flex-col pointer-events-none">
-                        <span className="text-white/70 text-[10px] sm:text-xs font-semibold tracking-wider uppercase mb-1">{file.folder}</span>
-                        <span className="text-white font-medium text-xs sm:text-sm leading-tight drop-shadow-md line-clamp-2">{file.caption}</span>
-                      </div>
-                    </>
-                  )}
+          {folderData.map((folder, folderIdx) => {
+            if (!folder.files || folder.files.length === 0) return null;
+            return (
+              <div key={folderIdx} className="space-y-6">
+                <div className="flex items-center gap-4">
+                  <h2 className="text-2xl md:text-3xl font-display font-semibold text-ink capitalize tracking-tight">
+                    {folder.folder}
+                  </h2>
+                  <div className="h-px bg-ink/10 flex-1"></div>
+                  <span className="text-sm font-medium text-ink-muted bg-ink/5 px-3 py-1 rounded-full">
+                    {folder.files.length} {folder.files.length === 1 ? 'Item' : 'Items'}
+                  </span>
                 </div>
-              );
-            })}
-          </div>
+                
+                <div className="custom-gallery-grid">
+                  {folder.files.map((file, i) => {
+                    const isVideo = /\.(mp4|webm|ogg|mov)$/i.test(file.src);
+
+                    return (
+                      <div 
+                        key={i} 
+                        className="custom-gallery-item group"
+                        onClick={() => !isVideo && openLightbox(file.src, file.caption)}
+                      >
+                        {isVideo ? (
+                           <a href={file.src} target="_blank" rel="noopener noreferrer" className="block relative w-full h-full">
+                              <div className="absolute inset-0 w-full h-full flex items-center justify-center bg-ink">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="white" className="opacity-80 group-hover:opacity-100 transition-opacity">
+                                  <path d="M8 5v14l11-7z" />
+                                </svg>
+                              </div>
+                           </a>
+                        ) : (
+                          <>
+                            <img 
+                              src={file.src} 
+                              alt={file.caption} 
+                              loading="lazy" 
+                              className="custom-gallery-img" 
+                            />
+                            {/* Gradient Overlay */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                            
+                            {/* Caption Text */}
+                            <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-out flex flex-col pointer-events-none">
+                              <span className="text-white font-medium text-xs sm:text-sm leading-tight drop-shadow-md line-clamp-2">{file.caption}</span>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
         </div>
       )}
 
