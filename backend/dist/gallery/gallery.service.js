@@ -106,8 +106,11 @@ let GalleryService = GalleryService_1 = class GalleryService {
         });
     }
     resolveDir(folder) {
-        const safe = folder.replace(/\.\./g, '').replace(/^\/+/, '');
-        return path.join(this.mediaRoot, safe);
+        const targetPath = path.resolve(this.mediaRoot, folder.replace(/^\/+/, ''));
+        if (!targetPath.startsWith(path.resolve(this.mediaRoot))) {
+            throw new Error(`Invalid folder path: traversal attempt detected.`);
+        }
+        return targetPath;
     }
     async scanFiles(folder) {
         const dir = this.resolveDir(folder);

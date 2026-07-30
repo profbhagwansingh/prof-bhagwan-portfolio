@@ -74,9 +74,12 @@ export class GalleryService {
     //  GENERIC FILE MANAGEMENT (works for any subfolder)
     // ═══════════════════════════════════════════════════════════
     private resolveDir(folder: string): string {
-        // Prevent path traversal
-        const safe = folder.replace(/\.\./g, '').replace(/^\/+/, '');
-        return path.join(this.mediaRoot, safe);
+        // Prevent path traversal securely
+        const targetPath = path.resolve(this.mediaRoot, folder.replace(/^\/+/, ''));
+        if (!targetPath.startsWith(path.resolve(this.mediaRoot))) {
+            throw new Error(`Invalid folder path: traversal attempt detected.`);
+        }
+        return targetPath;
     }
 
     async scanFiles(folder: string): Promise<string[]> {

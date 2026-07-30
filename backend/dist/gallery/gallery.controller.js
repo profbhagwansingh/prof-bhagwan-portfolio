@@ -25,7 +25,8 @@ let GalleryController = class GalleryController {
     }
     getCategories() { return this.galleryService.getCategories(); }
     getItems(category, type, isSlideshow, page, limit) {
-        return this.galleryService.getItems(category, type, isSlideshow, +(page || 1), +(limit || 20));
+        const isSlideshowBool = isSlideshow !== undefined ? isSlideshow === 'true' : undefined;
+        return this.galleryService.getItems(category, type, isSlideshowBool, +(page || 1), +(limit || 20));
     }
     getPublicFolders() { return this.galleryService.getPublicGalleryFolders(); }
     getPublicFiles(folder) { return this.galleryService.scanFiles(folder); }
@@ -90,7 +91,7 @@ __decorate([
     __param(3, (0, common_1.Query)('page')),
     __param(4, (0, common_1.Query)('limit')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String, Boolean, String, String]),
+    __metadata("design:paramtypes", [String, String, String, String, String]),
     __metadata("design:returntype", void 0)
 ], GalleryController.prototype, "getItems", null);
 __decorate([
@@ -154,12 +155,16 @@ __decorate([
 ], GalleryController.prototype, "toggleSlideshow", null);
 __decorate([
     (0, common_1.Get)('admin/slideshow-files'),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), roles_guard_1.RolesGuard),
+    (0, roles_guard_1.Roles)(client_1.Role.SUPER_ADMIN, client_1.Role.ADMIN),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], GalleryController.prototype, "getSlideshowFiles", null);
 __decorate([
     (0, common_1.Post)('admin/slideshow-files/upload'),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), roles_guard_1.RolesGuard),
+    (0, roles_guard_1.Roles)(client_1.Role.SUPER_ADMIN, client_1.Role.ADMIN),
     (0, common_1.UseInterceptors)((0, platform_express_1.FilesInterceptor)('files', 20)),
     __param(0, (0, common_1.UploadedFiles)()),
     __metadata("design:type", Function),
@@ -168,6 +173,8 @@ __decorate([
 ], GalleryController.prototype, "uploadSlideshowFiles", null);
 __decorate([
     (0, common_1.Patch)('admin/slideshow-files/rename'),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), roles_guard_1.RolesGuard),
+    (0, roles_guard_1.Roles)(client_1.Role.SUPER_ADMIN, client_1.Role.ADMIN),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -175,6 +182,8 @@ __decorate([
 ], GalleryController.prototype, "renameSlideshowFile", null);
 __decorate([
     (0, common_1.Patch)('admin/slideshow-files/order'),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), roles_guard_1.RolesGuard),
+    (0, roles_guard_1.Roles)(client_1.Role.SUPER_ADMIN, client_1.Role.ADMIN),
     __param(0, (0, common_1.Body)('order')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Array]),
@@ -182,6 +191,8 @@ __decorate([
 ], GalleryController.prototype, "setSlideshowOrder", null);
 __decorate([
     (0, common_1.Delete)('admin/slideshow-files/:filename'),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), roles_guard_1.RolesGuard),
+    (0, roles_guard_1.Roles)(client_1.Role.SUPER_ADMIN, client_1.Role.ADMIN),
     __param(0, (0, common_1.Param)('filename')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -189,12 +200,16 @@ __decorate([
 ], GalleryController.prototype, "deleteSlideshowFile", null);
 __decorate([
     (0, common_1.Get)('admin/folders'),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), roles_guard_1.RolesGuard),
+    (0, roles_guard_1.Roles)(client_1.Role.SUPER_ADMIN, client_1.Role.ADMIN),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], GalleryController.prototype, "getGalleryFolders", null);
 __decorate([
     (0, common_1.Post)('admin/folders'),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), roles_guard_1.RolesGuard),
+    (0, roles_guard_1.Roles)(client_1.Role.SUPER_ADMIN, client_1.Role.ADMIN),
     __param(0, (0, common_1.Body)('name')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -202,6 +217,8 @@ __decorate([
 ], GalleryController.prototype, "createGalleryFolder", null);
 __decorate([
     (0, common_1.Patch)('admin/folders/rename'),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), roles_guard_1.RolesGuard),
+    (0, roles_guard_1.Roles)(client_1.Role.SUPER_ADMIN, client_1.Role.ADMIN),
     __param(0, (0, common_1.Body)('oldName')),
     __param(1, (0, common_1.Body)('newName')),
     __metadata("design:type", Function),
@@ -210,6 +227,8 @@ __decorate([
 ], GalleryController.prototype, "renameGalleryFolder", null);
 __decorate([
     (0, common_1.Delete)('admin/folders'),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), roles_guard_1.RolesGuard),
+    (0, roles_guard_1.Roles)(client_1.Role.SUPER_ADMIN, client_1.Role.ADMIN),
     __param(0, (0, common_1.Query)('folder')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -226,6 +245,8 @@ __decorate([
 ], GalleryController.prototype, "setFolderOrder", null);
 __decorate([
     (0, common_1.Get)('admin/files'),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), roles_guard_1.RolesGuard),
+    (0, roles_guard_1.Roles)(client_1.Role.SUPER_ADMIN, client_1.Role.ADMIN),
     __param(0, (0, common_1.Query)('folder')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -233,6 +254,8 @@ __decorate([
 ], GalleryController.prototype, "getGalleryFiles", null);
 __decorate([
     (0, common_1.Post)('admin/files/upload'),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), roles_guard_1.RolesGuard),
+    (0, roles_guard_1.Roles)(client_1.Role.SUPER_ADMIN, client_1.Role.ADMIN),
     (0, common_1.UseInterceptors)((0, platform_express_1.FilesInterceptor)('files', 20)),
     __param(0, (0, common_1.Query)('folder')),
     __param(1, (0, common_1.UploadedFiles)()),
@@ -242,6 +265,8 @@ __decorate([
 ], GalleryController.prototype, "uploadGalleryFiles", null);
 __decorate([
     (0, common_1.Patch)('admin/files/rename'),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), roles_guard_1.RolesGuard),
+    (0, roles_guard_1.Roles)(client_1.Role.SUPER_ADMIN, client_1.Role.ADMIN),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -249,6 +274,8 @@ __decorate([
 ], GalleryController.prototype, "renameGalleryFile", null);
 __decorate([
     (0, common_1.Delete)('admin/files/:filename'),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), roles_guard_1.RolesGuard),
+    (0, roles_guard_1.Roles)(client_1.Role.SUPER_ADMIN, client_1.Role.ADMIN),
     __param(0, (0, common_1.Query)('folder')),
     __param(1, (0, common_1.Param)('filename')),
     __metadata("design:type", Function),

@@ -18,11 +18,12 @@ export class GalleryController {
     getItems(
         @Query('category') category?: string,
         @Query('type') type?: MediaType,
-        @Query('isSlideshow') isSlideshow?: boolean,
+        @Query('isSlideshow') isSlideshow?: string,
         @Query('page') page?: string,
         @Query('limit') limit?: string,
     ) {
-        return this.galleryService.getItems(category, type, isSlideshow, +(page || 1), +(limit || 20));
+        const isSlideshowBool = isSlideshow !== undefined ? isSlideshow === 'true' : undefined;
+        return this.galleryService.getItems(category, type, isSlideshowBool, +(page || 1), +(limit || 20));
     }
 
     @Get('folders')
@@ -61,44 +62,62 @@ export class GalleryController {
 
     // ─── ADMIN: SLIDESHOW FILES ──────────────────────────────
     @Get('admin/slideshow-files')
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @Roles(Role.SUPER_ADMIN, Role.ADMIN)
     getSlideshowFiles() { return this.galleryService.scanSlideshowFiles(); }
 
     @Post('admin/slideshow-files/upload')
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @Roles(Role.SUPER_ADMIN, Role.ADMIN)
     @UseInterceptors(FilesInterceptor('files', 20))
     uploadSlideshowFiles(@UploadedFiles() files: any[]) {
         return this.galleryService.uploadSlideshowFiles(files);
     }
 
     @Patch('admin/slideshow-files/rename')
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @Roles(Role.SUPER_ADMIN, Role.ADMIN)
     renameSlideshowFile(@Body() data: { oldName: string; newName: string }) {
         return this.galleryService.renameSlideshowFile(data.oldName, data.newName);
     }
 
     @Patch('admin/slideshow-files/order')
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @Roles(Role.SUPER_ADMIN, Role.ADMIN)
     setSlideshowOrder(@Body('order') order: string[]) {
         return this.galleryService.setSlideshowOrder(order);
     }
 
     @Delete('admin/slideshow-files/:filename')
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @Roles(Role.SUPER_ADMIN, Role.ADMIN)
     deleteSlideshowFile(@Param('filename') filename: string) {
         return this.galleryService.deleteSlideshowFile(filename);
     }
 
     // ─── ADMIN: GALLERY FILES (any folder) ───────────────────
     @Get('admin/folders')
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @Roles(Role.SUPER_ADMIN, Role.ADMIN)
     getGalleryFolders() { return this.galleryService.scanGalleryFolders(); }
 
     @Post('admin/folders')
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @Roles(Role.SUPER_ADMIN, Role.ADMIN)
     createGalleryFolder(@Body('name') name: string) {
         return this.galleryService.createFolder(name);
     }
 
     @Patch('admin/folders/rename')
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @Roles(Role.SUPER_ADMIN, Role.ADMIN)
     renameGalleryFolder(@Body('oldName') oldName: string, @Body('newName') newName: string) {
         return this.galleryService.renameFolder(oldName, newName);
     }
 
     @Delete('admin/folders')
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @Roles(Role.SUPER_ADMIN, Role.ADMIN)
     deleteGalleryFolder(@Query('folder') folder: string) {
         return this.galleryService.deleteFolder(folder);
     }
@@ -111,22 +130,30 @@ export class GalleryController {
     }
 
     @Get('admin/files')
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @Roles(Role.SUPER_ADMIN, Role.ADMIN)
     getGalleryFiles(@Query('folder') folder: string) {
         return this.galleryService.scanFiles(folder);
     }
 
     @Post('admin/files/upload')
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @Roles(Role.SUPER_ADMIN, Role.ADMIN)
     @UseInterceptors(FilesInterceptor('files', 20))
     uploadGalleryFiles(@Query('folder') folder: string, @UploadedFiles() files: any[]) {
         return this.galleryService.uploadFiles(folder, files);
     }
 
     @Patch('admin/files/rename')
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @Roles(Role.SUPER_ADMIN, Role.ADMIN)
     renameGalleryFile(@Body() data: { folder: string; oldName: string; newName: string }) {
         return this.galleryService.renameFile(data.folder, data.oldName, data.newName);
     }
 
     @Delete('admin/files/:filename')
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @Roles(Role.SUPER_ADMIN, Role.ADMIN)
     deleteGalleryFile(@Query('folder') folder: string, @Param('filename') filename: string) {
         return this.galleryService.deleteFile(folder, filename);
     }

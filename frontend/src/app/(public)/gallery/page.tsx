@@ -156,7 +156,7 @@ export default function GalleryPage() {
                     className="text-sm font-semibold tracking-widest uppercase border border-gray-900 text-gray-900 px-8 py-3 hover:bg-gray-900 hover:text-white transition-colors duration-300" 
                     onClick={() => toggleExpand(index)}
                   >
-                    {fd.expanded ? 'View Less' : `View More (${fd.files.length - 10} more)`}
+                    {fd.expanded ? 'View Less' : `View More (${fd.files.length - 6} more)`}
                   </button>
                 </div>
               )}

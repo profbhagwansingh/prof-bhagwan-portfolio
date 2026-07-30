@@ -23,7 +23,7 @@ export declare class GalleryController {
         slug: string;
         sortOrder: number;
     })[]>;
-    getItems(category?: string, type?: MediaType, isSlideshow?: boolean, page?: string, limit?: string): Promise<{
+    getItems(category?: string, type?: MediaType, isSlideshow?: string, page?: string, limit?: string): Promise<{
         items: ({
             category: {
                 id: string;
