@@ -106,6 +106,7 @@ export default function GalleryPage() {
           <p className="text-xl font-medium">No gallery content available.</p>
           <p className="text-sm mt-2 opacity-70">Check back later for updates.</p>
         </div>
+      ) : (
         <div className="px-4 md:px-8 lg:px-12 max-w-[1800px] mx-auto py-16 space-y-24">
           <style dangerouslySetInnerHTML={{__html: `
             .custom-gallery-grid {
