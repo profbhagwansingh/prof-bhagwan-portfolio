@@ -105,19 +105,25 @@ export default function GalleryPage() {
                 {fd.info.label}
               </h2>
 
-              <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
-                {(fd.expanded ? fd.files : fd.files.slice(0, 12)).map((src, i) => {
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 auto-rows-[250px] gap-4 grid-flow-dense">
+                {(fd.expanded ? fd.files : fd.files.slice(0, 6)).map((src, i) => {
                   const isVideo = /\.(mp4|webm|ogg|mov)$/i.test(src);
                   const caption = formatCaption(src);
+
+                  let spanClass = "col-span-1 row-span-1";
+                  const modIndex = i % 6;
+                  if (modIndex === 0) spanClass = "md:row-span-2"; // Tile 1: tall portrait
+                  else if (modIndex === 2) spanClass = "md:col-span-2"; // Tile 3: wide landscape
+                  else if (modIndex === 5) spanClass = "md:row-span-2"; // Tile 6: tall portrait
 
                   return (
                     <div 
                       key={i} 
-                      className="relative group break-inside-avoid overflow-hidden bg-gray-50 cursor-pointer"
+                      className={`relative group overflow-hidden bg-gray-100 rounded-2xl cursor-pointer ${spanClass}`}
                       onClick={() => !isVideo && openLightbox(src, caption)}
                     >
                       {isVideo ? (
-                         <a href={src} target="_blank" rel="noopener noreferrer" className="w-full block relative" style={{ aspectRatio: '16/9' }}>
+                         <a href={src} target="_blank" rel="noopener noreferrer" className="w-full h-full block relative">
                             <div className="w-full h-full flex items-center justify-center bg-[#111]">
                               <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="white">
                                 <path d="M8 5v14l11-7z" />
@@ -125,19 +131,26 @@ export default function GalleryPage() {
                             </div>
                          </a>
                       ) : (
-                        <img 
-                          src={src} 
-                          alt={caption} 
-                          loading="lazy" 
-                          className="w-full h-auto block transition-transform duration-700 ease-out group-hover:scale-105" 
-                        />
+                        <>
+                          <img 
+                            src={src} 
+                            alt={caption} 
+                            loading="lazy" 
+                            className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" 
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-90 transition-opacity duration-300" />
+                          <div className="absolute bottom-4 left-4 right-4 flex flex-col pointer-events-none">
+                            <span className="text-white/70 font-light text-sm md:text-base tracking-widest">{`${i + 1}S`}</span>
+                            <span className="text-white font-medium text-sm md:text-base tracking-wide truncate">{caption}</span>
+                          </div>
+                        </>
                       )}
                     </div>
                   );
                 })}
               </div>
 
-              {fd.files.length > 10 && (
+              {fd.files.length > 6 && (
                 <div className="mt-12 text-center">
                   <button 
                     className="text-sm font-semibold tracking-widest uppercase border border-gray-900 text-gray-900 px-8 py-3 hover:bg-gray-900 hover:text-white transition-colors duration-300" 
