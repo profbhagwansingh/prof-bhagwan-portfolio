@@ -9,18 +9,13 @@ interface FolderInfo {
   count: number;
 }
 
-interface FolderData {
-  info: FolderInfo;
-  files: string[];
-  expanded: boolean;
-}
-
 export default function GalleryPage() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxImg, setLightboxImg] = useState("");
   const [lightboxCaption, setLightboxCaption] = useState("");
 
-  const [folderData, setFolderData] = useState<FolderData[]>([]);
+  const [allFiles, setAllFiles] = useState<{ src: string; caption: string }[]>([]);
+  const [expanded, setExpanded] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -30,7 +25,7 @@ export default function GalleryPage() {
         const folders: FolderInfo[] = Array.isArray(foldersRes.data) ? foldersRes.data : [];
 
         if (folders.length === 0) {
-          setFolderData([]);
+          setAllFiles([]);
           setLoading(false);
           return;
         }
@@ -41,17 +36,18 @@ export default function GalleryPage() {
             .catch(() => [] as string[])
         );
 
-        const allFiles = await Promise.all(fileRequests);
+        const folderFilesArrays = await Promise.all(fileRequests);
+        
+        // Flatten all files from all folders into a single array
+        const combinedFiles: { src: string; caption: string }[] = [];
+        folderFilesArrays.forEach(files => {
+          files.forEach(src => {
+            const caption = src.split('/').pop()?.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ") || "Gallery Image";
+            combinedFiles.push({ src, caption });
+          });
+        });
 
-        const combined: FolderData[] = folders
-          .map((info, i) => ({
-            info,
-            files: allFiles[i],
-            expanded: false,
-          }))
-          .filter(fd => fd.files.length > 0);
-
-        setFolderData(combined);
+        setAllFiles(combinedFiles);
       } catch (err) {
         console.error("Failed to fetch gallery data:", err);
       } finally {
@@ -62,12 +58,6 @@ export default function GalleryPage() {
     fetchGalleryData();
   }, []);
 
-  const toggleExpand = (index: number) => {
-    setFolderData(prev =>
-      prev.map((fd, i) => i === index ? { ...fd, expanded: !fd.expanded } : fd)
-    );
-  };
-
   const openLightbox = (src: string, alt: string) => {
     setLightboxImg(src);
     setLightboxCaption(alt);
@@ -76,10 +66,6 @@ export default function GalleryPage() {
 
   const closeLightbox = () => {
     setLightboxOpen(false);
-  };
-
-  const formatCaption = (filename: string) => {
-    return filename.split('/').pop()?.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ") || "Gallery Image";
   };
 
   return (
@@ -92,76 +78,66 @@ export default function GalleryPage() {
         <div className="py-20 text-center text-gray-500 tracking-wide">
           <p>Loading gallery...</p>
         </div>
-      ) : folderData.length === 0 ? (
+      ) : allFiles.length === 0 ? (
         <div className="py-20 text-center text-gray-500 tracking-wide">
           <p>No gallery content available.</p>
         </div>
       ) : (
         <div className="px-4 md:px-8 lg:px-12 max-w-[1600px] mx-auto py-16">
-          {folderData.map((fd, index) => (
-            <div key={fd.info.folder} className="mb-24">
-              <h2 className="text-xl md:text-2xl uppercase tracking-widest mb-10 text-gray-800 flex items-center gap-6">
-                <span className="w-12 h-[2px] bg-gray-900"></span>
-                {fd.info.label}
-              </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 auto-rows-[250px] gap-4 grid-flow-dense">
+            {(expanded ? allFiles : allFiles.slice(0, 6)).map((file, i) => {
+              const isVideo = /\.(mp4|webm|ogg|mov)$/i.test(file.src);
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 auto-rows-[250px] gap-4 grid-flow-dense">
-                {(fd.expanded ? fd.files : fd.files.slice(0, 6)).map((src, i) => {
-                  const isVideo = /\.(mp4|webm|ogg|mov)$/i.test(src);
-                  const caption = formatCaption(src);
+              let spanClass = "col-span-1 row-span-1";
+              const modIndex = i % 6;
+              if (modIndex === 0) spanClass = "md:row-span-2"; // Tile 1: tall portrait
+              else if (modIndex === 2) spanClass = "md:col-span-2"; // Tile 3: wide landscape
+              else if (modIndex === 5) spanClass = "md:row-span-2"; // Tile 6: tall portrait
 
-                  let spanClass = "col-span-1 row-span-1";
-                  const modIndex = i % 6;
-                  if (modIndex === 0) spanClass = "md:row-span-2"; // Tile 1: tall portrait
-                  else if (modIndex === 2) spanClass = "md:col-span-2"; // Tile 3: wide landscape
-                  else if (modIndex === 5) spanClass = "md:row-span-2"; // Tile 6: tall portrait
-
-                  return (
-                    <div 
-                      key={i} 
-                      className={`relative group overflow-hidden bg-gray-100 rounded-2xl cursor-pointer ${spanClass}`}
-                      onClick={() => !isVideo && openLightbox(src, caption)}
-                    >
-                      {isVideo ? (
-                         <a href={src} target="_blank" rel="noopener noreferrer" className="w-full h-full block relative">
-                            <div className="w-full h-full flex items-center justify-center bg-[#111]">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="white">
-                                <path d="M8 5v14l11-7z" />
-                              </svg>
-                            </div>
-                         </a>
-                      ) : (
-                        <>
-                          <img 
-                            src={src} 
-                            alt={caption} 
-                            loading="lazy" 
-                            className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" 
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-90 transition-opacity duration-300" />
-                          <div className="absolute bottom-4 left-4 right-4 flex flex-col pointer-events-none">
-                            <span className="text-white/70 font-light text-sm md:text-base tracking-widest">{`${i + 1}S`}</span>
-                            <span className="text-white font-medium text-sm md:text-base tracking-wide truncate">{caption}</span>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-
-              {fd.files.length > 6 && (
-                <div className="mt-12 text-center">
-                  <button 
-                    className="text-sm font-semibold tracking-widest uppercase border border-gray-900 text-gray-900 px-8 py-3 hover:bg-gray-900 hover:text-white transition-colors duration-300" 
-                    onClick={() => toggleExpand(index)}
-                  >
-                    {fd.expanded ? 'View Less' : `View More (${fd.files.length - 6} more)`}
-                  </button>
+              return (
+                <div 
+                  key={i} 
+                  className={`relative group overflow-hidden bg-gray-100 rounded-2xl cursor-pointer ${spanClass}`}
+                  onClick={() => !isVideo && openLightbox(file.src, file.caption)}
+                >
+                  {isVideo ? (
+                     <a href={file.src} target="_blank" rel="noopener noreferrer" className="w-full h-full block relative">
+                        <div className="w-full h-full flex items-center justify-center bg-[#111]">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="white">
+                            <path d="M8 5v14l11-7z" />
+                          </svg>
+                        </div>
+                     </a>
+                  ) : (
+                    <>
+                      <img 
+                        src={file.src} 
+                        alt={file.caption} 
+                        loading="lazy" 
+                        className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" 
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-90 transition-opacity duration-300" />
+                      <div className="absolute bottom-4 left-4 right-4 flex flex-col pointer-events-none">
+                        <span className="text-white/70 font-light text-sm md:text-base tracking-widest">{`${i + 1}S`}</span>
+                        <span className="text-white font-medium text-sm md:text-base tracking-wide truncate">{file.caption}</span>
+                      </div>
+                    </>
+                  )}
                 </div>
-              )}
+              );
+            })}
+          </div>
+
+          {allFiles.length > 6 && (
+            <div className="mt-12 text-center">
+              <button 
+                className="text-sm font-semibold tracking-widest uppercase border border-gray-900 text-gray-900 px-8 py-3 hover:bg-gray-900 hover:text-white transition-colors duration-300" 
+                onClick={() => setExpanded(!expanded)}
+              >
+                {expanded ? 'View Less' : `View More (${allFiles.length - 6} more)`}
+              </button>
             </div>
-          ))}
+          )}
         </div>
       )}
 
