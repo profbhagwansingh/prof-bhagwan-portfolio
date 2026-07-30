@@ -193,14 +193,14 @@ export default function ECRRBPage() {
               <p style={{ color: "#64748b", fontSize: "1rem", lineHeight: "1.6" }}>
                 Review the complete, legally-binding terms of reference and standard operating procedures for the ECRRB.
               </p>
-              <button style={{
+              <a href="/media/pdf/ecrrb-constitution.pdf" download style={{
                 display: "inline-flex", alignItems: "center", gap: "10px",
                 backgroundColor: "#4A154B", color: "white", padding: "12px 24px",
                 borderRadius: "8px", fontWeight: "600", border: "none", cursor: "pointer",
-                marginTop: "10px"
+                marginTop: "10px", textDecoration: "none"
               }}>
                 <FileDown size={18} /> Download Full ECRRB Constitution (PDF)
-              </button>
+              </a>
             </div>
           </div>
 

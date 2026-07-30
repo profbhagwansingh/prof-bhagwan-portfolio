@@ -31,20 +31,23 @@ export function Header() {
             <li><Link href="/publications" className={isActive("/publications")}>Publication & Research</Link></li>
             <li><Link href="/invited-lectures" className={isActive("/invited-lectures")}>Invited Lectures</Link></li>
             <li><Link href="/gallery" className={isActive("/gallery")}>Gallery</Link></li>
+            <li><Link href="/alumni" className={isActive("/alumni")}>Alumni Connect</Link></li>
             <li><Link href="/testimonials" className={isActive("/testimonials")}>Testimonials</Link></li>
-            <li><Link href="/talk-to-prof" className={isActive("/talk-to-prof")}>Talk to Prof</Link></li>
+            <li><Link href="/contact" className={isActive("/contact")}>Talk to Prof</Link></li>
             <li><Link href="/ecrrb" className={isActive("/ecrrb")}>Ethical Committee</Link></li>
           </ul>
         </nav>
 
-        <div 
+        <button 
           className={`hamburger ${mobileMenuOpen ? 'active' : ''}`} 
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Toggle navigation menu"
+          aria-expanded={mobileMenuOpen}
         >
           <span className="bar"></span>
           <span className="bar"></span>
           <span className="bar"></span>
-        </div>
+        </button>
       </div>
 
       <nav className={`mobile-nav ${mobileMenuOpen ? 'active' : ''}`}>
@@ -54,8 +57,9 @@ export function Header() {
           <li><Link href="/publications" className={isActive("/publications")} onClick={() => setMobileMenuOpen(false)}>Publication & Research</Link></li>
           <li><Link href="/invited-lectures" className={isActive("/invited-lectures")} onClick={() => setMobileMenuOpen(false)}>Invited Lectures</Link></li>
           <li><Link href="/gallery" className={isActive("/gallery")} onClick={() => setMobileMenuOpen(false)}>Gallery</Link></li>
+          <li><Link href="/alumni" className={isActive("/alumni")} onClick={() => setMobileMenuOpen(false)}>Alumni Connect</Link></li>
           <li><Link href="/testimonials" className={isActive("/testimonials")} onClick={() => setMobileMenuOpen(false)}>Testimonials</Link></li>
-          <li><Link href="/talk-to-prof" className={isActive("/talk-to-prof")} onClick={() => setMobileMenuOpen(false)}>Talk to Prof</Link></li>
+          <li><Link href="/contact" className={isActive("/contact")} onClick={() => setMobileMenuOpen(false)}>Talk to Prof</Link></li>
           <li><Link href="/ecrrb" className={isActive("/ecrrb")} onClick={() => setMobileMenuOpen(false)}>Ethical Committee</Link></li>
         </ul>
       </nav>

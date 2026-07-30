@@ -13,6 +13,7 @@ export function AlumniPage() {
   const [visible, setVisible] = useState(false);
   const [status,  setStatus]  = useState<Status>("idle");
   const [preview, setPreview] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [form, setForm] = useState({
     fullName: "", email: "", whatsapp: "",
     teachingMode: "", degreeProgram: "", institute: "",
@@ -30,6 +31,7 @@ export function AlumniPage() {
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    setSelectedFile(file);
     const reader = new FileReader();
     reader.onload = () => setPreview(reader.result as string);
     reader.readAsDataURL(file);
@@ -39,11 +41,17 @@ export function AlumniPage() {
     e.preventDefault();
     setStatus("loading");
     try {
-      // pictureUrl (Base64 data-URI from FileReader) is intentionally excluded —
-      // sending raw Base64 in JSON causes a DB overflow / 500 error on the backend.
-      // The profile photo preview is shown locally only.
-      const { ...payload } = form;
-      await api.post("/api/submissions/alumni", payload);
+      const formData = new FormData();
+      Object.entries(form).forEach(([key, val]) => {
+        if (val) formData.append(key, val);
+      });
+      if (selectedFile) {
+        formData.append("picture", selectedFile);
+      }
+      
+      await api.post("/api/submissions/alumni", formData, {
+        headers: { "Content-Type": "multipart/form-data" }
+      });
       setStatus("success");
     } catch {
       setStatus("error");

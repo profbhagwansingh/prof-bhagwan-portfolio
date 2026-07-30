@@ -68,13 +68,13 @@ export function ContactPage() {
                 {
                   icon: Mail,
                   label: "Email",
-                  lines: ["bhagwansingh@dsmm.ac.in", "profbhagwansingh@gmail.com"],
-                  href: "mailto:bhagwansingh@dsmm.ac.in",
+                  lines: ["bhagwan.singh@cuj.ac.in", "profbhagwansingh@gmail.com"],
+                  href: "mailto:bhagwan.singh@cuj.ac.in",
                 },
                 {
                   icon: MapPin,
                   label: "Office",
-                  lines: ["Department of Management Studies", "DSMM College, India"],
+                  lines: ["Department of Business Administration", "Central University of Jharkhand, India"],
                   href: null,
                 },
                 {

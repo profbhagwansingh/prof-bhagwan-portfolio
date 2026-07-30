@@ -82,10 +82,23 @@ async function bootstrap() {
   // ── Auto-seed admin on startup ─────────────────────────────────────────────
   const prisma = new PrismaClient();
 
-  // Run migrations on startup
+  // Run backup and migrations on startup
   const { execSync } = await import('child_process');
+  const path = await import('path');
+  
   try {
-    execSync('npx prisma migrate deploy --schema=/opt/render/project/src/backend/prisma/schema.prisma', { stdio: 'inherit' });
+    // 1. Run backup
+    const backupScript = path.join(__dirname, '..', 'backup-db.js');
+    try {
+      execSync(`node "${backupScript}"`, { stdio: 'inherit' });
+      logger.log('✅ Pre-migration database backup completed');
+    } catch (e) {
+      logger.warn('⚠️ Backup script failed or not found, continuing with migration', e);
+    }
+
+    // 2. Run migration
+    const schemaPath = path.join(__dirname, '..', 'prisma', 'schema.prisma');
+    execSync(`npx prisma migrate deploy --schema="${schemaPath}"`, { stdio: 'inherit' });
     logger.log('✅ Database migrations applied');
   } catch (e) {
     logger.error('Migration failed', e);

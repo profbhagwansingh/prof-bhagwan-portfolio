@@ -16,6 +16,7 @@ export default function HomePage() {
   const [invitedLecturesCount, setInvitedLecturesCount] = useState<number>(0);
   const [settings, setSettings] = useState<Record<string, string>>({});
   const [activeIndex, setActiveIndex] = useState(0);
+  const [featuredPubs, setFeaturedPubs] = useState<any[]>([]);
 
   const getExperienceYears = () => {
     const start = new Date(2000, 8, 1); // September 2000
@@ -55,6 +56,15 @@ export default function HomePage() {
             data.settings.forEach((s: any) => { map[s.key] = s.value; });
             setSettings(map);
           }
+        }
+      })
+      .catch(console.error);
+
+    // Fetch featured publications (top 3)
+    api.get('/api/publications?limit=3')
+      .then(res => {
+        if (res.data && res.data.items) {
+          setFeaturedPubs(res.data.items);
         }
       })
       .catch(console.error);
@@ -359,18 +369,18 @@ export default function HomePage() {
             <div className="container animate-on-scroll">
               <h2 className="section-title">Featured Publications</h2>
               <div className="publications-grid">
-                <div className="publication-card">
-                  <h4>Drone Delivery Services</h4>
-                  <p>Investigating user acceptance of drone-based food delivery services in India. Published in the British Food Journal (2024).</p>
-                </div>
-                <div className="publication-card">
-                  <h4>Green Consumption</h4>
-                  <p>A study on the effect of green marketing stimuli on consumer behavior in the Indian market. Published in Society and Business Review (2021).</p>
-                </div>
-                <div className="publication-card">
-                  <h4>CRISP Research Model</h4>
-                  <p>Presenting a new structured approach for the presentation of research, theses, and projects, now adopted by universities across India.</p>
-                </div>
+                {featuredPubs.length > 0 ? (
+                  featuredPubs.map((pub) => (
+                    <div className="publication-card" key={pub.id}>
+                      <h4>{pub.title}</h4>
+                      <p>
+                        {pub.abstract || `Published in ${pub.journal} (${pub.year}).`}
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  <p style={{ textAlign: "center", width: "100%" }}>Loading publications...</p>
+                )}
               </div>
               <div className="text-center section-cta">
                 <Link href="/publications" className="cta-button">View All Publications</Link>
@@ -380,36 +390,7 @@ export default function HomePage() {
         </section>
       </section>
 
-      <section className="developers-section section-padding bg-light">
-        <div className="container animate-on-scroll">
-          <h2 className="section-title">Web Development Team</h2>
-          <p className="intro-text text-center">
-            Designed and developed by the students of Central University of Jharkhand.
-          </p>
 
-          <div className="developers-grid">
-            <div className="developer-card">
-              <div className="dev-avatar">👨‍💻</div> <h4>Student Name</h4>
-              <p className="dev-role">Frontend Developer</p>
-              <p className="dev-dept">Dept. of Computer Science</p>
-            </div>
-
-            <div className="developer-card">
-              <div className="dev-avatar">🎨</div>
-              <h4>Student Name</h4>
-              <p className="dev-role">UI/UX Designer</p>
-              <p className="dev-dept">Dept. of Management</p>
-            </div>
-
-            <div className="developer-card">
-              <div className="dev-avatar">⚙️</div>
-              <h4>Student Name</h4>
-              <p className="dev-role">Backend Developer</p>
-              <p className="dev-dept">Dept. of Computer Science</p>
-            </div>
-          </div>
-        </div>
-      </section>
       {/* ========== NEW HOME PAGE SECTIONS END ========== */}
     </main>
   );

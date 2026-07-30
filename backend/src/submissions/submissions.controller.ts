@@ -1,9 +1,12 @@
-import { Controller, Get, Post, Patch, Delete, Body, Param, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, Query, UseGuards, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard, Roles } from '../auth/roles.guard';
 import { Throttle } from '@nestjs/throttler';
 import { SubmissionsService } from './submissions.service';
 import { Role, SubmissionStatus, AlumniStatus } from '@prisma/client';
+import * as fs from 'fs';
+import * as path from 'path';
 
 @Controller('api/submissions')
 export class SubmissionsController {
@@ -18,7 +21,15 @@ export class SubmissionsController {
 
     @Post('alumni')
     @Throttle({ default: { limit: 5, ttl: 60000 } })
-    createAlumni(@Body() data: any) {
+    @UseInterceptors(FileInterceptor('picture'))
+    createAlumni(@Body() data: any, @UploadedFile() file: Express.Multer.File) {
+        if (file) {
+            const mediaRoot = path.join(process.cwd(), '..', 'frontend', 'public', 'media', 'img', 'alumni');
+            if (!fs.existsSync(mediaRoot)) fs.mkdirSync(mediaRoot, { recursive: true });
+            const safeName = `${Date.now()}_${file.originalname.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+            fs.writeFileSync(path.join(mediaRoot, safeName), file.buffer);
+            data.pictureUrl = `/media/img/alumni/${safeName}`;
+        }
         return this.subService.createAlumni(data);
     }
 
