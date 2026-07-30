@@ -243,7 +243,44 @@ export default function AboutPage() {
                       </div>
                     ))
                   ) : (
-                    <p>No achievements to display.</p>
+                    <>
+                      <div 
+                        className="achievement-card" 
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => openImageModal('/media/img/achievements/crisp.png', 'CRISP Model')}
+                      >
+                        <h4>Developed CRISP Model</h4>
+                        <p>Developed the CRISP Model for presentation of RTP (Research/Thesis/Project), appreciated and adopted by reputed national universities.</p>
+                      </div>
+                      <div className="achievement-card">
+                        <h4>Best Teacher Award (2012)</h4>
+                        <p>Received Best Teacher Award from the Rotary Club Dharamshala, H. P. (2012).</p>
+                      </div>
+                      <div className="achievement-card">
+                        <h4>Best Teacher Award (2011)</h4>
+                        <p>Received Best Teacher Award (2011) presented by the Hon’ble Vice Chancellor, Mahatma Gandhi Kashi Vidyapeth, Varanasi (organized by JDIMT, Varanasi).</p>
+                      </div>
+                      <div className="achievement-card">
+                        <h4>First Best Paper Award (2010)</h4>
+                        <p>First Best Paper Award (Feb 2010) among ~218 papers at the International Conference organized by Gardi Vidyapith University, Rajkot, Gujarat.</p>
+                      </div>
+                      <div className="achievement-card">
+                        <h4>Conference & FDP Leadership</h4>
+                        <p>Chaired several international and national FDPs, seminars, workshops, and conferences at reputed organizations.</p>
+                      </div>
+                      <div className="achievement-card">
+                        <h4>Post-Doctoral Supervision</h4>
+                        <p>Guided post-doctoral student Dr. Sachin Kumar (Green Marketing), who is now posted at NIT Hamirpur.</p>
+                      </div>
+                      <div className="achievement-card">
+                        <h4>Publications & Presentations</h4>
+                        <p>Authored {publicationsCount > 0 ? publicationsCount : 54} publications and {chaptersCount > 0 ? chaptersCount : 10} book chapters; delivered {lecturesCount > 0 ? lecturesCount : 65}+ invited lectures and presentations at national & international conferences.</p>
+                      </div>
+                      <div className="achievement-card">
+                        <h4>Guest Lectures</h4>
+                        <p>Delivered guest lectures at leading institutions across India on IT, Web-Based Advertising, and Marketing.</p>
+                      </div>
+                    </>
                   )}
                 </div>
               </div>
