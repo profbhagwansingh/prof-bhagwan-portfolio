@@ -23,7 +23,7 @@ export class SubmissionsController {
     @Post('alumni')
     @Throttle({ default: { limit: 5, ttl: 60000 } })
     @UseInterceptors(FileInterceptor('picture'))
-    createAlumni(@Body() data: any, @UploadedFile() file: Express.Multer.File) {
+    createAlumni(@Body() data: any, @UploadedFile() file: any) {
         if (file) {
             const mediaRoot = path.join(process.cwd(), '..', 'frontend', 'public', 'media', 'img', 'alumni');
             if (!fs.existsSync(mediaRoot)) fs.mkdirSync(mediaRoot, { recursive: true });
