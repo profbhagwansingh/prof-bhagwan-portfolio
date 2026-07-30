@@ -84,19 +84,19 @@ export default function GalleryPage() {
         </div>
       ) : (
         <div className="px-4 md:px-8 lg:px-12 max-w-[1600px] mx-auto py-16">
-          <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-4 space-y-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
             {(expanded ? allFiles : allFiles.slice(0, 20)).map((file, i) => {
               const isVideo = /\.(mp4|webm|ogg|mov)$/i.test(file.src);
 
               return (
                 <div 
                   key={i} 
-                  className="relative group overflow-hidden bg-gray-100 rounded-2xl cursor-pointer break-inside-avoid"
+                  className="relative group overflow-hidden bg-gray-100 rounded-xl cursor-pointer aspect-[4/3]"
                   onClick={() => !isVideo && openLightbox(file.src, file.caption)}
                 >
                   {isVideo ? (
-                     <a href={file.src} target="_blank" rel="noopener noreferrer" className="w-full block relative min-h-[250px]">
-                        <div className="absolute inset-0 w-full h-full flex items-center justify-center bg-[#111]">
+                     <a href={file.src} target="_blank" rel="noopener noreferrer" className="w-full h-full block">
+                        <div className="w-full h-full flex items-center justify-center bg-[#111]">
                           <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="white">
                             <path d="M8 5v14l11-7z" />
                           </svg>
@@ -108,12 +108,11 @@ export default function GalleryPage() {
                         src={file.src} 
                         alt={file.caption} 
                         loading="lazy" 
-                        className="w-full h-auto block transition-transform duration-700 ease-out group-hover:scale-105" 
+                        className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110" 
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-90 transition-opacity duration-300" />
-                      <div className="absolute bottom-4 left-4 right-4 flex flex-col pointer-events-none">
-                        <span className="text-white/70 font-light text-sm md:text-base tracking-widest">{`${i + 1}S`}</span>
-                        <span className="text-white font-medium text-sm md:text-base tracking-wide truncate">{file.caption}</span>
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      <div className="absolute bottom-0 left-0 right-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
+                        <span className="text-white font-medium text-xs sm:text-sm tracking-wide line-clamp-2">{file.caption}</span>
                       </div>
                     </>
                   )}
@@ -136,11 +135,28 @@ export default function GalleryPage() {
       )}
 
       {/* Lightbox Modal */}
-      <div id="lightboxModal" className="lightbox" style={{ display: lightboxOpen ? 'flex' : 'none', zIndex: 50, position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.95)', alignItems: 'center', justifyItems: 'center', flexDirection: 'column', padding: '20px' }}>
-        <span className="close-lightbox" style={{ position: 'absolute', top: '20px', right: '30px', color: 'white', fontSize: '40px', cursor: 'pointer' }} onClick={closeLightbox}>&times;</span>
-        <img className="lightbox-content" id="lightboxImg" src={lightboxImg} alt={lightboxCaption} style={{ maxHeight: '80vh', maxWidth: '100%', objectFit: 'contain', margin: 'auto' }} />
-        <div id="lightboxCaption" style={{ color: 'white', textAlign: 'center', marginTop: '15px', fontSize: '18px' }}>{lightboxCaption}</div>
-      </div>
+      {lightboxOpen && (
+        <div 
+          className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4"
+          onClick={closeLightbox}
+        >
+          <button 
+            className="absolute top-5 right-6 text-white/80 hover:text-white text-4xl font-light transition-colors z-10"
+            onClick={closeLightbox}
+          >
+            &times;
+          </button>
+          <img 
+            src={lightboxImg} 
+            alt={lightboxCaption} 
+            className="max-h-[85vh] max-w-full object-contain rounded-lg shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          />
+          <div className="absolute bottom-6 left-0 right-0 text-center text-white/80 text-lg tracking-wide">
+            {lightboxCaption}
+          </div>
+        </div>
+      )}
     </main>
   );
 }
