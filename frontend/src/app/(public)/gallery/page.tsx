@@ -84,25 +84,19 @@ export default function GalleryPage() {
         </div>
       ) : (
         <div className="px-4 md:px-8 lg:px-12 max-w-[1600px] mx-auto py-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 auto-rows-[250px] gap-4 grid-flow-dense">
-            {(expanded ? allFiles : allFiles.slice(0, 6)).map((file, i) => {
+          <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-4 space-y-4">
+            {(expanded ? allFiles : allFiles.slice(0, 20)).map((file, i) => {
               const isVideo = /\.(mp4|webm|ogg|mov)$/i.test(file.src);
-
-              let spanClass = "col-span-1 row-span-1";
-              const modIndex = i % 6;
-              if (modIndex === 0) spanClass = "md:row-span-2"; // Tile 1: tall portrait
-              else if (modIndex === 2) spanClass = "md:col-span-2"; // Tile 3: wide landscape
-              else if (modIndex === 5) spanClass = "md:row-span-2"; // Tile 6: tall portrait
 
               return (
                 <div 
                   key={i} 
-                  className={`relative group overflow-hidden bg-gray-100 rounded-2xl cursor-pointer ${spanClass}`}
+                  className="relative group overflow-hidden bg-gray-100 rounded-2xl cursor-pointer break-inside-avoid"
                   onClick={() => !isVideo && openLightbox(file.src, file.caption)}
                 >
                   {isVideo ? (
-                     <a href={file.src} target="_blank" rel="noopener noreferrer" className="w-full h-full block relative">
-                        <div className="w-full h-full flex items-center justify-center bg-[#111]">
+                     <a href={file.src} target="_blank" rel="noopener noreferrer" className="w-full block relative min-h-[250px]">
+                        <div className="absolute inset-0 w-full h-full flex items-center justify-center bg-[#111]">
                           <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="white">
                             <path d="M8 5v14l11-7z" />
                           </svg>
@@ -114,7 +108,7 @@ export default function GalleryPage() {
                         src={file.src} 
                         alt={file.caption} 
                         loading="lazy" 
-                        className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" 
+                        className="w-full h-auto block transition-transform duration-700 ease-out group-hover:scale-105" 
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-90 transition-opacity duration-300" />
                       <div className="absolute bottom-4 left-4 right-4 flex flex-col pointer-events-none">
@@ -128,13 +122,13 @@ export default function GalleryPage() {
             })}
           </div>
 
-          {allFiles.length > 6 && (
+          {allFiles.length > 20 && (
             <div className="mt-12 text-center">
               <button 
                 className="text-sm font-semibold tracking-widest uppercase border border-gray-900 text-gray-900 px-8 py-3 hover:bg-gray-900 hover:text-white transition-colors duration-300" 
                 onClick={() => setExpanded(!expanded)}
               >
-                {expanded ? 'View Less' : `View More (${allFiles.length - 6} more)`}
+                {expanded ? 'View Less' : `View More (${allFiles.length - 20} more)`}
               </button>
             </div>
           )}
