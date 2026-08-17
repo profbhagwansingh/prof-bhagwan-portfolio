@@ -203,11 +203,17 @@ export default function AboutPage() {
               {/* PhD Supervision Section */}
               <div className="supervision-section animate-on-scroll">
                 <h3 className="section-title">PhD Supervision</h3>
-                <p className="intro-text text-center">
-                  Mentored {scholars.filter(s => s.status === 'POST_DOC').length > 0 ? `${scholars.filter(s => s.status === 'POST_DOC').length} Post-Doctoral, ` : ''}
-                  {scholars.filter(s => s.status === 'AWARDED' || s.status === 'PURSUING').length} doctoral students, 
-                  with {scholars.filter(s => s.status === 'AWARDED').length} awarded and {scholars.filter(s => s.status === 'PURSUING').length} currently pursuing their research.
-                </p>
+                {scholars.length > 0 ? (
+                  <p className="intro-text text-center">
+                    Mentored {scholars.filter(s => s.status === 'POST_DOC').length > 0 ? `${scholars.filter(s => s.status === 'POST_DOC').length} Post-Doctoral, ` : ''}
+                    {scholars.filter(s => s.status === 'AWARDED' || s.status === 'PURSUING').length} doctoral students, 
+                    with {scholars.filter(s => s.status === 'AWARDED').length} awarded and {scholars.filter(s => s.status === 'PURSUING').length} currently pursuing their research.
+                  </p>
+                ) : (
+                  <p className="intro-text text-center">
+                    Mentored 1 Post-Doctoral, 14 doctoral students, with 9 awarded and 5 currently pursuing their research.
+                  </p>
+                )}
                 
                 <div className="phd-grid">
                   {scholars.length > 0 ? (
@@ -221,7 +227,16 @@ export default function AboutPage() {
                       </div>
                     ))
                   ) : (
-                    <p>Loading scholars...</p>
+                    <>
+                      <div className="phd-card post_doc" onClick={() => openImageModal('/media/img/research-scholars/default.png', 'Dr. Sachin Kumar')}>Dr. Sachin Kumar</div>
+                      <div className="phd-card awarded" onClick={() => openImageModal('/media/img/research-scholars/default.png', 'Dr. Rakesh Kumar')}>Dr. Rakesh Kumar</div>
+                      <div className="phd-card awarded" onClick={() => openImageModal('/media/img/research-scholars/default.png', 'Dr. Anita Singh')}>Dr. Anita Singh</div>
+                      <div className="phd-card awarded" onClick={() => openImageModal('/media/img/research-scholars/default.png', 'Dr. Vikas Sharma')}>Dr. Vikas Sharma</div>
+                      <div className="phd-card awarded" onClick={() => openImageModal('/media/img/research-scholars/default.png', 'Dr. Priyanka Verma')}>Dr. Priyanka Verma</div>
+                      <div className="phd-card pursuing" onClick={() => openImageModal('/media/img/research-scholars/default.png', 'Rahul Gupta')}>Rahul Gupta</div>
+                      <div className="phd-card pursuing" onClick={() => openImageModal('/media/img/research-scholars/default.png', 'Neha Mishra')}>Neha Mishra</div>
+                      <div className="phd-card pursuing" onClick={() => openImageModal('/media/img/research-scholars/default.png', 'Amit Patel')}>Amit Patel</div>
+                    </>
                   )}
                 </div>
               </div>
