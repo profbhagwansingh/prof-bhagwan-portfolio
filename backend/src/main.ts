@@ -96,12 +96,11 @@ async function bootstrap() {
       logger.warn('⚠️ Backup script failed or not found, continuing with migration', e);
     }
 
-    // 2. Run migration
-    const schemaPath = path.join(__dirname, '..', 'prisma', 'schema.prisma');
-    execSync(`npx prisma migrate deploy --schema="${schemaPath}"`, { stdio: 'inherit' });
-    logger.log('✅ Database migrations applied');
+    // 2. Migrations are now handled externally via Supabase Session Pooler
+    // We removed automatic execSync migrations because they hang over Transaction Poolers
+    logger.log('✅ Database startup phase complete');
   } catch (e) {
-    logger.error('Migration failed', e);
+    logger.error('Startup script failed', e);
   }
 
   const adminEmail = process.env.ADMIN_EMAIL ?? 'admin@bhagwansingh.com';
