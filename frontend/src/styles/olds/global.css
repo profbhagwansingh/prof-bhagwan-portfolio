@@ -244,9 +244,11 @@ header a { text-decoration: none; color: #333; }
     .mobile-nav {
         display: block;
         position: fixed;
-        top: 120px; 
+        top: 85px; /* Matches average header height to close the gap */
         left: -100%; 
         width: 100%;
+        height: calc(100vh - 85px); /* Take up remaining screen */
+        overflow-y: auto; /* Allow scrolling if many links */
         background-color: #fff;
         box-shadow: 0 10px 10px rgba(0,0,0,0.1);
         transition: left 0.3s ease-in-out;
