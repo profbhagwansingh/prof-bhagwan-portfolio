@@ -103,12 +103,20 @@ async function bootstrap() {
     app.enableShutdownHooks();
     const prisma = new client_1.PrismaClient();
     const { execSync } = await Promise.resolve().then(() => __importStar(require('child_process')));
+    const path = await Promise.resolve().then(() => __importStar(require('path')));
     try {
-        execSync('npx prisma migrate deploy --schema=/opt/render/project/src/backend/prisma/schema.prisma', { stdio: 'inherit' });
-        logger.log('✅ Database migrations applied');
+        const backupScript = path.join(__dirname, '..', 'backup-db.js');
+        try {
+            execSync(`node "${backupScript}"`, { stdio: 'inherit' });
+            logger.log('✅ Pre-migration database backup completed');
+        }
+        catch (e) {
+            logger.warn('⚠️ Backup script failed or not found, continuing with migration', e);
+        }
+        logger.log('✅ Database startup phase complete');
     }
     catch (e) {
-        logger.error('Migration failed', e);
+        logger.error('Startup script failed', e);
     }
     const adminEmail = process.env.ADMIN_EMAIL ?? 'admin@bhagwansingh.com';
     const adminPassword = process.env.ADMIN_PASSWORD ?? 'Admin@1234';
@@ -125,8 +133,8 @@ async function bootstrap() {
     }
     await prisma.$disconnect();
     const port = process.env.PORT ?? 4000;
-    await app.listen(port);
-    logger.log(`🚀 Server running on http://localhost:${port}`);
+    await app.listen(port, '0.0.0.0');
+    logger.log(`🚀 Server running on http://0.0.0.0:${port}`);
     logger.log(`📦 Environment: ${process.env.NODE_ENV ?? 'development'}`);
 }
 bootstrap().catch((err) => {

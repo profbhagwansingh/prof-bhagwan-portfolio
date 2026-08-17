@@ -60,7 +60,9 @@ let BackupService = BackupService_1 = class BackupService {
             fs.mkdirSync(this.backupDir, { recursive: true });
         }
         this.logger.log('Backup service initialized. Backups will be stored in: ' + this.backupDir);
-        await this.createBackup('startup');
+        setTimeout(() => {
+            this.createBackup('startup').catch(err => this.logger.error('Startup backup failed', err));
+        }, 10000);
     }
     async handleCronBackup() {
         this.logger.log('Running scheduled auto-backup...');

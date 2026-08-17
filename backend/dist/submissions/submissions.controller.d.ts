@@ -1,3 +1,4 @@
+import 'multer';
 import { SubmissionsService } from './submissions.service';
 import { SubmissionStatus, AlumniStatus } from '@prisma/client';
 export declare class SubmissionsController {
@@ -17,7 +18,7 @@ export declare class SubmissionsController {
         whatsapp: string | null;
         message: string;
     }>;
-    createAlumni(data: any): Promise<{
+    createAlumni(data: any, file: any): Promise<{
         email: string;
         fullName: string;
         id: string;
