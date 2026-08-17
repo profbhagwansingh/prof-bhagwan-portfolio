@@ -16,9 +16,10 @@ export class BackupService implements OnModuleInit {
       fs.mkdirSync(this.backupDir, { recursive: true });
     }
     this.logger.log('Backup service initialized. Backups will be stored in: ' + this.backupDir);
-    
-    // Auto-backup on startup to keep latest state safe
-    await this.createBackup('startup');
+    // Auto-backup on startup (run asynchronously to avoid blocking server boot)
+    setTimeout(() => {
+      this.createBackup('startup').catch(err => this.logger.error('Startup backup failed', err));
+    }, 10000); // 10 second delay after boot
   }
 
   @Cron(CronExpression.EVERY_6_HOURS)
