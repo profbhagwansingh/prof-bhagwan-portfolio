@@ -1,14 +1,23 @@
-/* Contact Section General Styling */
+:root {
+    --primary: #5061C4;
+    --bg-light: #f8faff;
+    --bg-gradient: linear-gradient(135deg, var(--bg-light) 0%, #eef2fa 100%);
+    --text-dark: #1e293b;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --shadow: rgba(0,0,0,0.06);
+}
+
 .contact-section {
     padding: 5rem 0;
-    background: linear-gradient(135deg, #f8faff 0%, #eef2fa 100%);
+    background: var(--bg-gradient);
 }
 
 .contact-section h2 {
     text-align: center;
     font-size: 3rem;
     margin-bottom: 1.25rem;
-    color: #1e293b;
+    color: var(--text-dark);
     font-weight: 700;
 }
 
@@ -38,7 +47,7 @@
     font-size: 1.8rem;
     margin-top: 0;
     margin-bottom: 2.5rem;
-    color: #1e293b;
+    color: var(--text-dark);
     font-weight: 600;
 }
 
