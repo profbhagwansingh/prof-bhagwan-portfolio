@@ -35,10 +35,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   useEffect(() => {
     setMounted(true);
-    // Guard: redirect to login if no token
+    const token = localStorage.getItem("admin_token");
     if (pathname !== "/admin/login") {
-      const token = localStorage.getItem("admin_token");
       if (!token) router.push("/admin/login");
+    } else {
+      if (token) router.push("/admin/dashboard");
     }
   }, [pathname, router]);
 

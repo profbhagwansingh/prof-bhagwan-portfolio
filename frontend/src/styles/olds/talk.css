@@ -1,128 +1,69 @@
-/* Contact Section Styles */
-.contact-section {
-    padding: 4rem 0;
-}
-
-.contact-section .container {
-    max-width: 700px;
-    background: #fff;
-    padding: 3rem;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-    text-align: center;
-}
-
-.contact-section h2 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-}
-
-.contact-section p {
-    font-size: 1.1rem;
-    color: #666;
-    margin-bottom: 2rem;
-}
-
-.contact-form {
-    text-align: left;
-}
-
-.form-group {
-    margin-bottom: 1.5rem;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-}
-
-.form-group input,
-.form-group textarea {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-family: var(--font-poppins), sans-serif;
-    font-size: 1rem;
-    box-sizing: border-box; /* Ensures padding doesn't affect width */
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: #5061C4;
-    box-shadow: 0 0 5px rgba(80, 97, 196, 0.2);
-}
-
-/* Note: .cta-button is now in global.css */
-.contact-form .cta-button {
-    width: 100%;
-    padding: 15px;
-    border: none;
-    cursor: pointer;
-    font-size: 1rem;
-}
-
-/* Responsive Design for Contact Section */
-@media (max-width: 768px) {
-    .contact-section .container {
-        padding: 2rem;
-    }
-}
-
 /* Contact Section General Styling */
 .contact-section {
-    padding: 4rem 0;
-    background-color: #f9f9f9;
+    padding: 5rem 0;
+    background: linear-gradient(135deg, #f8faff 0%, #eef2fa 100%);
 }
 
 .contact-section h2 {
     text-align: center;
-    font-size: 2.8rem;
-    margin-bottom: 1rem;
+    font-size: 3rem;
+    margin-bottom: 1.25rem;
+    color: #1e293b;
+    font-weight: 700;
 }
 
 .contact-intro {
     text-align: center;
-    max-width: 600px;
-    margin: 0 auto 4rem auto;
-    color: #555;
-    font-size: 1.1rem;
+    max-width: 650px;
+    margin: 0 auto 3rem auto;
+    color: #64748b;
+    font-size: 1.15rem;
+    line-height: 1.6;
 }
 
 /* Two-column grid layout */
 .contact-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 3rem;
-    background: #fff;
-    padding: 3rem;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    gap: 4rem;
+    background: #ffffff;
+    padding: 3.5rem;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+    border: 1px solid #f1f5f9;
 }
 
 /* Left Column: Contact Info */
 .contact-info h3 {
     font-size: 1.8rem;
     margin-top: 0;
-    margin-bottom: 2rem;
-    color: #333;
+    margin-bottom: 2.5rem;
+    color: #1e293b;
+    font-weight: 600;
 }
 
 .info-item {
     display: flex;
     align-items: flex-start;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: #f8fafc;
+    border-radius: 12px;
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.info-item:hover {
+    transform: translateX(5px);
+    background: #f1f5f9;
 }
 
 .info-item svg {
     flex-shrink: 0;
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
     color: #5061C4;
-    margin-right: 1rem;
-    margin-top: 5px;
+    margin-right: 1.25rem;
+    margin-top: 2px;
 }
 
 .info-item div {
@@ -131,22 +72,24 @@
 }
 
 .info-item strong {
-    font-size: 1rem;
-    color: #333;
-    margin-bottom: 0.25rem;
+    font-size: 1.1rem;
+    color: #334155;
+    margin-bottom: 0.4rem;
+    font-weight: 600;
 }
 
 .info-item a, .info-item p {
-    font-size: 1rem;
-    color: #555;
+    font-size: 1.05rem;
+    color: #64748b;
     text-decoration: none;
     margin: 0;
     line-height: 1.6;
+    transition: color 0.2s ease;
 }
 
 .info-item a:hover {
     color: #5061C4;
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 /* Right Column: Contact Form */
@@ -154,132 +97,122 @@
     font-size: 1.8rem;
     margin-top: 0;
     margin-bottom: 2rem;
+    color: #1e293b;
+    font-weight: 600;
 }
 
 .form-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.75rem;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-    color: #333;
+    margin-bottom: 0.6rem;
+    font-weight: 600;
+    color: #475569;
+    font-size: 0.95rem;
 }
 
 .form-group input,
-.form-group textarea {
+.form-group textarea,
+.form-group select {
     width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+    padding: 0.85rem 1.2rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
     font-size: 1rem;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    background: #f8fafc;
+    color: #334155;
+    font-family: inherit;
+    transition: all 0.3s ease;
 }
 
 .form-group input:focus,
-.form-group textarea:focus {
+.form-group textarea:focus,
+.form-group select:focus {
     outline: none;
     border-color: #5061C4;
-    box-shadow: 0 0 0 3px rgba(80, 97, 196, 0.15);
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(80, 97, 196, 0.1);
 }
 
-.contact-form .cta-button {
+.contact-form .cta-button, 
+#submit-button.cta-button {
     width: 100%;
-    padding: 0.8rem;
-    font-size: 1.1rem;
+    padding: 1rem;
+    font-size: 1.15rem;
+    font-weight: 600;
+    border-radius: 10px;
+    background: #5061C4;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(80, 97, 196, 0.25);
+}
+
+.contact-form .cta-button:hover,
+#submit-button.cta-button:hover {
+    background: #3f4da3;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(80, 97, 196, 0.35);
 }
 
 /* Responsive adjustments */
 @media (max-width: 900px) {
     .contact-grid {
         grid-template-columns: 1fr;
-        padding: 2rem;
+        padding: 2.5rem;
+        gap: 2.5rem;
     }
 }
 
-/* --- Main Form Container Styling --- */
+/* --- Main Form Container Styling (Alumni Form) --- */
 .form-container {
-    max-width: 800px;
+    max-width: 850px;
     margin: 4rem auto;
-    padding: 3rem;
+    padding: 4rem;
     background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    animation: fadeIn 0.5s ease-out; /* Add fade-in animation */
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+    border: 1px solid #f1f5f9;
+    animation: fadeIn 0.6s ease-out;
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
+    from { opacity: 0; transform: translateY(15px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
 .form-header {
     text-align: center;
-    margin-bottom: 2.5rem;
+    margin-bottom: 3rem;
 }
 
 .page-title {
-    font-size: 2.5rem;
+    font-size: 2.8rem;
     font-weight: 700;
-    color: #333;
+    color: #1e293b;
     margin: 0;
 }
 
 .page-subtitle {
-    font-size: 1.1rem;
-    color: #666;
-    margin-top: 0.5rem;
+    font-size: 1.15rem;
+    color: #64748b;
+    margin-top: 0.75rem;
 }
-
-/* --- General Form Element Styling --- */
-.form-group {
-    margin-bottom: 1.5rem;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    color: #444;
-}
-
-.form-group input[type="text"],
-.form-group input[type="email"],
-.form-group select {
-    width: 100%;
-    padding: 0.8rem 1rem;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-family: var(--font-poppins), sans-serif;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.form-group input:focus,
-.form-group select:focus {
-    outline: none;
-    border-color: #5061C4;
-    box-shadow: 0 0 0 4px rgba(80, 97, 196, 0.1);
-}
-
-/* --- Replaces the old .form-row rule --- */
 
 /* This ID selector targets ONLY the Student Alumni form */
 #contact-form.contact-form {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* This creates the strict 2-column grid */
+    grid-template-columns: 1fr 1fr;
     gap: 1.5rem;
-    text-align: left; /* Overrides any centered text from parent classes */
+    text-align: left;
 }
 
-/* This is a utility class we added to the HTML */
 #contact-form .form-span-2 {
-    grid-column: 1 / -1; /* Tells an item to span both columns */
+    grid-column: 1 / -1;
 }
-
-/* This rule is no longer needed for the alumni form */
-
 
 /* --- File Upload Styling --- */
 .file-upload-wrapper {
@@ -289,138 +222,130 @@
 }
 
 input[type="file"] {
-    display: none; /* Hide the default file input */
+    display: none;
 }
 
 .custom-file-upload {
     display: inline-block;
-    padding: 0.7rem 1.2rem;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+    padding: 0.85rem 1.5rem;
+    background-color: #f1f5f9;
+    color: #475569;
+    border: 2px dashed #cbd5e1;
+    border-radius: 10px;
     cursor: pointer;
-    font-weight: 500;
-    transition: background-color 0.3s ease;
+    font-weight: 600;
+    transition: all 0.3s ease;
 }
 
 .custom-file-upload:hover {
-    background-color: #e0e0e0;
-}
-
-.custom-file-upload span {
-    margin-right: 0.5rem;
+    background-color: #e2e8f0;
+    border-color: #94a3b8;
 }
 
 .file-name {
     margin-left: 1rem;
     font-style: italic;
-    color: #777;
+    color: #64748b;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-/* --- Submit Button --- */
-#submit-button.cta-button {
-    width: 100%;
-    padding: 1rem;
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin-top: 1rem;
-}
-
 /* --- Form Status Message --- */
 #form-status {
     text-align: center;
-    margin-top: 1.5rem;
-    font-size: 1rem;
+    margin-top: 2rem;
+    font-size: 1.05rem;
     font-weight: 500;
-    min-height: 1.2em; /* Reserve space to prevent layout shift */
+    min-height: 1.5em;
+    padding: 1rem;
+    border-radius: 8px;
+}
+#form-status.success {
+    background-color: #dcfce7;
+    color: #166534;
+}
+#form-status.error {
+    background-color: #fee2e2;
+    color: #b91c1c;
 }
 
 /* --- Responsive Design for smaller screens --- */
-@media (max-width: 600px) {
-    .form-row {
+@media (max-width: 768px) {
+    #contact-form.contact-form {
         grid-template-columns: 1fr;
     }
     .form-container {
-        padding: 2rem;
-        margin: 2rem auto;
+        padding: 2.5rem;
+        margin: 2rem 1rem;
     }
     .page-title {
-        font-size: 2rem;
+        font-size: 2.2rem;
     }
 }
 
 /* --- Batch Year Grid Styling --- */
-
 #batch-grid-container {
     display: grid;
-    /* Creates columns of boxes, each at least 60px wide */
-    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
-    gap: 8px;
-    padding: 10px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    
-    /* Makes the grid scrollable if years don't fit */
-    max-height: 200px;
+    grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+    gap: 10px;
+    padding: 15px;
+    background-color: #f8fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    max-height: 220px;
     overflow-y: auto;
 }
 
 .year-box {
-    padding: 10px 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    padding: 12px 5px;
+    border: 2px solid transparent;
+    border-radius: 8px;
     text-align: center;
     cursor: pointer;
-    background-color: #fff;
-    font-weight: 500;
-    font-size: 0.9rem;
-    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    background-color: #ffffff;
+    color: #475569;
+    font-weight: 600;
+    font-size: 0.95rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: all 0.2s ease;
 }
 
 .year-box:hover {
-    background-color: #eef0f8; /* Light purple on hover */
-    color: #5061C4;
+    border-color: #cbd5e1;
+    transform: translateY(-2px);
 }
 
 .year-box.selected {
-    background-color: #5061C4; /* Primary color when selected */
-    color: #fff;
+    background-color: #5061C4;
+    color: #ffffff;
     border-color: #5061C4;
-    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(80, 97, 196, 0.3);
 }
-
 
 /* Specific style for the Alumni Connect button */
 .alumni-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    
-    /* Colored background for the connect button */
-    background-color: #5061C4; 
-    color: #fff;
-    
-    /* Sizing - Matches the submit button */
+    background-color: #ffffff; 
+    color: #5061C4;
+    border: 2px solid #5061C4;
     width: auto;
     min-width: 150px;
-    padding: 12px 30px;
-    
-    /* Standard button styling */
+    padding: 12px 35px;
     text-decoration: none;
-    border-radius: 5px;
+    border-radius: 30px;
     font-weight: 600;
-    font-size: 1rem;
-    border: none;
+    font-size: 1.05rem;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: all 0.3s ease;
+    margin-bottom: 3rem;
 }
 
-/* Hover Effect */
 .alumni-btn:hover {
-    background-color: #3f4da3; /* Darker blue/purple on hover */
-    transform: translateY(-2px); /* Slight lift effect */
+    background-color: #5061C4;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(80, 97, 196, 0.2);
 }
