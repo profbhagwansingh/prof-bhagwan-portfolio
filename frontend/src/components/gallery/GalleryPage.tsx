@@ -174,32 +174,56 @@ export function GalleryPage() {
                   <p className="text-[var(--text-muted)]">No images found in this folder.</p>
                 </div>
               ) : (
-                <div className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
-                  {allFiles.map((fileUrl, i) => (
-                    <div
-                      key={fileUrl}
-                      onClick={() => openLightbox(i)}
-                      className="break-inside-avoid relative overflow-hidden rounded-xl cursor-pointer group shadow-sm hover:shadow-md transition-all duration-500 border border-[var(--border)] bg-[var(--bg-card)]"
-                      style={{
-                        opacity: visible ? 1 : 0,
-                        transform: visible ? "none" : "translateY(20px)",
-                        transitionDelay: `${(i % 10) * 40}ms`,
-                      }}
-                    >
-                      <img 
-                        src={fileUrl} 
-                        alt={fileUrl.split("/").pop()?.replace(/\.[^.]+$/, "") || "Gallery image"}
-                        loading="lazy"
-                        className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                      
-                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                        <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30">
-                          <ImageIcon className="w-5 h-5 text-white" />
+                <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6">
+                  {allFiles.map((fileUrl, i) => {
+                    // Extract filename and folder name for elegant captions
+                    const segments = fileUrl.split("/");
+                    const filename = segments.pop()?.replace(/\.[^.]+$/, "").replace(/[-_]/g, " ") || "Gallery image";
+                    const folderName = segments.pop()?.replace(/[-_]/g, " ") || "Media";
+
+                    return (
+                      <div
+                        key={fileUrl}
+                        onClick={() => openLightbox(i)}
+                        className="break-inside-avoid flex flex-col overflow-hidden rounded-2xl cursor-pointer group bg-[var(--bg-card)] border border-[var(--border)] shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-all duration-500 hover:-translate-y-1.5"
+                        style={{
+                          opacity: visible ? 1 : 0,
+                          transform: visible ? "none" : "translateY(20px)",
+                          transitionDelay: `${(i % 10) * 40}ms`,
+                        }}
+                      >
+                        {/* Image Container */}
+                        <div className="relative overflow-hidden bg-[var(--bg-secondary)]">
+                          <img 
+                            src={fileUrl} 
+                            alt={filename}
+                            loading="lazy"
+                            className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
+                          />
+                          
+                          {/* Hover Overlay */}
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                            <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 transform scale-75 group-hover:scale-100 transition-transform duration-300">
+                              <ImageIcon className="w-5 h-5 text-white" />
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Card Caption / Footer */}
+                        <div className="p-4 border-t border-[var(--border)]">
+                          <h4 className="font-medium text-[var(--text-primary)] text-sm line-clamp-1 mb-1 capitalize" title={filename}>
+                            {filename}
+                          </h4>
+                          <div className="flex items-center gap-2">
+                            <FolderOpen className="w-3 h-3 text-primary-500" />
+                            <p className="text-[11px] text-[var(--text-muted)] uppercase tracking-wider font-semibold capitalize">
+                              {activeFolder === "ALL" ? folderName : activeFolder.replace(/[-_]/g, " ")}
+                            </p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </>
