@@ -173,29 +173,32 @@ footer {
    ========================================= */
 header {
     background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
     color: #333;
-    padding: 0.75rem 0;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 0.85rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
     position: sticky;
     top: 0;
     z-index: 1000;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
 }
 
 header .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1200px;
+    max-width: 1440px; /* Increased to allow more room for links */
+    width: 95%; /* Use more horizontal space */
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 10px;
+    gap: 20px;
 }
 
 /* Logo Styling */
 .logo-link {
     text-decoration: none;
     color: inherit;
+    flex-shrink: 0; /* Prevent logo from shrinking */
 }
 
 .logo-container {
@@ -210,19 +213,20 @@ header .container {
 }
 
 .logo-container .logo-image img {
-    width: 48px;
-    height: 48px;
+    width: 44px; /* Slightly smaller for elegance */
+    height: 44px;
     border-radius: 50%;
     object-fit: cover;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
 .logo-text {
     margin: 0;
-    color: #1B264F;
-    font-size: 1.35rem;
+    color: var(--text-primary);
+    font-size: 1.25rem;
     font-weight: 700;
     line-height: 1.2;
+    letter-spacing: -0.01em;
 }
 
 header a { text-decoration: none; color: #333; }
@@ -230,6 +234,9 @@ header a { text-decoration: none; color: #333; }
 /* --- 1. DESKTOP NAV (Visible by default) --- */
 .desktop-nav {
     display: block;
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .desktop-nav ul {
@@ -237,22 +244,30 @@ header a { text-decoration: none; color: #333; }
     margin: 0;
     padding: 0;
     display: flex;
-    gap: 24px;
+    gap: 1.2vw; /* Use vw for responsive spacing between many links */
     align-items: center;
+    flex-wrap: nowrap; /* Force single line */
+}
+
+@media (min-width: 1440px) {
+    .desktop-nav ul { gap: 20px; }
 }
 
 .desktop-nav a {
-    font-weight: 500;   
-    font-size: 0.95rem;
-    color: #555;
-    transition: all 0.2s ease;
+    font-weight: 600;   
+    font-size: 0.82rem; /* Smaller font to fit all links gracefully */
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    transition: all 0.25s ease;
     padding: 6px 0;
     position: relative;
+    white-space: nowrap; /* Prevent individual links from wrapping */
 }
 
 .desktop-nav a:hover,
 .desktop-nav a.active {
-    color: #5061C4;
+    color: var(--primary-500);
 }
 
 .desktop-nav a::after {
@@ -260,16 +275,18 @@ header a { text-decoration: none; color: #333; }
     position: absolute;
     width: 0;
     height: 2px;
-    bottom: 0;
+    bottom: -2px;
     left: 0;
-    background-color: #5061C4;
+    background-color: var(--primary-500);
     transition: width 0.3s ease;
+    border-radius: 2px;
 }
 
 .desktop-nav a:hover::after,
 .desktop-nav a.active::after {
     width: 100%;
 }
+
 
 /* --- 2. MOBILE ELEMENTS (Hidden by default) --- */
 .mobile-nav {
