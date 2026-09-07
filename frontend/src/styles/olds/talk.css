@@ -1,360 +1,426 @@
-:root {
-    --primary: #5061C4;
-    --bg-light: #f8faff;
-    --bg-gradient: linear-gradient(135deg, var(--bg-light) 0%, #eef2fa 100%);
-    --text-dark: #1e293b;
-    --text-muted: #64748b;
-    --border: #e2e8f0;
-    --shadow: rgba(0,0,0,0.06);
-}
+/* ============================================================
+   TALK TO PROFESSOR PAGE — Elegant CSS
+   ============================================================ */
 
-.contact-section {
-    padding: 5rem 0;
-    background: var(--bg-gradient);
+/* ── Hero Section ── */
+.contact-hero {
+    padding: 5.5rem 0 4rem;
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 60%, var(--accent-light) 100%);
+    position: relative;
+    overflow: hidden;
 }
-
-.contact-section h2 {
-    text-align: center;
-    font-size: 3rem;
-    margin-bottom: 1.25rem;
-    color: var(--text-dark);
+.contact-hero::before {
+    content: '';
+    position: absolute;
+    top: -80px;
+    right: -80px;
+    width: 380px;
+    height: 380px;
+    background: radial-gradient(circle, rgba(80, 97, 196, 0.08) 0%, transparent 70%);
+    pointer-events: none;
+}
+.contact-hero h1 {
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
     font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 1.25rem;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+}
+.contact-hero p {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    line-height: 1.75;
+    max-width: 580px;
+    margin: 0;
 }
 
+/* ── Contact Section ── */
+.contact-section {
+    padding: 5rem 0 6rem;
+    background: var(--bg-primary);
+}
 .contact-intro {
     text-align: center;
-    max-width: 650px;
-    margin: 0 auto 3rem auto;
-    color: #64748b;
-    font-size: 1.15rem;
-    line-height: 1.6;
+    max-width: 620px;
+    margin: 0 auto 3.5rem;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    line-height: 1.7;
+}
+.contact-section h2 {
+    text-align: center;
+    font-size: 2.6rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
 }
 
-/* Two-column grid layout */
+/* ── Two-column Grid ── */
 .contact-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
-    background: #ffffff;
-    padding: 3.5rem;
-    border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.06);
-    border: 1px solid #f1f5f9;
+    grid-template-columns: 2fr 3fr;
+    gap: 2.5rem;
+    align-items: start;
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
 }
 
-/* Left Column: Contact Info */
+/* ── Left Column: Info ── */
 .contact-info h3 {
-    font-size: 1.8rem;
-    margin-top: 0;
-    margin-bottom: 2.5rem;
-    color: var(--text-dark);
-    font-weight: 600;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 1.25rem;
+    letter-spacing: -0.01em;
 }
 
 .info-item {
     display: flex;
     align-items: flex-start;
-    margin-bottom: 2rem;
-    padding: 1.5rem;
-    background: #f8fafc;
-    border-radius: 12px;
-    transition: transform 0.3s ease, background 0.3s ease;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding: 1.25rem 1.4rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    box-shadow: var(--shadow-card);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
-
 .info-item:hover {
-    transform: translateX(5px);
-    background: #f1f5f9;
+    transform: translateX(6px);
+    box-shadow: var(--shadow-card-hover);
+    border-color: var(--primary-200);
 }
-
 .info-item svg {
     flex-shrink: 0;
-    width: 28px;
-    height: 28px;
-    color: #5061C4;
-    margin-right: 1.25rem;
-    margin-top: 2px;
+    width: 22px;
+    height: 22px;
+    color: var(--primary-500);
+    margin-top: 3px;
+    padding: 8px;
+    background: var(--accent-light);
+    border-radius: 0.6rem;
+    box-sizing: content-box;
+    transition: background 0.25s ease;
 }
-
+.info-item:hover svg {
+    background: var(--primary-100);
+}
 .info-item div {
     display: flex;
     flex-direction: column;
+    gap: 0.15rem;
 }
-
 .info-item strong {
-    font-size: 1.1rem;
-    color: #334155;
-    margin-bottom: 0.4rem;
-    font-weight: 600;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 0.2rem;
 }
-
-.info-item a, .info-item p {
-    font-size: 1.05rem;
-    color: #64748b;
+.info-item a,
+.info-item p {
+    font-size: 0.93rem;
+    color: var(--text-soft);
     text-decoration: none;
     margin: 0;
     line-height: 1.6;
     transition: color 0.2s ease;
 }
-
 .info-item a:hover {
-    color: #5061C4;
-    text-decoration: none;
+    color: var(--primary-500);
 }
 
-/* Right Column: Contact Form */
+/* ── Philosophy Quote ── */
+.philosophy-card,
+.contact-info > div[style*="gradient"] {
+    padding: 1.75rem;
+    background: linear-gradient(135deg, var(--primary-500), var(--primary-700)) !important;
+    border-radius: 1rem;
+    border: 0 !important;
+    box-shadow: 0 8px 30px rgba(80, 97, 196, 0.3) !important;
+    position: relative;
+    overflow: hidden;
+    margin-top: 0.25rem;
+}
+
+/* ── Right Column: Form ── */
+.contact-form {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 1.25rem;
+    padding: 2.5rem;
+    box-shadow: var(--shadow-card);
+}
 .contact-form h3 {
-    font-size: 1.8rem;
-    margin-top: 0;
-    margin-bottom: 2rem;
-    color: #1e293b;
-    font-weight: 600;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 1.75rem;
+    letter-spacing: -0.01em;
 }
 
+/* ── Form Fields ── */
 .form-group {
-    margin-bottom: 1.75rem;
+    margin-bottom: 1.4rem;
 }
-
 .form-group label {
     display: block;
-    margin-bottom: 0.6rem;
+    margin-bottom: 0.45rem;
     font-weight: 600;
-    color: #475569;
-    font-size: 0.95rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
 }
-
 .form-group input,
 .form-group textarea,
 .form-group select {
     width: 100%;
-    padding: 0.85rem 1.2rem;
-    border: 2px solid #e2e8f0;
-    border-radius: 10px;
-    font-size: 1rem;
-    background: #f8fafc;
-    color: #334155;
+    padding: 0.8rem 1.1rem;
+    border: 1.5px solid var(--border);
+    border-radius: 0.75rem;
+    font-size: 0.95rem;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
     font-family: inherit;
-    transition: all 0.3s ease;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    box-sizing: border-box;
 }
-
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: var(--text-faint);
+}
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus {
     outline: none;
-    border-color: #5061C4;
+    border-color: var(--primary-400);
     background: #ffffff;
     box-shadow: 0 0 0 4px rgba(80, 97, 196, 0.1);
 }
 
-.contact-form .cta-button, 
+/* ── Submit Button ── */
+.contact-form .cta-button,
 #submit-button.cta-button {
     width: 100%;
-    padding: 1rem;
-    font-size: 1.15rem;
+    padding: 0.9rem 1.5rem;
+    font-size: 1rem;
     font-weight: 600;
-    border-radius: 10px;
-    background: #5061C4;
-    color: white;
+    border-radius: 0.75rem;
+    background: var(--primary-500);
+    color: #ffffff;
     border: none;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(80, 97, 196, 0.25);
+    transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
+    box-shadow: 0 4px 14px rgba(80, 97, 196, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
 }
-
 .contact-form .cta-button:hover,
 #submit-button.cta-button:hover {
-    background: #3f4da3;
+    background: var(--primary-600);
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(80, 97, 196, 0.35);
+    box-shadow: 0 8px 20px rgba(80, 97, 196, 0.4);
 }
 
-/* Responsive adjustments */
-@media (max-width: 900px) {
+/* ── Responsive ── */
+@media (max-width: 960px) {
     .contact-grid {
         grid-template-columns: 1fr;
-        padding: 2.5rem;
-        gap: 2.5rem;
+        gap: 2rem;
+    }
+}
+@media (max-width: 640px) {
+    .contact-form {
+        padding: 1.75rem;
+    }
+    .contact-section h2 {
+        font-size: 2rem;
     }
 }
 
-/* --- Main Form Container Styling (Alumni Form) --- */
-.form-container {
-    max-width: 850px;
-    margin: 4rem auto;
-    padding: 4rem;
-    background-color: #ffffff;
-    border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
-    border: 1px solid #f1f5f9;
-    animation: fadeIn 0.6s ease-out;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(15px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.form-header {
+/* ── Form Status ── */
+#form-status {
     text-align: center;
-    margin-bottom: 3rem;
+    margin-top: 1.5rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 0.85rem 1rem;
+    border-radius: 0.75rem;
+    min-height: 1.5em;
+}
+#form-status.success {
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+#form-status.error {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
 }
 
-.page-title {
-    font-size: 2.8rem;
-    font-weight: 700;
-    color: #1e293b;
-    margin: 0;
-}
-
-.page-subtitle {
-    font-size: 1.15rem;
-    color: #64748b;
-    margin-top: 0.75rem;
-}
-
-/* This ID selector targets ONLY the Student Alumni form */
-#contact-form.contact-form {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-    text-align: left;
-}
-
-#contact-form .form-span-2 {
-    grid-column: 1 / -1;
-}
-
-/* --- File Upload Styling --- */
+/* ── File Upload ── */
 .file-upload-wrapper {
     position: relative;
     display: flex;
     align-items: center;
+    gap: 1rem;
 }
-
-input[type="file"] {
-    display: none;
-}
-
+input[type="file"] { display: none; }
 .custom-file-upload {
-    display: inline-block;
-    padding: 0.85rem 1.5rem;
-    background-color: #f1f5f9;
-    color: #475569;
-    border: 2px dashed #cbd5e1;
-    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.72rem 1.1rem;
+    background: var(--bg-secondary);
+    color: var(--text-soft);
+    border: 1.5px dashed var(--border);
+    border-radius: 0.75rem;
     cursor: pointer;
     font-weight: 600;
-    transition: all 0.3s ease;
+    font-size: 0.88rem;
+    transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
 }
-
 .custom-file-upload:hover {
-    background-color: #e2e8f0;
-    border-color: #94a3b8;
+    background: var(--accent-light);
+    border-color: var(--primary-300);
+    color: var(--primary-600);
 }
-
 .file-name {
-    margin-left: 1rem;
+    font-size: 0.88rem;
     font-style: italic;
-    color: #64748b;
+    color: var(--text-muted);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-/* --- Form Status Message --- */
-#form-status {
+/* ── Form Container (Alumni) ── */
+.form-container {
+    max-width: 860px;
+    margin: 4rem auto;
+    padding: 3.5rem;
+    background: var(--bg-card);
+    border-radius: 1.5rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.07);
+    border: 1px solid var(--border);
+    animation: contactFadeUp 0.6s ease-out;
+}
+@keyframes contactFadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.form-header {
     text-align: center;
-    margin-top: 2rem;
+    margin-bottom: 2.75rem;
+}
+.page-title {
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+    letter-spacing: -0.02em;
+}
+.page-subtitle {
     font-size: 1.05rem;
-    font-weight: 500;
-    min-height: 1.5em;
+    color: var(--text-muted);
+    margin-top: 0.6rem;
+}
+#contact-form.contact-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.4rem;
+    text-align: left;
+    background: transparent;
+    border: none;
+    padding: 0;
+    box-shadow: none;
+    border-radius: 0;
+}
+#contact-form .form-span-2 { grid-column: 1 / -1; }
+
+/* ── Batch Year Grid ── */
+#batch-grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+    gap: 8px;
     padding: 1rem;
-    border-radius: 8px;
+    background: var(--bg-secondary);
+    border: 1.5px solid var(--border);
+    border-radius: 0.75rem;
+    max-height: 220px;
+    overflow-y: auto;
 }
-#form-status.success {
-    background-color: #dcfce7;
-    color: #166534;
+.year-box {
+    padding: 10px 5px;
+    border: 1.5px solid transparent;
+    border-radius: 0.5rem;
+    text-align: center;
+    cursor: pointer;
+    background: var(--bg-card);
+    color: var(--text-soft);
+    font-weight: 600;
+    font-size: 0.88rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    transition: all 0.2s ease;
 }
-#form-status.error {
-    background-color: #fee2e2;
-    color: #b91c1c;
+.year-box:hover {
+    border-color: var(--primary-300);
+    color: var(--primary-600);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(80, 97, 196, 0.12);
+}
+.year-box.selected {
+    background: var(--primary-500);
+    color: #ffffff;
+    border-color: var(--primary-500);
+    box-shadow: 0 4px 12px rgba(80, 97, 196, 0.3);
 }
 
-/* --- Responsive Design for smaller screens --- */
+/* ── Alumni Button ── */
+.alumni-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    color: var(--primary-500);
+    border: 2px solid var(--primary-500);
+    padding: 0.72rem 2rem;
+    border-radius: 2rem;
+    font-weight: 600;
+    font-size: 0.98rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.25s ease, color 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
+    margin-bottom: 2.5rem;
+}
+.alumni-btn:hover {
+    background: var(--primary-500);
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(80, 97, 196, 0.25);
+}
+
+/* ── Mobile ── */
 @media (max-width: 768px) {
     #contact-form.contact-form {
         grid-template-columns: 1fr;
     }
     .form-container {
-        padding: 2.5rem;
+        padding: 2rem 1.5rem;
         margin: 2rem 1rem;
+        border-radius: 1rem;
     }
-    .page-title {
-        font-size: 2.2rem;
-    }
-}
-
-/* --- Batch Year Grid Styling --- */
-#batch-grid-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
-    gap: 10px;
-    padding: 15px;
-    background-color: #f8fafc;
-    border: 2px solid #e2e8f0;
-    border-radius: 10px;
-    max-height: 220px;
-    overflow-y: auto;
-}
-
-.year-box {
-    padding: 12px 5px;
-    border: 2px solid transparent;
-    border-radius: 8px;
-    text-align: center;
-    cursor: pointer;
-    background-color: #ffffff;
-    color: #475569;
-    font-weight: 600;
-    font-size: 0.95rem;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    transition: all 0.2s ease;
-}
-
-.year-box:hover {
-    border-color: #cbd5e1;
-    transform: translateY(-2px);
-}
-
-.year-box.selected {
-    background-color: #5061C4;
-    color: #ffffff;
-    border-color: #5061C4;
-    box-shadow: 0 4px 10px rgba(80, 97, 196, 0.3);
-}
-
-/* Specific style for the Alumni Connect button */
-.alumni-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #ffffff; 
-    color: #5061C4;
-    border: 2px solid #5061C4;
-    width: auto;
-    min-width: 150px;
-    padding: 12px 35px;
-    text-decoration: none;
-    border-radius: 30px;
-    font-weight: 600;
-    font-size: 1.05rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-bottom: 3rem;
-}
-
-.alumni-btn:hover {
-    background-color: #5061C4;
-    color: #ffffff;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(80, 97, 196, 0.2);
+    .page-title { font-size: 2rem; }
 }
