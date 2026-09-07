@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { X, ChevronLeft, ChevronRight, Image as ImageIcon, Loader2, FolderOpen } from "lucide-react";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import api from "@/lib/api";
 
@@ -162,7 +163,7 @@ export function GalleryPage() {
                 ))}
               </div>
 
-              {/* Masonry-style Grid */}
+              {/* Wildgallery Asymmetric Bento Grid */}
               {filesLoading ? (
                 <div className="py-20 flex flex-col items-center justify-center">
                   <Loader2 className="w-8 h-8 text-primary-500 animate-spin mb-4" />
@@ -174,57 +175,67 @@ export function GalleryPage() {
                   <p className="text-[var(--text-muted)]">No images found in this folder.</p>
                 </div>
               ) : (
-                <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6">
+                <motion.div 
+                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={{ once: true, amount: 0.1 }}
+                  variants={{
+                    hidden: {},
+                    show: {
+                      transition: {
+                        staggerChildren: 0.08
+                      }
+                    }
+                  }}
+                >
                   {allFiles.map((fileUrl, i) => {
-                    // Extract filename and folder name for elegant captions
                     const segments = fileUrl.split("/");
                     const filename = segments.pop()?.replace(/\.[^.]+$/, "").replace(/[-_]/g, " ") || "Gallery image";
-                    const folderName = segments.pop()?.replace(/[-_]/g, " ") || "Media";
+                    
+                    // Core visual signature: asymmetric grid layout
+                    // Make some images tall (span 2 rows) and others wide (span 2 cols) based on their index
+                    // This creates the organic collage feel from the spec
+                    let spanClass = "";
+                    if (i % 7 === 0) spanClass = "lg:col-span-2 lg:row-span-2"; // Hero image
+                    else if (i % 5 === 0) spanClass = "lg:row-span-2"; // Tall vertical tile
+                    else if (i % 6 === 0) spanClass = "lg:col-span-2"; // Wide tile
 
                     return (
-                      <div
+                      <motion.div
                         key={fileUrl}
-                        onClick={() => openLightbox(i)}
-                        className="break-inside-avoid flex flex-col overflow-hidden rounded-2xl cursor-pointer group bg-[var(--bg-card)] border border-[var(--border)] shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-all duration-500 hover:-translate-y-1.5"
-                        style={{
-                          opacity: visible ? 1 : 0,
-                          transform: visible ? "none" : "translateY(20px)",
-                          transitionDelay: `${(i % 10) * 40}ms`,
+                        variants={{
+                          hidden: { opacity: 0, scale: 0.92 },
+                          show: { opacity: 1, scale: 1, transition: { type: "spring", stiffness: 200, damping: 20 } }
                         }}
+                        onClick={() => openLightbox(i)}
+                        className={cn(
+                          "relative overflow-hidden rounded-md cursor-pointer group bg-gray-100",
+                          spanClass,
+                          "aspect-square", // Fallback for standard tiles
+                          spanClass.includes("row-span-2") ? "aspect-auto h-full min-h-[300px]" : "",
+                          spanClass.includes("col-span-2") && !spanClass.includes("row-span-2") ? "aspect-[2/1]" : ""
+                        )}
                       >
-                        {/* Image Container */}
-                        <div className="relative overflow-hidden bg-[var(--bg-secondary)]">
-                          <img 
-                            src={fileUrl} 
-                            alt={filename}
-                            loading="lazy"
-                            className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
-                          />
-                          
-                          {/* Hover Overlay */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                            <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 transform scale-75 group-hover:scale-100 transition-transform duration-300">
-                              <ImageIcon className="w-5 h-5 text-white" />
-                            </div>
-                          </div>
+                        <motion.img 
+                          src={fileUrl} 
+                          alt={filename}
+                          loading={i < 4 ? "eager" : "lazy"}
+                          whileHover={{ scale: 1.03 }}
+                          transition={{ duration: 0.4, ease: "easeOut" }}
+                          className="w-full h-full object-cover"
+                        />
+                        
+                        {/* Hover Overlay with sliding title (Wildgallery spec) */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none flex items-end p-6 overflow-hidden">
+                           <div className="transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
+                              <h4 className="text-white font-medium capitalize text-sm">{filename}</h4>
+                           </div>
                         </div>
-
-                        {/* Card Caption / Footer */}
-                        <div className="p-4 border-t border-[var(--border)]">
-                          <h4 className="font-medium text-[var(--text-primary)] text-sm line-clamp-1 mb-1 capitalize" title={filename}>
-                            {filename}
-                          </h4>
-                          <div className="flex items-center gap-2">
-                            <FolderOpen className="w-3 h-3 text-primary-500" />
-                            <p className="text-[11px] text-[var(--text-muted)] uppercase tracking-wider font-semibold capitalize">
-                              {activeFolder === "ALL" ? folderName : activeFolder.replace(/[-_]/g, " ")}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
+                      </motion.div>
                     );
                   })}
-                </div>
+                </motion.div>
               )}
             </>
           )}
