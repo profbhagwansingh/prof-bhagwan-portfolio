@@ -405,7 +405,8 @@ export default function GalleryAdminPage() {
         for (let i = 0; i < batch.length; i++) formData.append("files", batch[i]);
         
         await api.post(`/api/gallery/admin/files/upload?folder=${encodeURIComponent(activeFolder)}`, formData, { 
-          headers: { "Content-Type": "multipart/form-data" } 
+          headers: { "Content-Type": "multipart/form-data" },
+          timeout: 0 // Disable 10s timeout for large uploads
         });
         
         uploadedCount += batch.length;
@@ -491,7 +492,10 @@ export default function GalleryAdminPage() {
         const formData = new FormData();
         for (let i = 0; i < batch.length; i++) formData.append("files", batch[i]);
         
-        await api.post("/api/gallery/admin/slideshow-files/upload", formData, { headers: { "Content-Type": "multipart/form-data" } });
+        await api.post("/api/gallery/admin/slideshow-files/upload", formData, { 
+          headers: { "Content-Type": "multipart/form-data" },
+          timeout: 0 // Disable 10s timeout for large uploads
+        });
         
         uploadedCount += batch.length;
         setSlideshowUploadProgress(prev => prev ? { ...prev, current: uploadedCount } : null);
