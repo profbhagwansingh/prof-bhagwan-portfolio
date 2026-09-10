@@ -3,10 +3,11 @@
 import { useState, useEffect, useCallback } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Plus, Trash2, Image, Video, Newspaper, Loader2,
   RefreshCw, Check, X as XIcon, Sparkles, ImagePlus, Pencil,
-  FolderOpen, ChevronRight, ArrowLeft, ArrowRight, Save,
+  FolderOpen, ChevronRight, ArrowLeft, ArrowRight, Save, UploadCloud
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useApiQuery, useApiMutation, useInvalidate } from "@/hooks";
@@ -16,6 +17,27 @@ import { useToast } from "@/components/providers/ToastProvider";
 import { MediaUploader } from "@/components/shared/MediaUploader";
 import { galleryItemFormSchema, type GalleryItemFormData } from "@/lib/validations";
 import api from "@/lib/api";
+
+const MAX_BATCH_SIZE = 15 * 1024 * 1024; // 15 MB chunk limit
+
+function createBatches(files: FileList | File[]) {
+  const batches: File[][] = [];
+  let batch: File[] = [];
+  let batchSize = 0;
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    if (batch.length > 0 && batchSize + file.size > MAX_BATCH_SIZE) {
+      batches.push(batch);
+      batch = [];
+      batchSize = 0;
+    }
+    batch.push(file);
+    batchSize += file.size;
+  }
+  if (batch.length > 0) batches.push(batch);
+  return batches;
+}
 
 type MediaType = "PHOTO" | "VIDEO" | "CLIPPING";
 type Tab = "items" | "categories" | "slideshow";
@@ -124,13 +146,22 @@ function FileGrid({
   }
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <motion.div layout className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <AnimatePresence mode="popLayout">
       {files.map((fileUrl, index) => {
         const filename = fileUrl.split("/").pop() || "";
         const isEditing = editingFile === fileUrl;
         const isDeleting = deletingFile === fileUrl;
         return (
-          <div key={fileUrl} className="relative group rounded-xl border border-[var(--border)] overflow-hidden bg-[var(--bg-card)] shadow-sm hover:shadow-md transition-all">
+          <motion.div 
+            layout
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.2 }}
+            key={fileUrl} 
+            className="relative group rounded-xl border border-[var(--border)] overflow-hidden bg-[var(--bg-card)] shadow-sm hover:shadow-md transition-all"
+          >
             <div className="aspect-[4/3] w-full relative">
               <img src={fileUrl} alt={filename} loading="lazy" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -187,10 +218,11 @@ function FileGrid({
                 </p>
               )}
             </div>
-          </div>
+          </motion.div>
         );
       })}
-    </div>
+      </AnimatePresence>
+    </motion.div>
   );
 }
 
@@ -351,19 +383,47 @@ export default function GalleryAdminPage() {
     setIsDeletingFolder(null);
   };
 
+  const [uploadProgress, setUploadProgress] = useState<{ current: number; total: number; batchIndex: number; totalBatches: number } | null>(null);
+
   const handleGalleryUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = e.target.files;
     if (!fileList || !activeFolder) return;
+    
+    const batches = createBatches(fileList);
     setGalleryUploading(true);
-    try {
-      const formData = new FormData();
-      for (let i = 0; i < fileList.length; i++) formData.append("files", fileList[i]);
-      await api.post(`/api/gallery/admin/files/upload?folder=${encodeURIComponent(activeFolder)}`, formData, { headers: { "Content-Type": "multipart/form-data" } });
-      toast({ type: "success", title: `${fileList.length} image(s) uploaded` });
+    setUploadProgress({ current: 0, total: fileList.length, batchIndex: 0, totalBatches: batches.length });
+    
+    let uploadedCount = 0;
+    let failedCount = 0;
+
+    for (let bIndex = 0; bIndex < batches.length; bIndex++) {
+      const batch = batches[bIndex];
+      setUploadProgress(prev => prev ? { ...prev, batchIndex: bIndex + 1 } : null);
+      
+      try {
+        const formData = new FormData();
+        for (let i = 0; i < batch.length; i++) formData.append("files", batch[i]);
+        
+        await api.post(`/api/gallery/admin/files/upload?folder=${encodeURIComponent(activeFolder)}`, formData, { 
+          headers: { "Content-Type": "multipart/form-data" } 
+        });
+        
+        uploadedCount += batch.length;
+        setUploadProgress(prev => prev ? { ...prev, current: uploadedCount } : null);
+      } catch (err: any) {
+        failedCount += batch.length;
+        toast({ type: "error", title: `Batch ${bIndex + 1} failed`, description: err?.message });
+      }
+    }
+
+    if (uploadedCount > 0) {
+      toast({ type: "success", title: "Upload complete", description: `Successfully uploaded ${uploadedCount} image(s)` });
       fetchFolderFiles(activeFolder);
       fetchFolders();
-    } catch (err: any) { toast({ type: "error", title: "Upload failed", description: err?.message }); }
+    }
+    
     setGalleryUploading(false);
+    setUploadProgress(null);
     e.target.value = "";
   };
 
@@ -410,18 +470,44 @@ export default function GalleryAdminPage() {
 
   useEffect(() => { if (activeTab === "slideshow") fetchSlideshow(); }, [activeTab, fetchSlideshow]);
 
+  const [slideshowUploadProgress, setSlideshowUploadProgress] = useState<{ current: number; total: number; batchIndex: number; totalBatches: number } | null>(null);
+
   const handleSlideshowUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = e.target.files;
     if (!fileList) return;
+    
+    const batches = createBatches(fileList);
     setSlideshowUploading(true);
-    try {
-      const formData = new FormData();
-      for (let i = 0; i < fileList.length; i++) formData.append("files", fileList[i]);
-      await api.post("/api/gallery/admin/slideshow-files/upload", formData, { headers: { "Content-Type": "multipart/form-data" } });
-      toast({ type: "success", title: `${fileList.length} image(s) uploaded` });
+    setSlideshowUploadProgress({ current: 0, total: fileList.length, batchIndex: 0, totalBatches: batches.length });
+    
+    let uploadedCount = 0;
+    let failedCount = 0;
+
+    for (let bIndex = 0; bIndex < batches.length; bIndex++) {
+      const batch = batches[bIndex];
+      setSlideshowUploadProgress(prev => prev ? { ...prev, batchIndex: bIndex + 1 } : null);
+      
+      try {
+        const formData = new FormData();
+        for (let i = 0; i < batch.length; i++) formData.append("files", batch[i]);
+        
+        await api.post("/api/gallery/admin/slideshow-files/upload", formData, { headers: { "Content-Type": "multipart/form-data" } });
+        
+        uploadedCount += batch.length;
+        setSlideshowUploadProgress(prev => prev ? { ...prev, current: uploadedCount } : null);
+      } catch (err: any) {
+        failedCount += batch.length;
+        toast({ type: "error", title: `Batch ${bIndex + 1} failed`, description: err?.message });
+      }
+    }
+
+    if (uploadedCount > 0) {
+      toast({ type: "success", title: "Upload complete", description: `Successfully uploaded ${uploadedCount} image(s)` });
       fetchSlideshow();
-    } catch (err: any) { toast({ type: "error", title: "Upload failed", description: err?.message }); }
+    }
+    
     setSlideshowUploading(false);
+    setSlideshowUploadProgress(null);
     e.target.value = "";
   };
 
@@ -640,6 +726,24 @@ export default function GalleryAdminPage() {
               </div>
             </div>
             <div className="flex items-center gap-2">
+              {uploadProgress && (
+                <div className="flex items-center gap-2 mr-2">
+                  <span className="text-xs text-[var(--text-muted)] font-medium">
+                    Batch {uploadProgress.batchIndex}/{uploadProgress.totalBatches}
+                  </span>
+                  <div className="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
+                    <motion.div 
+                      className="h-full bg-primary-500"
+                      initial={{ width: 0 }}
+                      animate={{ width: `${(uploadProgress.current / uploadProgress.total) * 100}%` }}
+                      transition={{ ease: "easeInOut" }}
+                    />
+                  </div>
+                  <span className="text-xs text-[var(--text-primary)] font-bold">
+                    {uploadProgress.current}/{uploadProgress.total}
+                  </span>
+                </div>
+              )}
               <label className={cn(
                 "inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium cursor-pointer transition-colors shadow-sm text-white",
                 galleryUploading ? "bg-primary-400 cursor-wait" : "bg-primary-500 hover:bg-primary-600"
@@ -704,6 +808,24 @@ export default function GalleryAdminPage() {
               <p className="text-sm text-[var(--text-muted)] mt-0.5">Manage images in the homepage hero slideshow</p>
             </div>
             <div className="flex items-center gap-2">
+              {slideshowUploadProgress && (
+                <div className="flex items-center gap-2 mr-2">
+                  <span className="text-xs text-[var(--text-muted)] font-medium">
+                    Batch {slideshowUploadProgress.batchIndex}/{slideshowUploadProgress.totalBatches}
+                  </span>
+                  <div className="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
+                    <motion.div 
+                      className="h-full bg-primary-500"
+                      initial={{ width: 0 }}
+                      animate={{ width: `${(slideshowUploadProgress.current / slideshowUploadProgress.total) * 100}%` }}
+                      transition={{ ease: "easeInOut" }}
+                    />
+                  </div>
+                  <span className="text-xs text-[var(--text-primary)] font-bold">
+                    {slideshowUploadProgress.current}/{slideshowUploadProgress.total}
+                  </span>
+                </div>
+              )}
               <label className={cn(
                 "inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium cursor-pointer transition-colors shadow-sm text-white",
                 slideshowUploading ? "bg-primary-400 cursor-wait" : "bg-primary-500 hover:bg-primary-600"
