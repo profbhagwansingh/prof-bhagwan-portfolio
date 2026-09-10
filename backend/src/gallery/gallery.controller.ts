@@ -69,7 +69,7 @@ export class GalleryController {
     @Post('admin/slideshow-files/upload')
     @UseGuards(AuthGuard('jwt'), RolesGuard)
     @Roles(Role.SUPER_ADMIN, Role.ADMIN)
-    @UseInterceptors(FilesInterceptor('files', 20))
+    @UseInterceptors(FilesInterceptor('files', 100))
     uploadSlideshowFiles(@UploadedFiles() files: any[]) {
         return this.galleryService.uploadSlideshowFiles(files);
     }
@@ -139,7 +139,7 @@ export class GalleryController {
     @Post('admin/files/upload')
     @UseGuards(AuthGuard('jwt'), RolesGuard)
     @Roles(Role.SUPER_ADMIN, Role.ADMIN)
-    @UseInterceptors(FilesInterceptor('files', 20))
+    @UseInterceptors(FilesInterceptor('files', 100))
     uploadGalleryFiles(@Query('folder') folder: string, @UploadedFiles() files: any[]) {
         return this.galleryService.uploadFiles(folder, files);
     }
