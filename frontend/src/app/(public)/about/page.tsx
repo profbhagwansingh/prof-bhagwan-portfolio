@@ -168,12 +168,26 @@ export default function AboutPage() {
                 <div className="marquee-track scroll-left">
                   <ul className="courses-list">
                     {courses.slice(0, Math.ceil(courses.length / 2)).map(c => (
-                      <li key={c.id} onClick={() => c.syllabusUrl ? window.open(c.syllabusUrl, '_blank') : null}>{c.name}</li>
+                      <li 
+                        key={c.id} 
+                        onClick={() => c.syllabusUrl ? window.open(c.syllabusUrl, '_blank') : null}
+                        style={{ cursor: c.syllabusUrl ? 'pointer' : 'default' }}
+                        title={c.syllabusUrl ? `View syllabus for ${c.name}` : undefined}
+                      >
+                        {c.name}
+                      </li>
                     ))}
                   </ul>
                   <ul className="courses-list">
                     {courses.slice(0, Math.ceil(courses.length / 2)).map(c => (
-                      <li key={`dup-${c.id}`} onClick={() => c.syllabusUrl ? window.open(c.syllabusUrl, '_blank') : null}>{c.name}</li>
+                      <li 
+                        key={`dup-${c.id}`} 
+                        onClick={() => c.syllabusUrl ? window.open(c.syllabusUrl, '_blank') : null}
+                        style={{ cursor: c.syllabusUrl ? 'pointer' : 'default' }}
+                        title={c.syllabusUrl ? `View syllabus for ${c.name}` : undefined}
+                      >
+                        {c.name}
+                      </li>
                     ))}
                   </ul>
                 </div>
@@ -184,12 +198,26 @@ export default function AboutPage() {
                   <div className="marquee-track scroll-right">
                     <ul className="courses-list">
                       {courses.slice(Math.ceil(courses.length / 2)).map(c => (
-                        <li key={c.id} onClick={() => c.syllabusUrl ? window.open(c.syllabusUrl, '_blank') : null}>{c.name}</li>
+                        <li 
+                          key={c.id} 
+                          onClick={() => c.syllabusUrl ? window.open(c.syllabusUrl, '_blank') : null}
+                          style={{ cursor: c.syllabusUrl ? 'pointer' : 'default' }}
+                          title={c.syllabusUrl ? `View syllabus for ${c.name}` : undefined}
+                        >
+                          {c.name}
+                        </li>
                       ))}
                     </ul>
                     <ul className="courses-list">
                       {courses.slice(Math.ceil(courses.length / 2)).map(c => (
-                        <li key={`dup-${c.id}`} onClick={() => c.syllabusUrl ? window.open(c.syllabusUrl, '_blank') : null}>{c.name}</li>
+                        <li 
+                          key={`dup-${c.id}`} 
+                          onClick={() => c.syllabusUrl ? window.open(c.syllabusUrl, '_blank') : null}
+                          style={{ cursor: c.syllabusUrl ? 'pointer' : 'default' }}
+                          title={c.syllabusUrl ? `View syllabus for ${c.name}` : undefined}
+                        >
+                          {c.name}
+                        </li>
                       ))}
                     </ul>
                   </div>

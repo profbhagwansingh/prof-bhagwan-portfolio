@@ -329,14 +329,13 @@ export default function HomePage() {
           <ul className="skills-list">
             {courses.length > 0 ? (
               courses.map(course => (
-                <li key={course.id}>
-                  {course.syllabusUrl ? (
-                    <a href={course.syllabusUrl} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>
-                      {course.name}
-                    </a>
-                  ) : (
-                    course.name
-                  )}
+                <li 
+                  key={course.id}
+                  onClick={() => course.syllabusUrl ? window.open(course.syllabusUrl, '_blank') : null}
+                  style={{ cursor: course.syllabusUrl ? 'pointer' : 'default' }}
+                  title={course.syllabusUrl ? `View syllabus for ${course.name}` : undefined}
+                >
+                  {course.name}
                 </li>
               ))
             ) : (
