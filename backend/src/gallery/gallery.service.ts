@@ -177,7 +177,13 @@ export class GalleryService {
 
     // ─── GALLERY: scan all media folders (PUBLIC) ────────────────
     async getPublicGalleryFolders(): Promise<{ folder: string; label: string; count: number; sortOrder: number }[]> {
-        return this.scanGalleryFolders(false);
+        const all = await this.scanGalleryFolders(false);
+        return all.filter(f => 
+            !f.folder.toLowerCase().includes('backup') && 
+            !f.folder.toLowerCase().includes('original') &&
+            !f.folder.startsWith('_') &&
+            !f.folder.includes('/_')
+        );
     }
 
     // ─── GALLERY: scan all media folders (ADMIN) ─────────────────
@@ -191,7 +197,7 @@ export class GalleryService {
         // Scan img/ subfolders (excluding slideshow — that has its own tab)
         if (fs.existsSync(imgDir)) {
             for (const name of fs.readdirSync(imgDir)) {
-                if (name === 'slideshow' || name.startsWith('.')) continue;
+                if (name === 'slideshow' || name.startsWith('.') || (!includeEmpty && (name.startsWith('_') || name.toLowerCase().includes('backup')))) continue;
                 const full = path.join(imgDir, name);
                 try {
                     if (!fs.statSync(full).isDirectory()) continue;

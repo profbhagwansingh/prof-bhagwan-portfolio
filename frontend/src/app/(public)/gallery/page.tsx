@@ -21,18 +21,27 @@ export default function GalleryPage() {
   useEffect(() => {
     const fetchGalleryData = async () => {
       try {
-        // Fetch folders (without cache buster to prevent timeout on backend)
+        // Fetch folders
         const foldersRes = await api.get('/api/gallery/folders');
-        const folders = Array.isArray(foldersRes.data) ? foldersRes.data : [];
+        const rawFolders = Array.isArray(foldersRes.data) ? foldersRes.data : [];
 
-        if (folders.length === 0) {
+        // Filter out any internal backup or private directories
+        const publicFolders = rawFolders.filter((f: any) => {
+          const name = (f.label || f.folder || "").toLowerCase();
+          return !name.includes("backup") && 
+                 !name.includes("original") && 
+                 !f.folder.startsWith("_") &&
+                 !f.folder.includes("/_");
+        });
+
+        if (publicFolders.length === 0) {
           setFolderData([]);
           setLoading(false);
           return;
         }
 
-        // Fetch files for all folders concurrently
-        const fileRequests = folders.map((f: any) =>
+        // Fetch files for all public folders concurrently
+        const fileRequests = publicFolders.map((f: any) =>
           api.get(`/api/gallery/files?folder=${encodeURIComponent(f.folder)}`)
             .then(res => ({
               folder: f.label || f.folder,
@@ -46,11 +55,11 @@ export default function GalleryPage() {
 
         const folderResults = await Promise.all(fileRequests);
         
-        // Map the results to our sectioned structure
+        // Map the results to clean sectioned structure
         const combinedData = folderResults.map((result) => {
           const files = result.files.map((src) => {
             const fileName = src.split('/').pop() || "";
-            const caption = fileName.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ") || "Gallery Image";
+            const caption = fileName.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ") || "Archival Image";
             return { src, caption, folder: result.folder };
           });
           return { folder: result.folder, files };
@@ -68,6 +77,17 @@ export default function GalleryPage() {
     fetchGalleryData();
   }, []);
 
+  // Keyboard navigation for lightbox (Esc to close)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && lightboxOpen) {
+        closeLightbox();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [lightboxOpen]);
+
   const openLightbox = (imgSrc: string, caption: string) => {
     setLightboxImg(imgSrc);
     setLightboxCaption(caption);
@@ -81,153 +101,156 @@ export default function GalleryPage() {
   };
 
   return (
-    <main className="min-h-screen bg-parchment pt-[80px]">
-      {/* Header Section */}
-      <section className="bg-ink text-parchment py-16 px-4 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent" />
-        <div className="container max-w-6xl mx-auto text-center relative z-10">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-6 tracking-tight">
-            THE LIBRARY
+    <main className="min-h-screen bg-[#faf9f8] text-[#1a1a2e]">
+      {/* ─── Stage 1 Header Section ─── */}
+      <header className="pt-28 pb-12 px-4 sm:px-6 lg:px-8 text-center border-b border-gray-200/70 bg-gradient-to-b from-white via-[#faf9f8] to-[#faf9f8]">
+        <div className="max-w-3xl mx-auto">
+          <span className="inline-block text-xs uppercase tracking-[0.2em] text-[#5061C4] font-semibold mb-2">
+            Academic Portfolio &bull; Visual Archive
+          </span>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-display font-medium text-[#1a1a2e] tracking-tight">
+            The Library
           </h1>
-          <p className="text-parchment-muted max-w-2xl mx-auto text-lg md:text-xl font-light">
-            A visual archive of academic achievements, events, and milestones.
+          <div className="w-14 h-[3px] bg-[#5061C4] mx-auto mt-4 mb-4 rounded-full" />
+          <p className="text-base sm:text-lg text-gray-600 font-normal leading-relaxed max-w-xl mx-auto">
+            A visual archive of academic achievements, conferences, and institutional milestones.
           </p>
         </div>
-      </section>
+      </header>
 
-      {/* Gallery Section */}
-      {loading ? (
-        <div className="py-32 flex flex-col items-center justify-center space-y-4">
-          <div className="w-12 h-12 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin"></div>
-          <p className="text-ink-muted tracking-wide font-medium">Loading gallery...</p>
-        </div>
-      ) : folderData.length === 0 ? (
-        <div className="py-32 text-center text-ink-muted tracking-wide">
-          <p className="text-xl font-medium">No gallery content available.</p>
-          <p className="text-sm mt-2 opacity-70">Check back later for updates.</p>
-        </div>
-      ) : (
-        <div className="px-4 md:px-8 lg:px-12 max-w-[1800px] mx-auto py-16 space-y-24">
-          <style dangerouslySetInnerHTML={{__html: `
-            .custom-gallery-grid {
-              display: grid;
-              grid-template-columns: repeat(2, 1fr);
-              gap: 16px;
-            }
-            @media (min-width: 640px) { .custom-gallery-grid { grid-template-columns: repeat(3, 1fr); } }
-            @media (min-width: 768px) { .custom-gallery-grid { grid-template-columns: repeat(4, 1fr); } }
-            @media (min-width: 1024px) { .custom-gallery-grid { grid-template-columns: repeat(5, 1fr); } }
-            
-            .custom-gallery-item {
-              aspect-ratio: 1 / 1;
-              width: 100%;
-              position: relative;
-              overflow: hidden;
-              border-radius: 12px;
-              background-color: #f3f4f6;
-              cursor: pointer;
-              box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-              transition: box-shadow 0.3s ease;
-            }
-            .custom-gallery-item:hover {
-              box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            }
-            
-            .custom-gallery-img {
-              width: 100%;
-              height: 100%;
-              object-fit: cover;
-              transition: transform 0.5s ease-out;
-            }
-            .custom-gallery-item:hover .custom-gallery-img {
-              transform: scale(1.1);
-            }
-          `}} />
-          
-          {folderData.map((folder, folderIdx) => {
-            if (!folder.files || folder.files.length === 0) return null;
-            return (
-              <div key={folderIdx} className="space-y-6">
-                <div className="flex items-center gap-4">
-                  <h2 className="text-2xl md:text-3xl font-display font-semibold text-ink capitalize tracking-tight">
-                    {folder.folder}
-                  </h2>
-                  <div className="h-px bg-ink/10 flex-1"></div>
-                  <span className="text-sm font-medium text-ink-muted bg-ink/5 px-3 py-1 rounded-full">
-                    {folder.files.length} {folder.files.length === 1 ? 'Item' : 'Items'}
-                  </span>
-                </div>
-                
-                <div className="custom-gallery-grid">
-                  {folder.files.map((file, i) => {
-                    const isVideo = /\.(mp4|webm|ogg|mov)$/i.test(file.src);
+      {/* ─── Centered Main Gallery Container (max-w-7xl) ─── */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+        {loading ? (
+          <div className="py-24 flex flex-col items-center justify-center space-y-4">
+            <div className="w-10 h-10 border-3 border-[#5061C4]/20 border-t-[#5061C4] rounded-full animate-spin" />
+            <p className="text-sm font-medium text-gray-500 tracking-wide">Loading library collection...</p>
+          </div>
+        ) : folderData.length === 0 ? (
+          <div className="py-24 text-center">
+            <p className="text-lg font-medium text-gray-700">No public gallery items available at this time.</p>
+            <p className="text-sm text-gray-500 mt-1">Please check back soon.</p>
+          </div>
+        ) : (
+          <div className="space-y-16">
+            {folderData.map((folder, folderIdx) => {
+              if (!folder.files || folder.files.length === 0) return null;
+              return (
+                <section key={folderIdx} className="space-y-6">
+                  {/* Album / Section Title */}
+                  <div className="flex items-center justify-between border-b border-gray-200/80 pb-3">
+                    <div className="flex items-baseline gap-3">
+                      <h2 className="text-2xl sm:text-3xl font-display font-semibold text-[#1a1a2e] capitalize tracking-tight">
+                        {folder.folder}
+                      </h2>
+                      <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2.5 py-0.5 rounded-full">
+                        {folder.files.length} {folder.files.length === 1 ? "Item" : "Items"}
+                      </span>
+                    </div>
+                  </div>
 
-                    return (
-                      <div 
-                        key={i} 
-                        className="custom-gallery-item group"
-                        onClick={() => !isVideo && openLightbox(file.src, file.caption)}
-                      >
-                        {isVideo ? (
-                           <a href={file.src} target="_blank" rel="noopener noreferrer" className="block relative w-full h-full">
-                              <div className="absolute inset-0 w-full h-full flex items-center justify-center bg-ink">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="white" className="opacity-80 group-hover:opacity-100 transition-opacity">
-                                  <path d="M8 5v14l11-7z" />
-                                </svg>
+                  {/* Responsive Grid: 1 col on mobile, 2 on tablet, 3-4 on desktop */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    {folder.files.map((file, i) => {
+                      const isVideo = /\.(mp4|webm|ogg|mov)$/i.test(file.src);
+
+                      return (
+                        <div
+                          key={i}
+                          tabIndex={0}
+                          role="button"
+                          aria-label={`View ${file.caption}`}
+                          className="group relative aspect-square w-full rounded-2xl overflow-hidden bg-white border border-gray-200/80 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#5061C4] focus:ring-offset-2"
+                          onClick={() => !isVideo && openLightbox(file.src, file.caption)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              e.preventDefault();
+                              if (!isVideo) openLightbox(file.src, file.caption);
+                            }
+                          }}
+                        >
+                          {isVideo ? (
+                            <a
+                              href={file.src}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="w-full h-full flex items-center justify-center bg-[#1a1a2e]"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="44"
+                                height="44"
+                                viewBox="0 0 24 24"
+                                fill="white"
+                                className="opacity-80 group-hover:opacity-100 transition-opacity"
+                              >
+                                <path d="M8 5v14l11-7z" />
+                              </svg>
+                            </a>
+                          ) : (
+                            <>
+                              <img
+                                src={file.src}
+                                alt={file.caption}
+                                loading="lazy"
+                                className="w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-105"
+                              />
+                              {/* Soft Gradient Overlay */}
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
+
+                              {/* Caption */}
+                              <div className="absolute bottom-0 inset-x-0 p-4 translate-y-2 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none">
+                                <p className="text-white text-xs sm:text-sm font-medium line-clamp-2 drop-shadow">
+                                  {file.caption}
+                                </p>
                               </div>
-                           </a>
-                        ) : (
-                          <>
-                            <img 
-                              src={file.src} 
-                              alt={file.caption} 
-                              loading="lazy" 
-                              className="custom-gallery-img" 
-                            />
-                            {/* Gradient Overlay */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-                            
-                            {/* Caption Text */}
-                            <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-out flex flex-col pointer-events-none">
-                              <span className="text-white font-medium text-xs sm:text-sm leading-tight drop-shadow-md line-clamp-2">{file.caption}</span>
-                            </div>
-                          </>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
+                            </>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </section>
+              );
+            })}
+          </div>
+        )}
+      </div>
 
-      {/* Elegant Lightbox Modal */}
+      {/* ─── Accessible Lightbox Modal ─── */}
       {lightboxOpen && (
-        <div 
-          className="fixed inset-0 z-50 bg-ink/95 backdrop-blur-sm flex items-center justify-center p-4 md:p-8 animate-fade-in"
+        <div
+          className="fixed inset-0 z-50 bg-[#1a1a2e]/90 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 md:p-8 animate-fade-in"
           onClick={closeLightbox}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Image lightbox"
         >
-          <button 
-            className="absolute top-6 right-8 text-white/60 hover:text-white text-5xl font-light transition-colors z-10 focus:outline-none"
+          <button
+            type="button"
+            className="absolute top-5 right-5 text-white/70 hover:text-white text-3xl font-light w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10 focus:outline-none focus:ring-2 focus:ring-white"
             onClick={closeLightbox}
-            aria-label="Close"
+            aria-label="Close lightbox"
           >
             &times;
           </button>
-          
-          <div className="relative max-w-6xl max-h-full flex flex-col items-center justify-center" onClick={(e) => e.stopPropagation()}>
-            <img 
-              src={lightboxImg} 
-              alt={lightboxCaption} 
-              className="max-h-[80vh] max-w-full object-contain rounded-md shadow-2xl"
+
+          <div
+            className="relative max-w-5xl max-h-full flex flex-col items-center justify-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={lightboxImg}
+              alt={lightboxCaption}
+              className="max-h-[80vh] max-w-full object-contain rounded-xl shadow-2xl"
             />
-            <div className="mt-6 text-center">
-              <p className="text-white/90 text-lg md:text-xl font-medium tracking-wide drop-shadow-sm">
-                {lightboxCaption}
-              </p>
-            </div>
+            {lightboxCaption && (
+              <div className="mt-4 text-center px-4">
+                <p className="text-white/95 text-base sm:text-lg font-medium drop-shadow">
+                  {lightboxCaption}
+                </p>
+              </div>
+            )}
           </div>
         </div>
       )}

@@ -452,16 +452,32 @@ header a { text-decoration: none; color: #333; }
 
 /* --- Mobile Responsiveness --- */
 @media (max-width: 768px) {
-    /* Optional: Hide sidebar on mobile to save screen space */
-    /* .social-sidebar { display: none; } */
-    
-    /* OR make them smaller on mobile */
+    .social-sidebar {
+        top: auto;
+        bottom: 16px;
+        right: 16px;
+        transform: none;
+        flex-direction: row;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(8px);
+        padding: 4px;
+        border-radius: 9999px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        gap: 6px;
+        z-index: 999;
+    }
     .social-icon {
-        width: 35px;
-        height: 35px;
+        width: 36px;
+        height: 36px;
+        border-radius: 9999px;
+        box-shadow: none;
     }
     .social-icon svg {
         width: 18px;
         height: 18px;
+    }
+    .social-icon:hover {
+        width: 36px !important;
     }
 }
