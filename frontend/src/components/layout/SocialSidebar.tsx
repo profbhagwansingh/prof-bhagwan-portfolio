@@ -1,4 +1,10 @@
+"use client";
+
+import { useState } from "react";
+
 export function SocialSidebar() {
+  const [imgError, setImgError] = useState(false);
+
   return (
     <div className="social-sidebar">
       <a href="https://www.facebook.com/bhagwan.singh.338" target="_blank" rel="noopener noreferrer" className="social-icon facebook" aria-label="facebook">
@@ -21,8 +27,22 @@ export function SocialSidebar() {
         </svg>
       </a>
       
-      <a href="https://www.instagram.com/dsmmclubcuj?igsh=azV6OG8zeGR3cDg4" target="_blank" rel="noopener noreferrer" className="social-icon instagram" aria-label="instagram">
-        <img src="/media/img/logo/462412614_432696082765765_3122521385722262254_n.jpg" className="icon-club" alt="club" />
+      <a href="https://www.instagram.com/dsmmclubcuj?igsh=azV6OG8zeGR3cDg4" target="_blank" rel="noopener noreferrer" className="social-icon instagram" aria-label="DSMM Club Instagram" title="DSMM Club CUJ">
+        {!imgError ? (
+          <img 
+            src="/media/img/logo/462412614_432696082765765_3122521385722262254_n.jpg" 
+            className="icon-club" 
+            alt="club" 
+            onError={() => setImgError(true)}
+          />
+        ) : (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: "20px", height: "20px" }}>
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+        )}
       </a>
     </div>
   );
