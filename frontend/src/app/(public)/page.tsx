@@ -224,47 +224,48 @@ export default function HomePage() {
           }}>
             {/* Left: Quick Stats (Replaces Image) */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', padding: '10px 20px 10px 0', borderRight: '1px solid #eee' }}>
-              {quickStats.length > 0 ? (
-                quickStats.map((stat, index) => {
-                  // Synchronize all highlighted metrics with true DB counts
-                  let displayCount = stat.count;
-                  const label = stat.label.toLowerCase();
-                  if (label.includes('publication') && publicationCount > 0) {
-                    displayCount = publicationCount.toString();
-                  } else if (label.includes('scholar') && scholarsCount > 0) {
-                    displayCount = scholarsCount.toString();
-                  } else if (label.includes('chapter') && chaptersCount > 0) {
-                    displayCount = chaptersCount.toString();
-                  } else if (label.includes('book') && authoredBooksCount > 0) {
-                    displayCount = authoredBooksCount.toString();
-                  } else if (label.includes('lecture') && invitedLecturesCount > 0) {
-                    displayCount = invitedLecturesCount.toString();
-                  }
-                  return (
-                    <div key={stat.id} style={{ 
-                      display: 'flex', 
-                      flexDirection: 'column', 
-                      alignItems: 'flex-start',
-                      borderBottom: index !== quickStats.length - 1 ? '1px dashed #eaeaea' : 'none',
-                      paddingBottom: index !== quickStats.length - 1 ? '20px' : '0'
-                    }}>
-                      <span style={{ fontSize: '1.4rem', fontWeight: '700', color: '#5061C4', marginBottom: '4px', lineHeight: 1.2, wordBreak: 'break-word' }}>
-                        {typeof displayCount === 'string' && displayCount.startsWith('http') ? (
-                          <a href={displayCount} target="_blank" rel="noopener noreferrer" style={{ color: '#5061C4', textDecoration: 'none', transition: 'color 0.3s' }}
-                            onMouseOver={(e) => e.currentTarget.style.color = '#3d4a9b'}
-                            onMouseOut={(e) => e.currentTarget.style.color = '#5061C4'}
-                          >{displayCount}</a>
-                        ) : displayCount}
-                      </span>
-                      <span style={{ fontSize: '0.9rem', color: '#666', textTransform: 'capitalize', fontWeight: '500' }}>
-                        {stat.label}
-                      </span>
-                    </div>
-                  );
-                })
-              ) : (
-                <p style={{ color: '#666', fontSize: '0.9rem' }}>Loading stats...</p>
-              )}
+              {(quickStats.length > 0 ? quickStats : [
+                { id: 'stat-pub', label: 'Publications', count: publicationCount > 0 ? publicationCount.toString() : '54+' },
+                { id: 'stat-scholars', label: 'PhD Scholars', count: scholarsCount > 0 ? scholarsCount.toString() : '14+' },
+                { id: 'stat-chapters', label: 'Book Chapters', count: chaptersCount > 0 ? chaptersCount.toString() : '10+' },
+                { id: 'stat-lectures', label: 'Invited Lectures', count: invitedLecturesCount > 0 ? invitedLecturesCount.toString() : '87+' },
+              ]).map((stat, index, arr) => {
+                // Synchronize all highlighted metrics with true DB counts
+                let displayCount = stat.count;
+                const label = stat.label.toLowerCase();
+                if (label.includes('publication') && publicationCount > 0) {
+                  displayCount = publicationCount.toString();
+                } else if (label.includes('scholar') && scholarsCount > 0) {
+                  displayCount = scholarsCount.toString();
+                } else if (label.includes('chapter') && chaptersCount > 0) {
+                  displayCount = chaptersCount.toString();
+                } else if (label.includes('book') && authoredBooksCount > 0) {
+                  displayCount = authoredBooksCount.toString();
+                } else if (label.includes('lecture') && invitedLecturesCount > 0) {
+                  displayCount = invitedLecturesCount.toString();
+                }
+                return (
+                  <div key={stat.id} style={{ 
+                    display: 'flex', 
+                    flexDirection: 'column', 
+                    alignItems: 'flex-start',
+                    borderBottom: index !== arr.length - 1 ? '1px dashed #eaeaea' : 'none',
+                    paddingBottom: index !== arr.length - 1 ? '20px' : '0'
+                  }}>
+                    <span style={{ fontSize: '1.4rem', fontWeight: '700', color: '#5061C4', marginBottom: '4px', lineHeight: 1.2, wordBreak: 'break-word' }}>
+                      {typeof displayCount === 'string' && displayCount.startsWith('http') ? (
+                        <a href={displayCount} target="_blank" rel="noopener noreferrer" style={{ color: '#5061C4', textDecoration: 'none', transition: 'color 0.3s' }}
+                          onMouseOver={(e) => e.currentTarget.style.color = '#3d4a9b'}
+                          onMouseOut={(e) => e.currentTarget.style.color = '#5061C4'}
+                        >{displayCount}</a>
+                      ) : displayCount}
+                    </span>
+                    <span style={{ fontSize: '0.9rem', color: '#666', textTransform: 'capitalize', fontWeight: '500' }}>
+                      {stat.label}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
 
             {/* Middle: Details */}

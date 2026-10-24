@@ -227,107 +227,106 @@ export default function AboutPage() {
               {/* ... other marquee tracks can be added here if needed ... */}
             </div>
 
-            <section className="horizontal">
-              {/* PhD Supervision Section */}
-              <div className="supervision-section animate-on-scroll">
-                <h3 className="section-title">PhD Supervision</h3>
+            {/* PhD Supervision Section */}
+            <div className="supervision-section animate-on-scroll" style={{ width: '100%', margin: '3.5rem 0' }}>
+              <h3 className="section-title">PhD Supervision</h3>
+              {scholars.length > 0 ? (
+                <p className="intro-text text-center">
+                  Mentored {scholars.filter(s => s.status === 'POST_DOC').length > 0 ? `${scholars.filter(s => s.status === 'POST_DOC').length} Post-Doctoral, ` : ''}
+                  {scholars.filter(s => s.status === 'AWARDED' || s.status === 'PURSUING').length} doctoral students, 
+                  with {scholars.filter(s => s.status === 'AWARDED').length} awarded and {scholars.filter(s => s.status === 'PURSUING').length} currently pursuing their research.
+                </p>
+              ) : (
+                <p className="intro-text text-center">
+                  Mentored 1 Post-Doctoral, 14 doctoral students, with 9 awarded and 5 currently pursuing their research.
+                </p>
+              )}
+              
+              <div className="phd-grid">
                 {scholars.length > 0 ? (
-                  <p className="intro-text text-center">
-                    Mentored {scholars.filter(s => s.status === 'POST_DOC').length > 0 ? `${scholars.filter(s => s.status === 'POST_DOC').length} Post-Doctoral, ` : ''}
-                    {scholars.filter(s => s.status === 'AWARDED' || s.status === 'PURSUING').length} doctoral students, 
-                    with {scholars.filter(s => s.status === 'AWARDED').length} awarded and {scholars.filter(s => s.status === 'PURSUING').length} currently pursuing their research.
-                  </p>
+                  scholars.map((scholar) => (
+                    <div 
+                      key={scholar.id} 
+                      className={`phd-card ${scholar.status.toLowerCase()}`}
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => openImageModal(scholar.imageUrl || '/media/img/research-scholars/default.png', scholar.name)}
+                    >
+                      {scholar.name}
+                    </div>
+                  ))
                 ) : (
-                  <p className="intro-text text-center">
-                    Mentored 1 Post-Doctoral, 14 doctoral students, with 9 awarded and 5 currently pursuing their research.
-                  </p>
+                  <>
+                    <div className="phd-card post_doc" style={{ cursor: 'pointer' }} onClick={() => openImageModal('/media/img/research-scholars/sachine.png', 'Dr. Sachin Kumar')}>Dr. Sachin Kumar</div>
+                    <div className="phd-card awarded" style={{ cursor: 'pointer' }} onClick={() => openImageModal('/media/img/research-scholars/rishi.png', 'Dr. Rishi Kant')}>Dr. Rishi Kant</div>
+                    <div className="phd-card awarded" style={{ cursor: 'pointer' }} onClick={() => openImageModal('/media/img/research-scholars/devender.png', 'Dr. Devender Kumar')}>Dr. Devender Kumar</div>
+                    <div className="phd-card awarded" style={{ cursor: 'pointer' }} onClick={() => openImageModal('/media/img/research-scholars/deepak.png', 'Dr. Deepak Jaiswal')}>Dr. Deepak Jaiswal</div>
+                    <div className="phd-card awarded" style={{ cursor: 'pointer' }} onClick={() => openImageModal('/media/img/research-scholars/kamlesh.png', 'Dr. Kamlesh Kumar')}>Dr. Kamlesh Kumar</div>
+                    <div className="phd-card pursuing" style={{ cursor: 'pointer' }} onClick={() => openImageModal('/media/img/research-scholars/default.png', 'Rahul Gupta')}>Rahul Gupta</div>
+                    <div className="phd-card pursuing" style={{ cursor: 'pointer' }} onClick={() => openImageModal('/media/img/research-scholars/default.png', 'Neha Mishra')}>Neha Mishra</div>
+                    <div className="phd-card pursuing" style={{ cursor: 'pointer' }} onClick={() => openImageModal('/media/img/research-scholars/default.png', 'Amit Patel')}>Amit Patel</div>
+                  </>
                 )}
-                
-                <div className="phd-grid">
-                  {scholars.length > 0 ? (
-                    scholars.map((scholar) => (
-                      <div 
-                        key={scholar.id} 
-                        className={`phd-card ${scholar.status.toLowerCase()}`}
-                        onClick={() => openImageModal(scholar.imageUrl || '/media/img/research-scholars/default.png', scholar.name)}
-                      >
-                        {scholar.name}
-                      </div>
-                    ))
-                  ) : (
-                    <>
-                      <div className="phd-card post_doc" onClick={() => openImageModal('/media/img/research-scholars/default.png', 'Dr. Sachin Kumar')}>Dr. Sachin Kumar</div>
-                      <div className="phd-card awarded" onClick={() => openImageModal('/media/img/research-scholars/default.png', 'Dr. Rakesh Kumar')}>Dr. Rakesh Kumar</div>
-                      <div className="phd-card awarded" onClick={() => openImageModal('/media/img/research-scholars/default.png', 'Dr. Anita Singh')}>Dr. Anita Singh</div>
-                      <div className="phd-card awarded" onClick={() => openImageModal('/media/img/research-scholars/default.png', 'Dr. Vikas Sharma')}>Dr. Vikas Sharma</div>
-                      <div className="phd-card awarded" onClick={() => openImageModal('/media/img/research-scholars/default.png', 'Dr. Priyanka Verma')}>Dr. Priyanka Verma</div>
-                      <div className="phd-card pursuing" onClick={() => openImageModal('/media/img/research-scholars/default.png', 'Rahul Gupta')}>Rahul Gupta</div>
-                      <div className="phd-card pursuing" onClick={() => openImageModal('/media/img/research-scholars/default.png', 'Neha Mishra')}>Neha Mishra</div>
-                      <div className="phd-card pursuing" onClick={() => openImageModal('/media/img/research-scholars/default.png', 'Amit Patel')}>Amit Patel</div>
-                    </>
-                  )}
-                </div>
               </div>
+            </div>
 
-              {/* Achievements Section */}
-              <div className="achievements-section animate-on-scroll">
-                <h3 className="section-title">Key Achievements & Awards</h3>
-                <div className="achievements-grid">
-                  {achievements.length > 0 ? (
-                    achievements.map((item) => (
-                      <div 
-                        key={item.id}
-                        className="achievement-card" 
-                        style={{ cursor: item.imageUrl ? 'pointer' : 'default' }}
-                        onClick={() => item.imageUrl ? openImageModal(item.imageUrl, item.title) : undefined}
-                      >
-                        <h4>{item.title}</h4>
-                        <p>{item.description}</p>
-                      </div>
-                    ))
-                  ) : (
-                    <>
-                      <div 
-                        className="achievement-card" 
-                        style={{ cursor: 'pointer' }}
-                        onClick={() => openImageModal('/media/img/achievements/crisp.png', 'CRISP Model')}
-                      >
-                        <h4>Developed CRISP Model</h4>
-                        <p>Developed the CRISP Model for presentation of RTP (Research/Thesis/Project), appreciated and adopted by reputed national universities.</p>
-                      </div>
-                      <div className="achievement-card">
-                        <h4>Best Teacher Award (2012)</h4>
-                        <p>Received Best Teacher Award from the Rotary Club Dharamshala, H. P. (2012).</p>
-                      </div>
-                      <div className="achievement-card">
-                        <h4>Best Teacher Award (2011)</h4>
-                        <p>Received Best Teacher Award (2011) presented by the Hon’ble Vice Chancellor, Mahatma Gandhi Kashi Vidyapeth, Varanasi (organized by JDIMT, Varanasi).</p>
-                      </div>
-                      <div className="achievement-card">
-                        <h4>First Best Paper Award (2010)</h4>
-                        <p>First Best Paper Award (Feb 2010) among ~218 papers at the International Conference organized by Gardi Vidyapith University, Rajkot, Gujarat.</p>
-                      </div>
-                      <div className="achievement-card">
-                        <h4>Conference & FDP Leadership</h4>
-                        <p>Chaired several international and national FDPs, seminars, workshops, and conferences at reputed organizations.</p>
-                      </div>
-                      <div className="achievement-card">
-                        <h4>Post-Doctoral Supervision</h4>
-                        <p>Guided post-doctoral student Dr. Sachin Kumar (Green Marketing), who is now posted at NIT Hamirpur.</p>
-                      </div>
-                      <div className="achievement-card">
-                        <h4>Publications & Presentations</h4>
-                        <p>Authored {publicationsCount > 0 ? publicationsCount : 54} publications and {chaptersCount > 0 ? chaptersCount : 10} book chapters; delivered {lecturesCount > 0 ? lecturesCount : 65}+ invited lectures and presentations at national & international conferences.</p>
-                      </div>
-                      <div className="achievement-card">
-                        <h4>Guest Lectures</h4>
-                        <p>Delivered guest lectures at leading institutions across India on IT, Web-Based Advertising, and Marketing.</p>
-                      </div>
-                    </>
-                  )}
-                </div>
+            {/* Achievements Section */}
+            <div className="achievements-section animate-on-scroll" style={{ width: '100%', margin: '3.5rem 0' }}>
+              <h3 className="section-title">Key Achievements & Awards</h3>
+              <div className="achievements-grid">
+                {achievements.length > 0 ? (
+                  achievements.map((item) => (
+                    <div 
+                      key={item.id}
+                      className="achievement-card" 
+                      style={{ cursor: item.imageUrl ? 'pointer' : 'default' }}
+                      onClick={() => item.imageUrl ? openImageModal(item.imageUrl, item.title) : undefined}
+                    >
+                      <h4>{item.title}</h4>
+                      <p>{item.description}</p>
+                    </div>
+                  ))
+                ) : (
+                  <>
+                    <div 
+                      className="achievement-card" 
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => openImageModal('/media/img/achievements/crisp.png', 'CRISP Model')}
+                    >
+                      <h4>Developed CRISP Model</h4>
+                      <p>Developed the CRISP Model for presentation of RTP (Research/Thesis/Project), appreciated and adopted by reputed national universities.</p>
+                    </div>
+                    <div className="achievement-card">
+                      <h4>Best Teacher Award (2012)</h4>
+                      <p>Received Best Teacher Award from the Rotary Club Dharamshala, H. P. (2012).</p>
+                    </div>
+                    <div className="achievement-card">
+                      <h4>Best Teacher Award (2011)</h4>
+                      <p>Received Best Teacher Award (2011) presented by the Hon’ble Vice Chancellor, Mahatma Gandhi Kashi Vidyapeth, Varanasi (organized by JDIMT, Varanasi).</p>
+                    </div>
+                    <div className="achievement-card">
+                      <h4>First Best Paper Award (2010)</h4>
+                      <p>First Best Paper Award (Feb 2010) among ~218 papers at the International Conference organized by Gardi Vidyapith University, Rajkot, Gujarat.</p>
+                    </div>
+                    <div className="achievement-card">
+                      <h4>Conference & FDP Leadership</h4>
+                      <p>Chaired several international and national FDPs, seminars, workshops, and conferences at reputed organizations.</p>
+                    </div>
+                    <div className="achievement-card">
+                      <h4>Post-Doctoral Supervision</h4>
+                      <p>Guided post-doctoral student Dr. Sachin Kumar (Green Marketing), who is now posted at NIT Hamirpur.</p>
+                    </div>
+                    <div className="achievement-card">
+                      <h4>Publications & Presentations</h4>
+                      <p>Authored {publicationsCount > 0 ? publicationsCount : 54} publications and {chaptersCount > 0 ? chaptersCount : 10} book chapters; delivered {lecturesCount > 0 ? lecturesCount : 65}+ invited lectures and presentations at national & international conferences.</p>
+                    </div>
+                    <div className="achievement-card">
+                      <h4>Guest Lectures</h4>
+                      <p>Delivered guest lectures at leading institutions across India on IT, Web-Based Advertising, and Marketing.</p>
+                    </div>
+                  </>
+                )}
               </div>
-            </section>
+            </div>
             
             {/* Books Authored Section */}
             <div className="books-section animate-on-scroll">
@@ -362,9 +361,24 @@ export default function AboutPage() {
       </section>
 
       {/* Modal for PhD Scholars */}
-      <div id="phdModal" className="modal" style={{ display: modalOpen ? 'block' : 'none' }}>
+      <div 
+        id="phdModal" 
+        className="modal" 
+        style={{ display: modalOpen ? 'block' : 'none' }}
+        onClick={(e) => {
+          if (e.target === e.currentTarget) closeImageModal();
+        }}
+      >
         <span className="close" onClick={closeImageModal}>&times;</span>
-        <img className="modal-content" id="modalImg" src={modalImg} alt="PhD Scholar" />
+        <img 
+          className="modal-content" 
+          id="modalImg" 
+          src={modalImg} 
+          alt="PhD Scholar"
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = '/media/img/research-scholars/default.png';
+          }}
+        />
         <div id="modalCaption">{modalCaption}</div>
       </div>
     </main>
