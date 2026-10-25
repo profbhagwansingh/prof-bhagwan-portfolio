@@ -1,22 +1,90 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, BadRequestException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { MediaType } from '@prisma/client';
-import * as fs from 'fs';
-import * as path from 'path';
+import { MediaService } from '../media/media.service';
+import { MediaType, GalleryCategory } from '@prisma/client';
 
 @Injectable()
 export class GalleryService {
     private readonly logger = new Logger(GalleryService.name);
-    private readonly mediaRoot: string;
 
-    constructor(private prisma: PrismaService) {
-        this.mediaRoot = path.join(process.cwd(), '..', 'frontend', 'public', 'media');
+    constructor(
+        private prisma: PrismaService,
+        private mediaService: MediaService,
+    ) { }
+
+    // ─── HELPER: NORMALIZE FOLDER SLUG ──────────────────────────
+    private normalizeSlug(folder: string): string {
+        const clean = folder
+            .replace(/^img\//, '')
+            .replace(/^\/+|\/+$/g, '')
+            .trim()
+            .toLowerCase()
+            .replace(/[^a-z0-9-_]/g, '-');
+        return clean || 'general';
     }
 
-    // ─── CATEGORIES ────────────────────────────────────────
+    private formatFolderName(folder: string): string {
+        const clean = folder.replace(/^img\//, '').replace(/^\/+|\/+$/g, '').trim();
+        return clean
+            .replace(/[-_]/g, ' ')
+            .split(' ')
+            .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+            .join(' ');
+    }
+
+    private async findOrCreateCategory(folder: string): Promise<GalleryCategory> {
+        const slug = this.normalizeSlug(folder);
+        const displayName = this.formatFolderName(folder);
+
+        let category = await this.prisma.galleryCategory.findFirst({
+            where: {
+                OR: [
+                    { slug },
+                    { name: { equals: displayName, mode: 'insensitive' } },
+                    { name: { equals: folder, mode: 'insensitive' } },
+                ],
+            },
+        });
+
+        if (!category) {
+            category = await this.prisma.galleryCategory.create({
+                data: {
+                    name: displayName,
+                    slug,
+                    sortOrder: 0,
+                },
+            });
+            this.logger.log(`Created new GalleryCategory: ${displayName} (${slug})`);
+        }
+
+        return category;
+    }
+
+    // ─── ENSURE DEFAULT CATEGORIES FOR ADMIN PANEL ─────────────
+    private async ensureDefaultFolders(): Promise<void> {
+        const defaults = ['Achievements', 'Books', 'Recent', 'Research Scholars', 'Paper Cuttings'];
+        for (const name of defaults) {
+            const slug = this.normalizeSlug(name);
+            const exists = await this.prisma.galleryCategory.findFirst({
+                where: { OR: [{ slug }, { name }] },
+            });
+            if (!exists) {
+                await this.prisma.galleryCategory.create({
+                    data: { name, slug, sortOrder: 0 },
+                });
+            }
+        }
+    }
+
+    // ─── CATEGORIES ────────────────────────────────────────────
     async getCategories() {
         return this.prisma.galleryCategory.findMany({
-            include: { items: { where: { isActive: true }, orderBy: { sortOrder: 'asc' } } },
+            include: {
+                items: {
+                    where: { isActive: true, isPublic: true },
+                    orderBy: { sortOrder: 'asc' },
+                },
+            },
             orderBy: { sortOrder: 'asc' },
         });
     }
@@ -30,11 +98,18 @@ export class GalleryService {
         return this.prisma.galleryCategory.delete({ where: { id } });
     }
 
-    // ─── ITEMS ─────────────────────────────────────────────
+    // ─── ITEMS ─────────────────────────────────────────────────
     async getItems(categorySlug?: string, mediaType?: MediaType, isSlideshow?: boolean, page = 1, limit = 20) {
-        const where: any = { isActive: true };
+        const where: any = { isActive: true, isPublic: true };
         if (categorySlug) {
-            const cat = await this.prisma.galleryCategory.findUnique({ where: { slug: categorySlug } });
+            const cat = await this.prisma.galleryCategory.findFirst({
+                where: {
+                    OR: [
+                        { slug: categorySlug },
+                        { name: { equals: categorySlug, mode: 'insensitive' } },
+                    ],
+                },
+            });
             if (cat) where.categoryId = cat.id;
         }
         if (mediaType) where.mediaType = mediaType;
@@ -60,6 +135,10 @@ export class GalleryService {
     }
 
     async deleteItem(id: string) {
+        const item = await this.prisma.galleryItem.findUnique({ where: { id } });
+        if (item?.publicId) {
+            await this.mediaService.deleteFile(item.publicId);
+        }
         return this.prisma.galleryItem.delete({ where: { id } });
     }
 
@@ -71,159 +150,255 @@ export class GalleryService {
     }
 
     // ═══════════════════════════════════════════════════════════
-    //  GENERIC FILE MANAGEMENT (works for any subfolder)
+    //  FILE MANAGEMENT (Database-backed & Cloudinary-powered)
     // ═══════════════════════════════════════════════════════════
-    private resolveDir(folder: string): string {
-        // Prevent path traversal securely
-        const targetPath = path.resolve(this.mediaRoot, folder.replace(/^\/+/, ''));
-        if (!targetPath.startsWith(path.resolve(this.mediaRoot))) {
-            throw new Error(`Invalid folder path: traversal attempt detected.`);
-        }
-        return targetPath;
-    }
 
     async scanFiles(folder: string): Promise<string[]> {
-        const dir = this.resolveDir(folder);
-        this.logger.log(`Scanning: ${dir}`);
-        try {
-            if (!fs.existsSync(dir)) {
-                this.logger.warn(`Directory not found: ${dir}`);
-                return [];
-            }
-            const files = fs.readdirSync(dir)
-                .filter((f: string) => !f.startsWith('.'))
-                .filter((f: string) => /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(f))
-                .sort()
-                .map((f: string) => `/media/${safe(folder)}/${f}`);
-            this.logger.log(`Found ${files.length} files in ${folder}`);
-            return files;
-        } catch (err) {
-            this.logger.error(`Failed to scan ${folder}: ${err}`);
-            return [];
+        const cleanSlug = this.normalizeSlug(folder);
+        if (cleanSlug === 'slideshow') {
+            return this.scanSlideshowFiles();
         }
+
+        const category = await this.prisma.galleryCategory.findFirst({
+            where: {
+                OR: [
+                    { slug: cleanSlug },
+                    { name: { equals: folder.replace(/^img\//, ''), mode: 'insensitive' } },
+                ],
+            },
+        });
+
+        if (!category) return [];
+
+        const items = await this.prisma.galleryItem.findMany({
+            where: {
+                categoryId: category.id,
+                isActive: true,
+                isPublic: true,
+            },
+            orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }],
+        });
+
+        return items.map((item) => item.mediaUrl);
     }
 
     async uploadFiles(folder: string, files: any[]): Promise<{ uploaded: string[] }> {
-        const dir = this.resolveDir(folder);
-        if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-        const uploaded: string[] = [];
-        for (const file of files) {
-            const safeName = file.originalname.replace(/[^a-zA-Z0-9._-]/g, '_');
-            fs.writeFileSync(path.join(dir, safeName), file.buffer);
-            uploaded.push(`/media/${safe(folder)}/${safeName}`);
-            this.logger.log(`Uploaded to ${folder}: ${safeName}`);
+        if (!files || files.length === 0) {
+            throw new BadRequestException('No files provided');
         }
+
+        const category = await this.findOrCreateCategory(folder);
+        const uploaded: string[] = [];
+
+        const lastItem = await this.prisma.galleryItem.findFirst({
+            where: { categoryId: category.id },
+            orderBy: { sortOrder: 'desc' },
+            select: { sortOrder: true },
+        });
+        let nextSortOrder = (lastItem?.sortOrder ?? 0) + 1;
+
+        for (const file of files) {
+            if (!file?.buffer) {
+                throw new BadRequestException(`File ${file?.originalname || 'unknown'} has an empty buffer`);
+            }
+            if (file.size > 10 * 1024 * 1024) {
+                throw new BadRequestException(`File ${file.originalname} exceeds the 10MB limit`);
+            }
+            if (!file.mimetype || !file.mimetype.startsWith('image/')) {
+                throw new BadRequestException(`File ${file.originalname} has invalid type: ${file.mimetype}. Only image files are allowed.`);
+            }
+
+            // Upload to Cloudinary under profbhagwan/gallery
+            const result = await this.mediaService.saveFile(file, 'profbhagwan/gallery');
+            const caption = (file.originalname || 'Archival Image')
+                .replace(/\.[^/.]+$/, '')
+                .replace(/[-_]/g, ' ');
+
+            const item = await this.prisma.galleryItem.create({
+                data: {
+                    categoryId: category.id,
+                    mediaType: MediaType.PHOTO,
+                    mediaUrl: result.url,
+                    publicId: result.filename,
+                    caption,
+                    altText: caption,
+                    sortOrder: nextSortOrder++,
+                    isActive: true,
+                    isPublic: true,
+                    isSlideshow: false,
+                },
+            });
+
+            uploaded.push(item.mediaUrl);
+            this.logger.log(`Uploaded to Cloudinary (profbhagwan/gallery): ${item.id} -> ${item.mediaUrl}`);
+        }
+
         return { uploaded };
     }
 
     async renameFile(folder: string, oldName: string, newName: string): Promise<{ success: boolean; newUrl: string }> {
-        const dir = this.resolveDir(folder);
-        const safeOld = path.basename(oldName);
-        const ext = path.extname(safeOld);
-        let safeNew = newName.replace(/[^a-zA-Z0-9._-]/g, '_');
-        if (!safeNew.endsWith(ext)) safeNew += ext;
+        const decodedOld = decodeURIComponent(oldName);
+        const item = await this.prisma.galleryItem.findFirst({
+            where: {
+                OR: [
+                    { mediaUrl: { contains: decodedOld } },
+                    { publicId: decodedOld.replace(/\.[^/.]+$/, '') },
+                    { id: decodedOld },
+                ],
+            },
+        });
 
-        const oldPath = path.join(dir, safeOld);
-        const newPath = path.join(dir, safeNew);
+        if (!item) throw new NotFoundException(`File not found: ${oldName}`);
 
-        if (!fs.existsSync(oldPath)) throw new Error(`File not found: ${safeOld}`);
-        if (fs.existsSync(newPath) && safeOld !== safeNew) throw new Error(`Already exists: ${safeNew}`);
+        const cleanCaption = newName.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
+        await this.prisma.galleryItem.update({
+            where: { id: item.id },
+            data: { caption: cleanCaption, altText: cleanCaption },
+        });
 
-        fs.renameSync(oldPath, newPath);
-        this.logger.log(`Renamed in ${folder}: ${safeOld} -> ${safeNew}`);
-        return { success: true, newUrl: `/media/${safe(folder)}/${safeNew}` };
+        return { success: true, newUrl: item.mediaUrl };
     }
 
     async deleteFile(folder: string, filename: string): Promise<{ success: boolean }> {
-        const dir = this.resolveDir(folder);
-        const safeName = path.basename(filename);
-        const filePath = path.join(dir, safeName);
+        const decoded = decodeURIComponent(filename);
+        const item = await this.prisma.galleryItem.findFirst({
+            where: {
+                OR: [
+                    { mediaUrl: { contains: decoded } },
+                    { publicId: decoded.replace(/\.[^/.]+$/, '') },
+                    { id: decoded },
+                ],
+            },
+        });
 
-        if (!fs.existsSync(filePath)) throw new Error(`File not found: ${safeName}`);
-        fs.unlinkSync(filePath);
-        this.logger.log(`Deleted from ${folder}: ${safeName}`);
+        if (!item) {
+            this.logger.warn(`File to delete not found in gallery_items: ${filename}`);
+            return { success: true };
+        }
+
+        if (item.publicId) {
+            await this.mediaService.deleteFile(item.publicId);
+        }
+
+        await this.prisma.galleryItem.delete({ where: { id: item.id } });
+        this.logger.log(`Deleted gallery item: ${item.id} (publicId: ${item.publicId})`);
         return { success: true };
     }
 
     // ─── FOLDER MANAGEMENT ─────────────────────────────────────
     async createFolder(folderName: string): Promise<{ success: boolean }> {
-        const dir = this.resolveDir(folderName);
-        if (fs.existsSync(dir)) throw new Error(`Folder already exists: ${folderName}`);
-        fs.mkdirSync(dir, { recursive: true });
-        this.logger.log(`Created folder: ${folderName}`);
+        const cleanName = folderName.trim();
+        const slug = this.normalizeSlug(cleanName);
+        const existing = await this.prisma.galleryCategory.findFirst({
+            where: { OR: [{ slug }, { name: cleanName }] },
+        });
+        if (existing) {
+            throw new BadRequestException(`Folder already exists: ${cleanName}`);
+        }
+        await this.prisma.galleryCategory.create({
+            data: { name: cleanName, slug, sortOrder: 0 },
+        });
+        this.logger.log(`Created folder: ${cleanName} (${slug})`);
         return { success: true };
     }
 
     async renameFolder(oldName: string, newName: string): Promise<{ success: boolean }> {
-        // Only allow renaming top-level folders or img/ subfolders
-        const oldDir = this.resolveDir(oldName);
-        const newDir = this.resolveDir(newName);
-        if (!fs.existsSync(oldDir)) throw new Error(`Folder not found: ${oldName}`);
-        if (fs.existsSync(newDir)) throw new Error(`Folder already exists: ${newName}`);
-        fs.renameSync(oldDir, newDir);
+        const oldSlug = this.normalizeSlug(oldName);
+        const category = await this.prisma.galleryCategory.findFirst({
+            where: { OR: [{ slug: oldSlug }, { name: oldName }] },
+        });
+        if (!category) {
+            throw new NotFoundException(`Folder not found: ${oldName}`);
+        }
+        const newSlug = this.normalizeSlug(newName);
+        await this.prisma.galleryCategory.update({
+            where: { id: category.id },
+            data: { name: newName.replace(/^img\//, ''), slug: newSlug },
+        });
         this.logger.log(`Renamed folder: ${oldName} -> ${newName}`);
         return { success: true };
     }
 
     async deleteFolder(folderName: string): Promise<{ success: boolean }> {
-        const dir = this.resolveDir(folderName);
-        if (!fs.existsSync(dir)) throw new Error(`Folder not found: ${folderName}`);
-        // For safety, only allow deleting empty folders, or we can use rmSync with recursive.
-        // The user wants to remove folders. Let's use recursive true.
-        fs.rmSync(dir, { recursive: true, force: true });
-        this.logger.log(`Deleted folder: ${folderName}`);
+        const slug = this.normalizeSlug(folderName);
+        const category = await this.prisma.galleryCategory.findFirst({
+            where: { OR: [{ slug }, { name: folderName }] },
+            include: { items: true },
+        });
+        if (!category) {
+            throw new NotFoundException(`Folder not found: ${folderName}`);
+        }
+
+        for (const item of category.items) {
+            if (item.publicId) {
+                await this.mediaService.deleteFile(item.publicId);
+            }
+        }
+
+        await this.prisma.galleryCategory.delete({ where: { id: category.id } });
+        this.logger.log(`Deleted folder and items: ${folderName}`);
         return { success: true };
     }
 
     // ─── GALLERY: scan all media folders (PUBLIC) ────────────────
     async getPublicGalleryFolders(): Promise<{ folder: string; label: string; count: number; sortOrder: number }[]> {
-        const all = await this.scanGalleryFolders(false);
-        return all.filter(f => 
-            !f.folder.toLowerCase().includes('backup') && 
-            !f.folder.toLowerCase().includes('original') &&
-            !f.folder.startsWith('_') &&
-            !f.folder.includes('/_')
-        );
+        const categories = await this.prisma.galleryCategory.findMany({
+            where: {
+                AND: [
+                    { slug: { not: 'slideshow' } },
+                    { slug: { not: { contains: 'backup' } } },
+                    { slug: { not: { contains: 'original' } } },
+                    { slug: { not: { startsWith: '_' } } },
+                ],
+            },
+            include: {
+                items: {
+                    where: { isActive: true, isPublic: true },
+                },
+            },
+            orderBy: { sortOrder: 'asc' },
+        });
+
+        const orderMap = await this.getFolderOrderMap();
+
+        return categories
+            .filter((c) => c.items.length > 0)
+            .map((c) => ({
+                folder: c.slug,
+                label: c.name,
+                count: c.items.length,
+                sortOrder: orderMap[c.slug] ?? orderMap[`img/${c.slug}`] ?? c.sortOrder ?? 0,
+            }))
+            .sort((a, b) => a.sortOrder - b.sortOrder || a.label.localeCompare(b.label));
     }
 
     // ─── GALLERY: scan all media folders (ADMIN) ─────────────────
     async scanGalleryFolders(includeEmpty = true): Promise<{ folder: string; label: string; count: number; sortOrder: number }[]> {
-        const imgDir = path.join(this.mediaRoot, 'img');
-        const folders: { folder: string; label: string; count: number; sortOrder: number }[] = [];
+        await this.ensureDefaultFolders();
 
-        // Load stored sort orders from SiteSetting
+        const categories = await this.prisma.galleryCategory.findMany({
+            where: {
+                slug: { not: 'slideshow' },
+            },
+            include: {
+                items: {
+                    where: { isActive: true },
+                },
+            },
+            orderBy: { sortOrder: 'asc' },
+        });
+
         const orderMap = await this.getFolderOrderMap();
 
-        // Scan img/ subfolders (excluding slideshow — that has its own tab)
-        if (fs.existsSync(imgDir)) {
-            for (const name of fs.readdirSync(imgDir)) {
-                if (name === 'slideshow' || name.startsWith('.') || (!includeEmpty && (name.startsWith('_') || name.toLowerCase().includes('backup')))) continue;
-                const full = path.join(imgDir, name);
-                try {
-                    if (!fs.statSync(full).isDirectory()) continue;
-                } catch { continue; }
-                const count = fs.readdirSync(full).filter(f => !f.startsWith('.') && /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(f)).length;
-                if (includeEmpty || count > 0) {
-                    const folderPath = `img/${name}`;
-                    folders.push({ folder: folderPath, label: name.replace(/[-_]/g, ' '), count, sortOrder: orderMap[folderPath] ?? 999 });
-                }
-            }
-        }
-
-        // Scan other media root folders (paperCuttings, Courses Taught, etc.)
-        for (const name of fs.readdirSync(this.mediaRoot)) {
-            if (['img', 'video'].includes(name) || name.startsWith('.')) continue;
-            const full = path.join(this.mediaRoot, name);
-            try {
-                if (!fs.statSync(full).isDirectory()) continue;
-            } catch { continue; }
-            const count = fs.readdirSync(full).filter(f => !f.startsWith('.') && /\.(jpg|jpeg|png|gif|webp|svg|pdf)$/i.test(f)).length;
-            if (includeEmpty || count > 0) {
-                folders.push({ folder: name, label: name.replace(/[-_]/g, ' '), count, sortOrder: orderMap[name] ?? 999 });
-            }
-        }
-
-        return folders.sort((a, b) => a.sortOrder - b.sortOrder || a.label.localeCompare(b.label));
+        return categories
+            .filter((c) => includeEmpty || c.items.length > 0)
+            .map((c) => ({
+                folder: c.slug,
+                label: c.name,
+                count: c.items.length,
+                sortOrder: orderMap[c.slug] ?? orderMap[`img/${c.slug}`] ?? c.sortOrder ?? 0,
+            }))
+            .sort((a, b) => a.sortOrder - b.sortOrder || a.label.localeCompare(b.label));
     }
 
     // ─── FOLDER SORT ORDER (persisted via SiteSetting) ───────────
@@ -236,6 +411,19 @@ export class GalleryService {
     }
 
     async setFolderOrder(orderMap: Record<string, number>): Promise<{ success: boolean }> {
+        for (const [folderKey, sortOrder] of Object.entries(orderMap)) {
+            const cleanSlug = this.normalizeSlug(folderKey);
+            await this.prisma.galleryCategory.updateMany({
+                where: {
+                    OR: [
+                        { slug: cleanSlug },
+                        { slug: folderKey },
+                    ],
+                },
+                data: { sortOrder },
+            });
+        }
+
         await this.prisma.siteSetting.upsert({
             where: { key: 'gallery_folder_order' },
             update: { value: JSON.stringify(orderMap) },
@@ -245,16 +433,23 @@ export class GalleryService {
         return { success: true };
     }
 
-    // ─── Convenience wrappers for slideshow ──────────────────
+    // ─── SLIDESHOW ─────────────────────────────────────────────
     async getSlideshowOrder(): Promise<string[]> {
         try {
             const setting = await this.prisma.siteSetting.findUnique({ where: { key: 'slideshow_order' } });
             if (setting?.value) return JSON.parse(setting.value);
-        } catch {}
+        } catch { }
         return [];
     }
 
     async setSlideshowOrder(order: string[]): Promise<{ success: boolean }> {
+        for (let i = 0; i < order.length; i++) {
+            await this.prisma.galleryItem.updateMany({
+                where: { mediaUrl: order[i] },
+                data: { sortOrder: i },
+            });
+        }
+
         await this.prisma.siteSetting.upsert({
             where: { key: 'slideshow_order' },
             update: { value: JSON.stringify(order) },
@@ -263,12 +458,17 @@ export class GalleryService {
         return { success: true };
     }
 
-    async scanSlideshowFiles() { 
-        const files = await this.scanFiles('img/slideshow'); 
+    async scanSlideshowFiles(): Promise<string[]> {
+        const items = await this.prisma.galleryItem.findMany({
+            where: { isSlideshow: true, isActive: true },
+            orderBy: { sortOrder: 'asc' },
+        });
+
+        const urls = items.map((i) => i.mediaUrl);
         const order = await this.getSlideshowOrder();
-        
+
         if (order.length > 0) {
-            files.sort((a, b) => {
+            urls.sort((a, b) => {
                 const indexA = order.indexOf(a);
                 const indexB = order.indexOf(b);
                 if (indexA === -1 && indexB === -1) return a.localeCompare(b);
@@ -277,14 +477,70 @@ export class GalleryService {
                 return indexA - indexB;
             });
         }
-        return files;
+        return urls;
     }
-    async uploadSlideshowFiles(files: any[]) { return this.uploadFiles('img/slideshow', files); }
-    async renameSlideshowFile(oldName: string, newName: string) { return this.renameFile('img/slideshow', oldName, newName); }
-    async deleteSlideshowFile(filename: string) { return this.deleteFile('img/slideshow', filename); }
-}
 
-// helper to normalize folder path for URLs
-function safe(folder: string): string {
-    return folder.replace(/\\/g, '/');
+    async uploadSlideshowFiles(files: any[]): Promise<{ uploaded: string[] }> {
+        if (!files || files.length === 0) {
+            throw new BadRequestException('No files provided');
+        }
+
+        const category = await this.findOrCreateCategory('slideshow');
+        const uploaded: string[] = [];
+
+        const lastItem = await this.prisma.galleryItem.findFirst({
+            where: { isSlideshow: true },
+            orderBy: { sortOrder: 'desc' },
+            select: { sortOrder: true },
+        });
+        let nextSortOrder = (lastItem?.sortOrder ?? 0) + 1;
+
+        for (const file of files) {
+            if (!file?.buffer) {
+                throw new BadRequestException(`File ${file?.originalname || 'unknown'} has an empty buffer`);
+            }
+            if (file.size > 10 * 1024 * 1024) {
+                throw new BadRequestException(`File ${file.originalname} exceeds the 10MB limit`);
+            }
+            if (!file.mimetype || !file.mimetype.startsWith('image/')) {
+                throw new BadRequestException(`File ${file.originalname} has invalid type: ${file.mimetype}. Only image files are allowed.`);
+            }
+
+            const result = await this.mediaService.saveFile(file, 'profbhagwan/gallery');
+            const caption = (file.originalname || 'Slideshow Image')
+                .replace(/\.[^/.]+$/, '')
+                .replace(/[-_]/g, ' ');
+
+            const item = await this.prisma.galleryItem.create({
+                data: {
+                    categoryId: category.id,
+                    mediaType: MediaType.PHOTO,
+                    mediaUrl: result.url,
+                    publicId: result.filename,
+                    caption,
+                    altText: caption,
+                    sortOrder: nextSortOrder++,
+                    isActive: true,
+                    isPublic: true,
+                    isSlideshow: true,
+                },
+            });
+
+            uploaded.push(item.mediaUrl);
+            this.logger.log(`Uploaded slideshow image to Cloudinary: ${item.id} -> ${item.mediaUrl}`);
+        }
+
+        const currentOrder = await this.getSlideshowOrder();
+        await this.setSlideshowOrder([...currentOrder, ...uploaded]);
+
+        return { uploaded };
+    }
+
+    async renameSlideshowFile(oldName: string, newName: string) {
+        return this.renameFile('slideshow', oldName, newName);
+    }
+
+    async deleteSlideshowFile(filename: string) {
+        return this.deleteFile('slideshow', filename);
+    }
 }

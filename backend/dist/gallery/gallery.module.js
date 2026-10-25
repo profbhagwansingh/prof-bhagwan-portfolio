@@ -9,8 +9,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.GalleryModule = void 0;
 const common_1 = require("@nestjs/common");
 const platform_express_1 = require("@nestjs/platform-express");
+const multer_1 = require("multer");
 const gallery_service_1 = require("./gallery.service");
 const gallery_controller_1 = require("./gallery.controller");
+const media_module_1 = require("../media/media.module");
 let GalleryModule = class GalleryModule {
 };
 exports.GalleryModule = GalleryModule;
@@ -18,8 +20,10 @@ exports.GalleryModule = GalleryModule = __decorate([
     (0, common_1.Module)({
         imports: [
             platform_express_1.MulterModule.register({
+                storage: (0, multer_1.memoryStorage)(),
                 limits: { fileSize: 10 * 1024 * 1024 },
             }),
+            media_module_1.MediaModule,
         ],
         controllers: [gallery_controller_1.GalleryController],
         providers: [gallery_service_1.GalleryService],

@@ -22,9 +22,9 @@ let MediaService = class MediaService {
             api_secret: this.config.get('CLOUDINARY_API_SECRET'),
         });
     }
-    async saveFile(file) {
+    async saveFile(file, folder = 'profbhagwan') {
         return new Promise((resolve, reject) => {
-            cloudinary_1.v2.uploader.upload_stream({ folder: 'profbhagwan', resource_type: 'auto' }, (error, result) => {
+            cloudinary_1.v2.uploader.upload_stream({ folder, resource_type: 'auto' }, (error, result) => {
                 if (error)
                     return reject(error);
                 if (!result?.secure_url || !result?.public_id) {
@@ -34,9 +34,19 @@ let MediaService = class MediaService {
             }).end(file.buffer);
         });
     }
-    async deleteFile(fileUrl) {
+    async deleteFile(fileUrlOrPublicId) {
         try {
-            await cloudinary_1.v2.uploader.destroy(fileUrl);
+            if (!fileUrlOrPublicId)
+                return;
+            let publicId = fileUrlOrPublicId;
+            if (publicId.startsWith('http://') || publicId.startsWith('https://')) {
+                const parts = publicId.split('/upload/');
+                if (parts.length > 1) {
+                    const pathAfterUpload = parts[1].replace(/^v\d+\//, '');
+                    publicId = pathAfterUpload.replace(/\.[^/.]+$/, '');
+                }
+            }
+            await cloudinary_1.v2.uploader.destroy(publicId);
         }
         catch (e) {
             console.error('Cloudinary delete error:', e);

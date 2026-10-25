@@ -287,25 +287,25 @@ export declare class ContentService {
     getSocialLinks(): Promise<{
         id: string;
         isActive: boolean;
+        url: string;
         sortOrder: number;
         platform: string;
-        url: string;
         iconSvg: string | null;
     }[]>;
     upsertSocialLink(data: any): Promise<{
         id: string;
         isActive: boolean;
+        url: string;
         sortOrder: number;
         platform: string;
-        url: string;
         iconSvg: string | null;
     }>;
     deleteSocialLink(id: string): Promise<{
         id: string;
         isActive: boolean;
+        url: string;
         sortOrder: number;
         platform: string;
-        url: string;
         iconSvg: string | null;
     }>;
     getInvitedLectures(): Promise<{

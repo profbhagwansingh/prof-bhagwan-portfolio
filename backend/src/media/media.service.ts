@@ -13,10 +13,10 @@ export class MediaService {
         });
     }
 
-    async saveFile(file: any): Promise<{ url: string; filename: string }> {
+    async saveFile(file: any, folder = 'profbhagwan'): Promise<{ url: string; filename: string }> {
         return new Promise((resolve, reject) => {
             cloudinary.uploader.upload_stream(
-                { folder: 'profbhagwan', resource_type: 'auto' },
+                { folder, resource_type: 'auto' },
                 (error, result) => {
                     if (error) return reject(error);
                     if (!result?.secure_url || !result?.public_id) {
@@ -28,9 +28,18 @@ export class MediaService {
         });
     }
 
-    async deleteFile(fileUrl: string): Promise<void> {
+    async deleteFile(fileUrlOrPublicId: string): Promise<void> {
         try {
-            await cloudinary.uploader.destroy(fileUrl);
+            if (!fileUrlOrPublicId) return;
+            let publicId = fileUrlOrPublicId;
+            if (publicId.startsWith('http://') || publicId.startsWith('https://')) {
+                const parts = publicId.split('/upload/');
+                if (parts.length > 1) {
+                    const pathAfterUpload = parts[1].replace(/^v\d+\//, '');
+                    publicId = pathAfterUpload.replace(/\.[^/.]+$/, '');
+                }
+            }
+            await cloudinary.uploader.destroy(publicId);
         } catch (e) {
             console.error('Cloudinary delete error:', e);
         }

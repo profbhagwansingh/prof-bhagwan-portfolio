@@ -19,6 +19,15 @@ const platform_express_1 = require("@nestjs/platform-express");
 const roles_guard_1 = require("../auth/roles.guard");
 const gallery_service_1 = require("./gallery.service");
 const client_1 = require("@prisma/client");
+const imageUploadOptions = {
+    limits: { fileSize: 10 * 1024 * 1024 },
+    fileFilter: (req, file, cb) => {
+        if (!file.mimetype || !file.mimetype.match(/^image\/(jpeg|jpg|png|webp|gif|svg\+xml)$/i)) {
+            return cb(new common_1.BadRequestException(`Unsupported file type: ${file.mimetype}. Only JPEG, PNG, WebP, GIF, and SVG images are allowed.`), false);
+        }
+        cb(null, true);
+    },
+};
 let GalleryController = class GalleryController {
     constructor(galleryService) {
         this.galleryService = galleryService;
@@ -165,7 +174,7 @@ __decorate([
     (0, common_1.Post)('admin/slideshow-files/upload'),
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), roles_guard_1.RolesGuard),
     (0, roles_guard_1.Roles)(client_1.Role.SUPER_ADMIN, client_1.Role.ADMIN),
-    (0, common_1.UseInterceptors)((0, platform_express_1.FilesInterceptor)('files', 20)),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FilesInterceptor)('files', 100, imageUploadOptions)),
     __param(0, (0, common_1.UploadedFiles)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Array]),
@@ -256,7 +265,7 @@ __decorate([
     (0, common_1.Post)('admin/files/upload'),
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), roles_guard_1.RolesGuard),
     (0, roles_guard_1.Roles)(client_1.Role.SUPER_ADMIN, client_1.Role.ADMIN),
-    (0, common_1.UseInterceptors)((0, platform_express_1.FilesInterceptor)('files', 20)),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FilesInterceptor)('files', 100, imageUploadOptions)),
     __param(0, (0, common_1.Query)('folder')),
     __param(1, (0, common_1.UploadedFiles)()),
     __metadata("design:type", Function),

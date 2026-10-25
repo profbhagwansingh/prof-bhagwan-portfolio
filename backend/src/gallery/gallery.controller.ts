@@ -1,10 +1,20 @@
-import { Controller, Get, Post, Patch, Delete, Body, Param, Query, UseGuards, UseInterceptors, UploadedFiles } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, Query, UseGuards, UseInterceptors, UploadedFiles, BadRequestException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FilesInterceptor } from '@nestjs/platform-express';
 
 import { RolesGuard, Roles } from '../auth/roles.guard';
 import { GalleryService } from './gallery.service';
 import { Role, MediaType } from '@prisma/client';
+
+const imageUploadOptions = {
+    limits: { fileSize: 10 * 1024 * 1024 }, // 10MB per file
+    fileFilter: (req: any, file: any, cb: any) => {
+        if (!file.mimetype || !file.mimetype.match(/^image\/(jpeg|jpg|png|webp|gif|svg\+xml)$/i)) {
+            return cb(new BadRequestException(`Unsupported file type: ${file.mimetype}. Only JPEG, PNG, WebP, GIF, and SVG images are allowed.`), false);
+        }
+        cb(null, true);
+    },
+};
 
 @Controller('api/gallery')
 export class GalleryController {
@@ -69,7 +79,7 @@ export class GalleryController {
     @Post('admin/slideshow-files/upload')
     @UseGuards(AuthGuard('jwt'), RolesGuard)
     @Roles(Role.SUPER_ADMIN, Role.ADMIN)
-    @UseInterceptors(FilesInterceptor('files', 100))
+    @UseInterceptors(FilesInterceptor('files', 100, imageUploadOptions))
     uploadSlideshowFiles(@UploadedFiles() files: any[]) {
         return this.galleryService.uploadSlideshowFiles(files);
     }
@@ -139,7 +149,7 @@ export class GalleryController {
     @Post('admin/files/upload')
     @UseGuards(AuthGuard('jwt'), RolesGuard)
     @Roles(Role.SUPER_ADMIN, Role.ADMIN)
-    @UseInterceptors(FilesInterceptor('files', 100))
+    @UseInterceptors(FilesInterceptor('files', 100, imageUploadOptions))
     uploadGalleryFiles(@Query('folder') folder: string, @UploadedFiles() files: any[]) {
         return this.galleryService.uploadFiles(folder, files);
     }

@@ -12,9 +12,11 @@ export declare class GalleryController {
             categoryId: string;
             mediaType: import(".prisma/client").$Enums.MediaType;
             mediaUrl: string;
+            publicId: string | null;
             thumbnailUrl: string | null;
             caption: string | null;
             altText: string;
+            isPublic: boolean;
             isSlideshow: boolean;
         }[];
     } & {
@@ -39,9 +41,11 @@ export declare class GalleryController {
             categoryId: string;
             mediaType: import(".prisma/client").$Enums.MediaType;
             mediaUrl: string;
+            publicId: string | null;
             thumbnailUrl: string | null;
             caption: string | null;
             altText: string;
+            isPublic: boolean;
             isSlideshow: boolean;
         })[];
         total: number;
@@ -75,9 +79,11 @@ export declare class GalleryController {
         categoryId: string;
         mediaType: import(".prisma/client").$Enums.MediaType;
         mediaUrl: string;
+        publicId: string | null;
         thumbnailUrl: string | null;
         caption: string | null;
         altText: string;
+        isPublic: boolean;
         isSlideshow: boolean;
     }>;
     deleteItem(id: string): Promise<{
@@ -88,9 +94,11 @@ export declare class GalleryController {
         categoryId: string;
         mediaType: import(".prisma/client").$Enums.MediaType;
         mediaUrl: string;
+        publicId: string | null;
         thumbnailUrl: string | null;
         caption: string | null;
         altText: string;
+        isPublic: boolean;
         isSlideshow: boolean;
     }>;
     toggleSlideshow(id: string, isSlideshow: boolean): Promise<{
@@ -101,9 +109,11 @@ export declare class GalleryController {
         categoryId: string;
         mediaType: import(".prisma/client").$Enums.MediaType;
         mediaUrl: string;
+        publicId: string | null;
         thumbnailUrl: string | null;
         caption: string | null;
         altText: string;
+        isPublic: boolean;
         isSlideshow: boolean;
     }>;
     getSlideshowFiles(): Promise<string[]>;

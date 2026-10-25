@@ -1,10 +1,15 @@
 import { PrismaService } from '../prisma/prisma.service';
+import { MediaService } from '../media/media.service';
 import { MediaType } from '@prisma/client';
 export declare class GalleryService {
     private prisma;
+    private mediaService;
     private readonly logger;
-    private readonly mediaRoot;
-    constructor(prisma: PrismaService);
+    constructor(prisma: PrismaService, mediaService: MediaService);
+    private normalizeSlug;
+    private formatFolderName;
+    private findOrCreateCategory;
+    private ensureDefaultFolders;
     getCategories(): Promise<({
         items: {
             id: string;
@@ -14,9 +19,11 @@ export declare class GalleryService {
             categoryId: string;
             mediaType: import(".prisma/client").$Enums.MediaType;
             mediaUrl: string;
+            publicId: string | null;
             thumbnailUrl: string | null;
             caption: string | null;
             altText: string;
+            isPublic: boolean;
             isSlideshow: boolean;
         }[];
     } & {
@@ -53,9 +60,11 @@ export declare class GalleryService {
             categoryId: string;
             mediaType: import(".prisma/client").$Enums.MediaType;
             mediaUrl: string;
+            publicId: string | null;
             thumbnailUrl: string | null;
             caption: string | null;
             altText: string;
+            isPublic: boolean;
             isSlideshow: boolean;
         })[];
         total: number;
@@ -70,9 +79,11 @@ export declare class GalleryService {
         categoryId: string;
         mediaType: import(".prisma/client").$Enums.MediaType;
         mediaUrl: string;
+        publicId: string | null;
         thumbnailUrl: string | null;
         caption: string | null;
         altText: string;
+        isPublic: boolean;
         isSlideshow: boolean;
     }>;
     deleteItem(id: string): Promise<{
@@ -83,9 +94,11 @@ export declare class GalleryService {
         categoryId: string;
         mediaType: import(".prisma/client").$Enums.MediaType;
         mediaUrl: string;
+        publicId: string | null;
         thumbnailUrl: string | null;
         caption: string | null;
         altText: string;
+        isPublic: boolean;
         isSlideshow: boolean;
     }>;
     toggleSlideshow(id: string, isSlideshow: boolean): Promise<{
@@ -96,12 +109,13 @@ export declare class GalleryService {
         categoryId: string;
         mediaType: import(".prisma/client").$Enums.MediaType;
         mediaUrl: string;
+        publicId: string | null;
         thumbnailUrl: string | null;
         caption: string | null;
         altText: string;
+        isPublic: boolean;
         isSlideshow: boolean;
     }>;
-    private resolveDir;
     scanFiles(folder: string): Promise<string[]>;
     uploadFiles(folder: string, files: any[]): Promise<{
         uploaded: string[];

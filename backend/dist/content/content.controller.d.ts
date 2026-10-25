@@ -92,9 +92,9 @@ export declare class ContentController {
     getSocialLinks(): Promise<{
         id: string;
         isActive: boolean;
+        url: string;
         sortOrder: number;
         platform: string;
-        url: string;
         iconSvg: string | null;
     }[]>;
     getQuickStats(): Promise<{
@@ -295,17 +295,17 @@ export declare class ContentController {
     upsertSocialLink(data: any): Promise<{
         id: string;
         isActive: boolean;
+        url: string;
         sortOrder: number;
         platform: string;
-        url: string;
         iconSvg: string | null;
     }>;
     deleteSocialLink(id: string): Promise<{
         id: string;
         isActive: boolean;
+        url: string;
         sortOrder: number;
         platform: string;
-        url: string;
         iconSvg: string | null;
     }>;
     upsertQuickStat(data: any): Promise<{
