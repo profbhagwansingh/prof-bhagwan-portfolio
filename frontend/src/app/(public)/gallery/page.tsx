@@ -118,8 +118,8 @@ export default function GalleryPage() {
         </div>
       </header>
 
-      {/* ─── Centered Main Gallery Container (max-w-7xl) ─── */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      {/* ─── Centered Main Gallery Container (max-w-7xl with right clearance) ─── */}
+      <div className="gallery-container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 pb-28">
         {loading ? (
           <div className="py-24 flex flex-col items-center justify-center space-y-4">
             <div className="w-10 h-10 border-3 border-[#5061C4]/20 border-t-[#5061C4] rounded-full animate-spin" />
@@ -149,7 +149,7 @@ export default function GalleryPage() {
                   </div>
 
                   {/* Responsive Grid: 1 col on mobile, 2 on tablet, 3-4 on desktop */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                  <div className="gallery-responsive-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
                     {folder.files.map((file, i) => {
                       const isVideo = /\.(mp4|webm|ogg|mov)$/i.test(file.src);
 
@@ -159,7 +159,7 @@ export default function GalleryPage() {
                           tabIndex={0}
                           role="button"
                           aria-label={`View ${file.caption}`}
-                          className="group relative aspect-square w-full rounded-2xl overflow-hidden bg-white border border-gray-200/80 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#5061C4] focus:ring-offset-2"
+                          className="gallery-card group relative aspect-square w-full rounded-2xl overflow-hidden bg-white border border-gray-200/80 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#5061C4] focus:ring-offset-2"
                           onClick={() => !isVideo && openLightbox(file.src, file.caption)}
                           onKeyDown={(e) => {
                             if (e.key === "Enter" || e.key === " ") {
@@ -193,7 +193,7 @@ export default function GalleryPage() {
                                 src={file.src}
                                 alt={file.caption}
                                 loading="lazy"
-                                className="w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-105"
+                                className="gallery-card-img w-full h-full object-cover object-top transition-transform duration-300 ease-out group-hover:scale-105"
                               />
                               {/* Soft Gradient Overlay */}
                               <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
