@@ -1,8 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { MediaService } from '../media/media.service';
-import * as path from 'path';
-import * as fs from 'fs';
 import 'multer';
 
 @Injectable()
@@ -127,37 +125,24 @@ export class EcrrbService {
 
   async processCertification(data: any, files: any) {
     try {
-      // Handle file uploads (save locally for now)
-      const saveFile = (fileArray: any[] | undefined) => {
+      // Handle file uploads (save directly to Cloudinary)
+      const saveFile = async (fileArray: any[] | undefined): Promise<string | null> => {
         if (!fileArray || fileArray.length === 0) return null;
-        const file = fileArray[0];
-        const uploadDir = path.join(process.cwd(), 'uploads', 'ecrrb-certifications');
-        if (!fs.existsSync(uploadDir)) {
-          fs.mkdirSync(uploadDir, { recursive: true });
-        }
-        const fileName = `${Date.now()}-${file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
-        const filePath = path.join(uploadDir, fileName);
-        fs.writeFileSync(filePath, file.buffer);
-        return `/uploads/ecrrb-certifications/${fileName}`;
+        const upload = await this.mediaService.saveFile(fileArray[0], 'profbhagwan/ecrrb-certifications');
+        return upload.secure_url;
       };
 
-      const protocolUrl = saveFile(files.protocol);
-      const icfUrl = saveFile(files.icf);
-      const piCvUrl = saveFile(files.piCv);
-      const researchPaperUrl = saveFile(files.researchPaper);
-      const priorApprovalUrl = saveFile(files.priorApproval);
+      const protocolUrl = await saveFile(files.protocol);
+      const icfUrl = await saveFile(files.icf);
+      const piCvUrl = await saveFile(files.piCv);
+      const researchPaperUrl = await saveFile(files.researchPaper);
+      const priorApprovalUrl = await saveFile(files.priorApproval);
       
       const toolUrls: string[] = [];
       if (files.tools) {
         for (const file of files.tools) {
-          const uploadDir = path.join(process.cwd(), 'uploads', 'ecrrb-certifications');
-          if (!fs.existsSync(uploadDir)) {
-            fs.mkdirSync(uploadDir, { recursive: true });
-          }
-          const fileName = `${Date.now()}-${file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
-          const filePath = path.join(uploadDir, fileName);
-          fs.writeFileSync(filePath, file.buffer);
-          toolUrls.push(`/uploads/ecrrb-certifications/${fileName}`);
+          const upload = await this.mediaService.saveFile(file, 'profbhagwan/ecrrb-certifications');
+          toolUrls.push(upload.secure_url);
         }
       }
 

@@ -6,12 +6,14 @@ import { RolesGuard, Roles } from '../auth/roles.guard';
 import { Throttle } from '@nestjs/throttler';
 import { SubmissionsService } from './submissions.service';
 import { Role, SubmissionStatus, AlumniStatus } from '@prisma/client';
-import * as fs from 'fs';
-import * as path from 'path';
+import { MediaService } from '../media/media.service';
 
 @Controller('api/submissions')
 export class SubmissionsController {
-    constructor(private subService: SubmissionsService) { }
+    constructor(
+        private subService: SubmissionsService,
+        private mediaService: MediaService,
+    ) { }
 
     // ─── PUBLIC: Submit forms (rate-limited) ───────────────
     @Post('contact')
@@ -23,13 +25,10 @@ export class SubmissionsController {
     @Post('alumni')
     @Throttle({ default: { limit: 5, ttl: 60000 } })
     @UseInterceptors(FileInterceptor('picture'))
-    createAlumni(@Body() data: any, @UploadedFile() file: any) {
+    async createAlumni(@Body() data: any, @UploadedFile() file: any) {
         if (file) {
-            const mediaRoot = path.join(process.cwd(), '..', 'frontend', 'public', 'media', 'img', 'alumni');
-            if (!fs.existsSync(mediaRoot)) fs.mkdirSync(mediaRoot, { recursive: true });
-            const safeName = `${Date.now()}_${file.originalname.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
-            fs.writeFileSync(path.join(mediaRoot, safeName), file.buffer);
-            data.pictureUrl = `/media/img/alumni/${safeName}`;
+            const upload = await this.mediaService.saveFile(file, 'profbhagwan/alumni');
+            data.pictureUrl = upload.secure_url;
         }
         return this.subService.createAlumni(data);
     }

@@ -1,9 +1,11 @@
 import 'multer';
 import { SubmissionsService } from './submissions.service';
 import { SubmissionStatus, AlumniStatus } from '@prisma/client';
+import { MediaService } from '../media/media.service';
 export declare class SubmissionsController {
     private subService;
-    constructor(subService: SubmissionsService);
+    private mediaService;
+    constructor(subService: SubmissionsService, mediaService: MediaService);
     createContact(data: {
         name: string;
         email: string;

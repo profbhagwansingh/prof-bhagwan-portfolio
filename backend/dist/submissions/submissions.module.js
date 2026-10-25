@@ -10,11 +10,13 @@ exports.SubmissionsModule = void 0;
 const common_1 = require("@nestjs/common");
 const submissions_service_1 = require("./submissions.service");
 const submissions_controller_1 = require("./submissions.controller");
+const media_module_1 = require("../media/media.module");
 let SubmissionsModule = class SubmissionsModule {
 };
 exports.SubmissionsModule = SubmissionsModule;
 exports.SubmissionsModule = SubmissionsModule = __decorate([
     (0, common_1.Module)({
+        imports: [media_module_1.MediaModule],
         controllers: [submissions_controller_1.SubmissionsController],
         providers: [submissions_service_1.SubmissionsService],
     })

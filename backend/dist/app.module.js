@@ -25,7 +25,6 @@ const media_module_1 = require("./media/media.module");
 const settings_module_1 = require("./settings/settings.module");
 const users_module_1 = require("./users/users.module");
 const schedule_1 = require("@nestjs/schedule");
-const backup_module_1 = require("./backup/backup.module");
 const ecrrb_module_1 = require("./ecrrb/ecrrb.module");
 const testimonials_module_1 = require("./testimonials/testimonials.module");
 let AppModule = class AppModule {
@@ -47,13 +46,6 @@ exports.AppModule = AppModule = __decorate([
                 },
             ]),
             serve_static_1.ServeStaticModule.forRoot({
-                rootPath: (0, path_1.join)(process.cwd(), 'uploads'),
-                serveRoot: '/uploads/',
-                serveStaticOptions: {
-                    cacheControl: true,
-                    maxAge: '30d',
-                },
-            }, {
                 rootPath: (0, path_1.join)(process.cwd(), '..', 'frontend', 'public', 'media'),
                 serveRoot: '/media/',
                 serveStaticOptions: {
@@ -71,7 +63,6 @@ exports.AppModule = AppModule = __decorate([
             settings_module_1.SettingsModule,
             users_module_1.UsersModule,
             schedule_1.ScheduleModule.forRoot(),
-            backup_module_1.BackupModule,
             ecrrb_module_1.EcrrbModule,
             testimonials_module_1.TestimonialsModule,
         ],

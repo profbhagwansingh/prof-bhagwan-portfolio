@@ -82,26 +82,9 @@ async function bootstrap() {
   // ── Auto-seed admin on startup ─────────────────────────────────────────────
   const prisma = new PrismaClient();
 
-  // Run backup and migrations on startup
-  const { execSync } = await import('child_process');
-  const path = await import('path');
-  
-  try {
-    // 1. Run backup
-    const backupScript = path.join(__dirname, '..', 'backup-db.js');
-    try {
-      execSync(`node "${backupScript}"`, { stdio: 'inherit' });
-      logger.log('✅ Pre-migration database backup completed');
-    } catch (e) {
-      logger.warn('⚠️ Backup script failed or not found, continuing with migration', e);
-    }
-
-    // 2. Migrations are now handled externally via Supabase Session Pooler
-    // We removed automatic execSync migrations because they hang over Transaction Poolers
-    logger.log('✅ Database startup phase complete');
-  } catch (e) {
-    logger.error('Startup script failed', e);
-  }
+  // Note: Local disk backups to ephemeral container storage have been removed.
+  // Database backups are handled via automated scheduled pg_dump to offsite cloud storage.
+  logger.log('✅ Database startup phase complete');
 
   const adminEmail = process.env.ADMIN_EMAIL ?? 'admin@bhagwansingh.com';
   const adminPassword = process.env.ADMIN_PASSWORD ?? 'Admin@1234';

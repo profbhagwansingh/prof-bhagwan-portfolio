@@ -102,22 +102,7 @@ async function bootstrap() {
     logger.log('📚 Swagger docs available at /api/docs');
     app.enableShutdownHooks();
     const prisma = new client_1.PrismaClient();
-    const { execSync } = await Promise.resolve().then(() => __importStar(require('child_process')));
-    const path = await Promise.resolve().then(() => __importStar(require('path')));
-    try {
-        const backupScript = path.join(__dirname, '..', 'backup-db.js');
-        try {
-            execSync(`node "${backupScript}"`, { stdio: 'inherit' });
-            logger.log('✅ Pre-migration database backup completed');
-        }
-        catch (e) {
-            logger.warn('⚠️ Backup script failed or not found, continuing with migration', e);
-        }
-        logger.log('✅ Database startup phase complete');
-    }
-    catch (e) {
-        logger.error('Startup script failed', e);
-    }
+    logger.log('✅ Database startup phase complete');
     const adminEmail = process.env.ADMIN_EMAIL ?? 'admin@bhagwansingh.com';
     const adminPassword = process.env.ADMIN_PASSWORD ?? 'Admin@1234';
     const existing = await prisma.user.findUnique({ where: { email: adminEmail } });

@@ -16,7 +16,6 @@ import { MediaModule } from './media/media.module';
 import { SettingsModule } from './settings/settings.module';
 import { UsersModule } from './users/users.module';
 import { ScheduleModule } from '@nestjs/schedule';
-import { BackupModule } from './backup/backup.module';
 import { EcrrbModule } from './ecrrb/ecrrb.module';
 import { TestimonialsModule } from './testimonials/testimonials.module';
 
@@ -57,14 +56,6 @@ import { TestimonialsModule } from './testimonials/testimonials.module';
 
     ServeStaticModule.forRoot(
       {
-        rootPath: join(process.cwd(), 'uploads'),
-        serveRoot: '/uploads/',
-        serveStaticOptions: {
-          cacheControl: true,
-          maxAge: '30d',
-        },
-      },
-      {
         rootPath: join(process.cwd(), '..', 'frontend', 'public', 'media'),
         serveRoot: '/media/',
         serveStaticOptions: {
@@ -84,7 +75,6 @@ import { TestimonialsModule } from './testimonials/testimonials.module';
     SettingsModule,
     UsersModule,
     ScheduleModule.forRoot(),
-    BackupModule,
     EcrrbModule,
     TestimonialsModule,
   ],
