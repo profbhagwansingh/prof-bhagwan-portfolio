@@ -204,12 +204,13 @@ export class GalleryService {
             if (file.size > 10 * 1024 * 1024) {
                 throw new BadRequestException(`File ${file.originalname} exceeds the 10MB limit`);
             }
-            if (!file.mimetype || !file.mimetype.startsWith('image/')) {
-                throw new BadRequestException(`File ${file.originalname} has invalid type: ${file.mimetype}. Only image files are allowed.`);
+            if (!file.mimetype || !file.mimetype.match(/^image\/(jpeg|jpg|png|webp|gif)$/i)) {
+                throw new BadRequestException(`File ${file.originalname} has invalid type: ${file.mimetype}. Only raster photos (JPEG, PNG, WebP, GIF) are allowed.`);
             }
 
             // Upload to Cloudinary under profbhagwan/gallery
             const result = await this.mediaService.saveFile(file, 'profbhagwan/gallery');
+            const secureUrl = (result.secure_url || result.url).replace(/^http:\/\//i, 'https://');
             const caption = (file.originalname || 'Archival Image')
                 .replace(/\.[^/.]+$/, '')
                 .replace(/[-_]/g, ' ');
@@ -218,8 +219,8 @@ export class GalleryService {
                 data: {
                     categoryId: category.id,
                     mediaType: MediaType.PHOTO,
-                    mediaUrl: result.url,
-                    publicId: result.filename,
+                    mediaUrl: secureUrl,
+                    publicId: result.public_id || result.filename,
                     caption,
                     altText: caption,
                     sortOrder: nextSortOrder++,
@@ -502,11 +503,12 @@ export class GalleryService {
             if (file.size > 10 * 1024 * 1024) {
                 throw new BadRequestException(`File ${file.originalname} exceeds the 10MB limit`);
             }
-            if (!file.mimetype || !file.mimetype.startsWith('image/')) {
-                throw new BadRequestException(`File ${file.originalname} has invalid type: ${file.mimetype}. Only image files are allowed.`);
+            if (!file.mimetype || !file.mimetype.match(/^image\/(jpeg|jpg|png|webp|gif)$/i)) {
+                throw new BadRequestException(`File ${file.originalname} has invalid type: ${file.mimetype}. Only raster photos (JPEG, PNG, WebP, GIF) are allowed.`);
             }
 
             const result = await this.mediaService.saveFile(file, 'profbhagwan/gallery');
+            const secureUrl = (result.secure_url || result.url).replace(/^http:\/\//i, 'https://');
             const caption = (file.originalname || 'Slideshow Image')
                 .replace(/\.[^/.]+$/, '')
                 .replace(/[-_]/g, ' ');
@@ -515,8 +517,8 @@ export class GalleryService {
                 data: {
                     categoryId: category.id,
                     mediaType: MediaType.PHOTO,
-                    mediaUrl: result.url,
-                    publicId: result.filename,
+                    mediaUrl: secureUrl,
+                    publicId: result.public_id || result.filename,
                     caption,
                     altText: caption,
                     sortOrder: nextSortOrder++,

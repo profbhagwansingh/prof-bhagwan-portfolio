@@ -9,8 +9,8 @@ import { Role, MediaType } from '@prisma/client';
 const imageUploadOptions = {
     limits: { fileSize: 10 * 1024 * 1024 }, // 10MB per file
     fileFilter: (req: any, file: any, cb: any) => {
-        if (!file.mimetype || !file.mimetype.match(/^image\/(jpeg|jpg|png|webp|gif|svg\+xml)$/i)) {
-            return cb(new BadRequestException(`Unsupported file type: ${file.mimetype}. Only JPEG, PNG, WebP, GIF, and SVG images are allowed.`), false);
+        if (!file.mimetype || !file.mimetype.match(/^image\/(jpeg|jpg|png|webp|gif)$/i)) {
+            return cb(new BadRequestException(`Unsupported file type: ${file.mimetype}. Only raster photos (JPEG, PNG, WebP, GIF) are allowed.`), false);
         }
         cb(null, true);
     },

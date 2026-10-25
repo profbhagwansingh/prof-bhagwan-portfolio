@@ -13,7 +13,7 @@ export class MediaService {
         });
     }
 
-    async saveFile(file: any, folder = 'profbhagwan'): Promise<{ url: string; filename: string }> {
+    async saveFile(file: any, folder = 'profbhagwan'): Promise<{ url: string; secure_url: string; filename: string; public_id: string }> {
         return new Promise((resolve, reject) => {
             cloudinary.uploader.upload_stream(
                 { folder, resource_type: 'auto' },
@@ -22,7 +22,12 @@ export class MediaService {
                     if (!result?.secure_url || !result?.public_id) {
                         return reject(new Error('Invalid upload result'));
                     }
-                    resolve({ url: result.secure_url, filename: result.public_id });
+                    resolve({
+                        url: result.secure_url,
+                        secure_url: result.secure_url,
+                        filename: result.public_id,
+                        public_id: result.public_id,
+                    });
                 }
             ).end(file.buffer);
         });

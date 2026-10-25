@@ -30,7 +30,12 @@ let MediaService = class MediaService {
                 if (!result?.secure_url || !result?.public_id) {
                     return reject(new Error('Invalid upload result'));
                 }
-                resolve({ url: result.secure_url, filename: result.public_id });
+                resolve({
+                    url: result.secure_url,
+                    secure_url: result.secure_url,
+                    filename: result.public_id,
+                    public_id: result.public_id,
+                });
             }).end(file.buffer);
         });
     }
