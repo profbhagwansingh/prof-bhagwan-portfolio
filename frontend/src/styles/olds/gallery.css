@@ -81,6 +81,13 @@
 }
 
 /* ── Hero / Intro Section ── */
+.gallery-hero {
+    position: static !important;
+    top: auto !important;
+    z-index: auto !important;
+    box-shadow: none !important;
+}
+
 .gallery-section {
     padding: 5rem 0 6rem;
     background: var(--bg-primary);

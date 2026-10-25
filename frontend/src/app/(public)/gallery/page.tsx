@@ -101,25 +101,25 @@ export default function GalleryPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#faf9f8] text-[#1a1a2e]">
-      {/* ─── Stage 1 Header Section ─── */}
-      <header className="pt-28 pb-12 px-4 sm:px-6 lg:px-8 text-center border-b border-gray-200/70 bg-gradient-to-b from-white via-[#faf9f8] to-[#faf9f8]">
+    <div className="min-h-screen bg-[#faf9f8] text-[#1a1a2e]">
+      {/* ─── Stage 1 Hero / Intro Section ─── */}
+      <section className="gallery-hero relative bg-gradient-to-b from-white via-[#faf9f8] to-[#faf9f8] border-b border-gray-200/70 py-6 md:py-8 lg:py-10 px-4 sm:px-6 lg:px-8 text-center">
         <div className="max-w-3xl mx-auto">
-          <span className="inline-block text-xs uppercase tracking-[0.2em] text-[#5061C4] font-semibold mb-2">
+          <span className="inline-block text-xs uppercase tracking-[0.2em] text-[#5061C4] font-semibold mb-1.5">
             Academic Portfolio &bull; Visual Archive
           </span>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-display font-medium text-[#1a1a2e] tracking-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-display font-medium text-[#1a1a2e] tracking-tight leading-tight">
             The Library
           </h1>
-          <div className="w-14 h-[3px] bg-[#5061C4] mx-auto mt-4 mb-4 rounded-full" />
-          <p className="text-base sm:text-lg text-gray-600 font-normal leading-relaxed max-w-xl mx-auto">
+          <div className="w-12 h-[2.5px] bg-[#5061C4] mx-auto my-2.5 rounded-full" />
+          <p className="text-sm sm:text-base text-gray-600 font-normal leading-normal max-w-2xl mx-auto">
             A visual archive of academic achievements, conferences, and institutional milestones.
           </p>
         </div>
-      </header>
+      </section>
 
       {/* ─── Centered Main Gallery Container (max-w-7xl with right clearance) ─── */}
-      <div className="gallery-container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 pb-28">
+      <div className="gallery-container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 md:pt-10 pb-28">
         {loading ? (
           <div className="py-24 flex flex-col items-center justify-center space-y-4">
             <div className="w-10 h-10 border-3 border-[#5061C4]/20 border-t-[#5061C4] rounded-full animate-spin" />
@@ -135,7 +135,7 @@ export default function GalleryPage() {
             {folderData.map((folder, folderIdx) => {
               if (!folder.files || folder.files.length === 0) return null;
               return (
-                <section key={folderIdx} className="space-y-6">
+                <section key={folderIdx} id={`album-${folderIdx}`} className="space-y-6 scroll-mt-24">
                   {/* Album / Section Title */}
                   <div className="flex items-center justify-between border-b border-gray-200/80 pb-3">
                     <div className="flex items-baseline gap-3">
@@ -254,6 +254,6 @@ export default function GalleryPage() {
           </div>
         </div>
       )}
-    </main>
+    </div>
   );
 }
