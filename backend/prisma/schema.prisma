@@ -404,11 +404,13 @@ model GalleryItem {
   category     GalleryCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   mediaType    MediaType       @default(PHOTO)
   mediaUrl     String
+  publicId     String?
   thumbnailUrl String?
   caption      String?
   altText      String          @default("")
   sortOrder    Int             @default(0)
   isActive     Boolean         @default(true)
+  isPublic     Boolean         @default(true)
   isSlideshow  Boolean         @default(false)
   createdAt    DateTime        @default(now())
 
